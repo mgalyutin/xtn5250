@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
+import org.jetbrains.annotations.NotNull;
 
 public class Test {
 
@@ -28,7 +29,7 @@ public class Test {
   /*
    * Used only for test purposes.
    */
-  public static void main(String[] args) {
+  public static void main(String @NotNull [] args) {
 
     boolean pUse3dFX = false;
     boolean pAltFKeyRemap = false;

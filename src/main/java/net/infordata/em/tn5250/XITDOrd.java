@@ -26,6 +26,7 @@ import java.io.InputStream;
 
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * TD - Transparent data
@@ -40,7 +41,7 @@ public class XITDOrd extends XI5250Ord {
   protected int ivLen;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
 
     byte[] buf = new byte[2];
@@ -75,7 +76,7 @@ public class XITDOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [" + ivLen + ",\"" + ivData + "\"" + "]";
   }
 

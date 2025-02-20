@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import net.infordata.em.crt5250.XI5250Crt;
 import net.infordata.em.crt5250.XI5250CrtCtrl;
 import net.infordata.em.crt5250.XI5250CrtFrame;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles common commands shared by XI5250Frame and XI5250Applet.
@@ -35,7 +36,7 @@ import net.infordata.em.crt5250.XI5250CrtFrame;
 public class XI5250EmulatorCtrl extends XI5250CrtCtrl {
 
   // images
-  private static XIImagesBdl cvImagesBdl =
+  private static @NotNull XIImagesBdl cvImagesBdl =
       net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
   private static ResourceBundle cvRes =
@@ -50,7 +51,7 @@ public class XI5250EmulatorCtrl extends XI5250CrtCtrl {
 
   private int ivSnapShotCount = 0;
 
-  public XI5250EmulatorCtrl(XI5250Emulator aCrt) {
+  public XI5250EmulatorCtrl(@NotNull XI5250Emulator aCrt) {
     super(aCrt);
 
     getEmulator().addEmulatorListener(new EmulatorListener());

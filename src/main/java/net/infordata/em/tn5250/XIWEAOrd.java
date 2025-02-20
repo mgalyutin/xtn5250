@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * WEA - Write extended attribute
@@ -55,7 +56,7 @@ public class XIWEAOrd extends XI5250Ord {
 
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [" + XITelnet.toHex(ivAttributeType) + "," + 
         XITelnet.toHex(ivAttribute) + "]";
   }

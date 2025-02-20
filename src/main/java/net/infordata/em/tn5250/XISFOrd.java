@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 SF Order
@@ -34,13 +35,13 @@ import net.infordata.em.tnprot.XITelnet;
  */
 public class XISFOrd extends XI5250Ord {
 
-  protected byte[] FFW = new byte[2];
-  protected byte[] FCW = new byte[2];
+  protected byte @NotNull [] FFW = new byte[2];
+  protected byte @NotNull [] FCW = new byte[2];
   protected byte ivScreenAttr;
   protected int ivFieldLen;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
+  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
     byte bb;
 
     inStream.mark(1);
@@ -86,7 +87,7 @@ public class XISFOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [FFW=[" + XITelnet.toHex(FFW[0]) + "," +
         XITelnet.toHex(FFW[1]) + "]," +
         "FCW=[" + XITelnet.toHex(FCW[0]) + "," +

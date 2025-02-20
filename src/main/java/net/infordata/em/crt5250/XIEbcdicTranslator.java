@@ -27,6 +27,8 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -95,8 +97,8 @@ public abstract class XIEbcdicTranslator {
   protected XIEbcdicTranslator() {
   }
 
-  public static synchronized void registerTranslator(String id,
-      XIEbcdicTranslator tr) {
+  public static synchronized void registerTranslator(@NotNull String id,
+                                                     @NotNull XIEbcdicTranslator tr) {
     if (id == null) {
       throw new NullPointerException("id is null");
     }
@@ -112,7 +114,7 @@ public abstract class XIEbcdicTranslator {
   /**
    * @return a read-only map of registered translators
    */
-  public static Map<String, XIEbcdicTranslator> getRegisteredTranslators() {
+  public static @NotNull Map<String, XIEbcdicTranslator> getRegisteredTranslators() {
     return cvRORegistry;
   }
 
@@ -122,7 +124,7 @@ public abstract class XIEbcdicTranslator {
    * @param id of the translator
    * @return the translator for the given id
    */
-  public static XIEbcdicTranslator getTranslator(String id) {
+  public static XIEbcdicTranslator getTranslator(@NotNull String id) {
     return cvRegistry.get(id.toLowerCase());
   }
 
@@ -143,7 +145,7 @@ public abstract class XIEbcdicTranslator {
    * @param bb the byte to get the hex representation from
    * @return the hex representation of the byte
    */
-  public static String toHex(byte bb) {
+  public static @NotNull String toHex(byte bb) {
     String hex = Integer.toString(toInt(bb), 16);
     return "00".substring(hex.length()) + hex;
   }
@@ -171,7 +173,7 @@ public abstract class XIEbcdicTranslator {
    * @param aLen number of bytes to get from the string
    * @return ebcdic code bytes for the given string and length
    */
-  public byte[] toText(String aString, int aLen) {
+  public byte[] toText(@NotNull String aString, int aLen) {
     byte[] bb = new byte[aLen];
     int i;
     int len = Math.min(aLen, aString.length());
@@ -242,7 +244,7 @@ public abstract class XIEbcdicTranslator {
    * @param aLen number of bytes to get from the bytes
    * @return string for the given ebcdic code bytes
    */
-  public String toString(byte[] aBuf, int aOfs, int aLen) {
+  public @NotNull String toString(byte[] aBuf, int aOfs, int aLen) {
     String str = "";
     int i;
 

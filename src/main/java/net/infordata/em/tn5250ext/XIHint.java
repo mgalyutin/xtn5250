@@ -21,6 +21,9 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.util.*;
 
@@ -39,11 +42,11 @@ public class XIHint extends JComponent {
 
   private static final long serialVersionUID = 1L;
 
-  private String ivText = null;
+  private @Nullable String ivText = null;
 
   private int ivMaxWidth = 0;
 
-  private Font ivFont = null;
+  private @Nullable Font ivFont = null;
 
   private int ivSpaceLine = 1;
   private int ivSpaceUp = 1;
@@ -78,7 +81,7 @@ public class XIHint extends JComponent {
   }
 
   @Override
-  public Dimension getPreferredSize() {
+  public @NotNull Dimension getPreferredSize() {
     int x = ivSpaceLeft;
     int y;
 
@@ -91,12 +94,12 @@ public class XIHint extends JComponent {
     return new Dimension(x, y);
   }
 
-  public String getText() {
+  public @Nullable String getText() {
     return ivText;
   }
 
   @Override
-  protected void paintComponent(Graphics aGraphics) {
+  protected void paintComponent(@NotNull Graphics aGraphics) {
     int vXPos = 0;
 
     aGraphics.setFont(ivFont);
@@ -107,7 +110,7 @@ public class XIHint extends JComponent {
   }
 
   @SuppressWarnings("deprecation")
-  private int strWidth(String str, Font f) {
+  private int strWidth(@NotNull String str, Font f) {
     return Toolkit.getDefaultToolkit().getFontMetrics(f).stringWidth(str);
   }
 
@@ -121,7 +124,7 @@ public class XIHint extends JComponent {
     return Toolkit.getDefaultToolkit().getFontMetrics(f);
   }
 
-  private Dimension textDim(ArrayList<String> v, Font f) {
+  private @NotNull Dimension textDim(@NotNull ArrayList<String> v, Font f) {
 
     int maxW = 0;
     int lineW = 0;
@@ -168,7 +171,7 @@ public class XIHint extends JComponent {
     return new Dimension(maxW, h);
   }
 
-  private boolean isEscapeChar(String text, String escChar) {
+  private boolean isEscapeChar(@NotNull String text, @Nullable String escChar) {
     if (escChar == null) {
       return false;
     }
@@ -184,12 +187,12 @@ public class XIHint extends JComponent {
     return false;
   }
 
-  public Dimension getTextSize(Font f) {
+  public @NotNull Dimension getTextSize(Font f) {
     return new Dimension(textDim(ivVectorLines, f));
   }
 
-  private void drawMultiLineString(Graphics g, ArrayList<String> v,
-      Font f, int x, int y) {
+  private void drawMultiLineString(@NotNull Graphics g, @NotNull ArrayList<String> v,
+                                   Font f, int x, int y) {
     int xBegin = x;
 
     boolean bold = false;
@@ -227,7 +230,7 @@ public class XIHint extends JComponent {
     }
   }
 
-  private ArrayList<String> calculateLines(String text, Font f) {
+  private @NotNull ArrayList<String> calculateLines(@NotNull String text, Font f) {
     StringTokenizer st = new StringTokenizer(text, "\n");
     ArrayList<String> v = new ArrayList<>(10);
 
@@ -261,7 +264,7 @@ public class XIHint extends JComponent {
     return v;
   }
 
-  private String trimRight(String str) {
+  private @NotNull String trimRight(@NotNull String str) {
     String str1 = str;
     while (str.endsWith(" ")) {
       str1 = str.substring(0, str.length() - 1);

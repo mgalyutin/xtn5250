@@ -25,6 +25,9 @@ limitations under the License.
 package net.infordata.em.tn5250ext;
 
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -33,7 +36,7 @@ import java.beans.SimpleBeanInfo;
 
 
 public class XI5250EmulatorExtBeanInfo extends SimpleBeanInfo {
-  Class<XI5250EmulatorExt> beanClass = XI5250EmulatorExt.class;
+  @NotNull Class<XI5250EmulatorExt> beanClass = XI5250EmulatorExt.class;
   String iconColor16x16Filename;
   String iconColor32x32Filename;
   String iconMono16x16Filename;
@@ -44,7 +47,7 @@ public class XI5250EmulatorExtBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public PropertyDescriptor[] getPropertyDescriptors() {
+  public PropertyDescriptor @Nullable [] getPropertyDescriptors() {
     try  {
       PropertyDescriptor _hintOnActiveField = 
           new PropertyDescriptor("hintOnActiveField", beanClass,
@@ -67,7 +70,7 @@ public class XI5250EmulatorExtBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public java.awt.Image getIcon(int iconKind) {
+  public java.awt.@Nullable Image getIcon(int iconKind) {
     switch (iconKind) {
     case BeanInfo.ICON_COLOR_16x16:
       return iconColor16x16Filename != null ? loadImage(iconColor16x16Filename) : null;
@@ -82,7 +85,7 @@ public class XI5250EmulatorExtBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public BeanInfo[] getAdditionalBeanInfo() {
+  public BeanInfo @Nullable [] getAdditionalBeanInfo() {
     Class<?> superclass = beanClass.getSuperclass();
     try  {
       BeanInfo superBeanInfo = Introspector.getBeanInfo(superclass);

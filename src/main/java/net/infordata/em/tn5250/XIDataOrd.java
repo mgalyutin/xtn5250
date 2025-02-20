@@ -27,6 +27,7 @@ import java.io.InputStream;
 
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 Data Order
@@ -66,7 +67,7 @@ public class XIDataOrd extends XI5250Ord {
   }
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
+  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
     XIEbcdicTranslator translator = ivEmulator.getTranslator();
     int bb;
 
@@ -116,7 +117,7 @@ public class XIDataOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [" + XITelnet.toHex(ivColor) + "," + ",\"" + ivData + "\"" + "]";
   }
 

@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +36,7 @@ public class XIICOrd extends XI5250Ord {
   protected int ivRow, ivCol;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException, XI5250Exception {
+  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
     ivRow = Math.max(0, inStream.read());
     ivCol = Math.max(0, inStream.read());
     // Cannot deal with real dimensions, since they can be not applied yet 
@@ -51,7 +53,7 @@ public class XIICOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [" + ivRow + "," + ivCol + "]";
   }
 

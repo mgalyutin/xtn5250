@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.infordata.em.tn5250.XI5250Emulator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * THE 5250 EMULATOR extension.
@@ -41,7 +42,7 @@ public class XI5250EmulatorExt extends XI5250Emulator implements Serializable {
   private   boolean ivShowHints = true;
   private   boolean ivHintOnActiveField = false;
 
-  transient private   ArrayList<XI5250PanelsDispatcher>  ivDispatchers =
+  transient private @NotNull ArrayList<XI5250PanelsDispatcher>  ivDispatchers =
       new ArrayList<>();
 
   public static final String  SHOW_HINTS            = "showHints";

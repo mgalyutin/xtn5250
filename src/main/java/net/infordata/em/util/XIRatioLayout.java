@@ -21,6 +21,9 @@ limitations under the License.
 
 package net.infordata.em.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.Button;
 import java.awt.Component;
 import java.awt.Container;
@@ -46,7 +49,7 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
 
   private int ivHGap;
 
-  private Map<Component, Constraints> ivConstraints = new HashMap<>();
+  private @NotNull Map<Component, Constraints> ivConstraints = new HashMap<>();
 
     public XIRatioLayout() {
       this(0);
@@ -60,12 +63,12 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
     return ivHGap;
   }
 
-  public void addLayoutComponent(String aDescriptor, Component comp) {
+  public void addLayoutComponent(@NotNull String aDescriptor, Component comp) {
     Float fl = Float.valueOf(aDescriptor);
     addLayoutComponent(comp, new Constraints(fl, LEFT));
   }
 
-  public void addLayoutComponent(Component comp, Object constraints) {
+  public void addLayoutComponent(Component comp, @Nullable Object constraints) {
     if (constraints != null && !(constraints instanceof Constraints))
       throw new IllegalArgumentException("XIRatioLayout.Constraints expected");
     ivConstraints.put(comp, (Constraints)constraints);
@@ -79,7 +82,7 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
   private static final int MINIMUM = 1;
   private static final int MAXIMUM = 2;
 
-  private Dimension layoutSize(Container parent, int type) {
+  private @NotNull Dimension layoutSize(@NotNull Container parent, int type) {
     Insets insets;
     int[] nComps = new int[3];
     int maxW, maxH;
@@ -134,20 +137,20 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
     return new Dimension(maxW, maxH);
   }
 
-  public Dimension preferredLayoutSize(Container parent) {
+  public @NotNull Dimension preferredLayoutSize(@NotNull Container parent) {
     return layoutSize(parent, PREFERRED);
   }
 
-  public Dimension minimumLayoutSize(Container parent) {
+  public @NotNull Dimension minimumLayoutSize(@NotNull Container parent) {
     return layoutSize(parent, MINIMUM);
   }
 
-  public Dimension maximumLayoutSize(Container parent) {
+  public @NotNull Dimension maximumLayoutSize(@NotNull Container parent) {
     return layoutSize(parent, MAXIMUM);
   }
 
   @SuppressWarnings("unchecked")
-  public void layoutContainer(Container parent) {
+  public void layoutContainer(@NotNull Container parent) {
     Insets insets;
     ArrayList<Component>[] comps;
     ArrayList<Constraints>[] constrs;

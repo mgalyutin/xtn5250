@@ -21,6 +21,9 @@ limitations under the License.
 
 package net.infordata.em.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.Button;
 import java.awt.CheckboxMenuItem;
 import java.awt.MenuItem;
@@ -43,22 +46,22 @@ public class XICommandMgr {
   private static final Logger LOGGER = Logger.getLogger(XICommandMgr.class.getName());
 
   // relazione action-command -> XICommand
-  private Map<String, XICommand> ivActCmd2Cmd = new HashMap<>();
+  private @NotNull Map<String, XICommand> ivActCmd2Cmd = new HashMap<>();
 
   // action-commands disabilitati
-  private List<String> ivDisabledActCmd = new ArrayList<>();
+  private @NotNull List<String> ivDisabledActCmd = new ArrayList<>();
 
   // relazione oggetto -> action-command
-  private Map<Object, String> ivObj2ActCmd = new HashMap<>();
+  private @NotNull Map<Object, String> ivObj2ActCmd = new HashMap<>();
 
   // action-command -> boolean value
-  private Map<String, Boolean> ivActCmd2Value = new HashMap<>();
+  private @NotNull Map<String, Boolean> ivActCmd2Value = new HashMap<>();
 
   // lock per gestione action commands
-  private Object ivActCmdLock = new Object();
+  private @NotNull Object ivActCmdLock = new Object();
 
   //
-  private ActionListener ivActionListener = XICommandMgr.this::actionPerformed;
+  private @NotNull ActionListener ivActionListener = XICommandMgr.this::actionPerformed;
 
   // usato per sopperire ad un buco delle AWT - CheckboxMenuItem non inviano
   // action command
@@ -75,11 +78,11 @@ public class XICommandMgr {
    *
    * @return the action listener.
    */
-  public ActionListener getActionListener() {
+  public @NotNull ActionListener getActionListener() {
     return ivActionListener;
   }
 
-  private void actionPerformed(ActionEvent e) {
+  private void actionPerformed(@NotNull ActionEvent e) {
 
     if (LOGGER.isLoggable(Level.FINER)) {
       LOGGER.finer("" + e);
@@ -98,11 +101,11 @@ public class XICommandMgr {
     }
   }
 
-  public void dispatchCommand(String cmd) {
+  public void dispatchCommand(@NotNull String cmd) {
     dispatchCommand(null, cmd);
   }
 
-  protected void dispatchCommand(Object cmp, String cmd) {
+  protected void dispatchCommand(Object cmp, @NotNull String cmd) {
 
     if (LOGGER.isLoggable(Level.FINE)) {
       LOGGER.fine("dispatchCommand " + cmp + " " + cmd);
@@ -129,7 +132,7 @@ public class XICommandMgr {
     setCommandState(cmd, flag);
   }
 
-  public void setCommandState(String cmd, boolean value) {
+  public void setCommandState(@NotNull String cmd, boolean value) {
 
     if (LOGGER.isLoggable(Level.FINE)) {
       LOGGER.fine("setCommandState " + cmd + " " + value);
@@ -200,7 +203,7 @@ public class XICommandMgr {
   /*
    * Richiamata dagli altri metodi handleCommand.
    */
-  private void handleActionCommand(Object obj, String anActionCommand) {
+  private void handleActionCommand(@NotNull Object obj, @Nullable String anActionCommand) {
     if (obj == null) {
       throw new IllegalArgumentException("anObj can't be null");
     }
@@ -221,7 +224,7 @@ public class XICommandMgr {
    * @param aMenuItem menu item to associated the command to
    * @param anActionCommand command to associate to the menu item.
    */
-  public void handleCommand(MenuItem aMenuItem, String anActionCommand) {
+  public void handleCommand(@NotNull MenuItem aMenuItem, @Nullable String anActionCommand) {
 
     synchronized (ivActCmdLock) {
       handleActionCommand(aMenuItem, anActionCommand);
@@ -243,7 +246,7 @@ public class XICommandMgr {
    * @param aMenuItem menu item to associated the command to
    * @param anActionCommand command to associate to the menu item.
    */
-  public void handleCommand(CheckboxMenuItem aMenuItem, String anActionCommand) {
+  public void handleCommand(@NotNull CheckboxMenuItem aMenuItem, @Nullable String anActionCommand) {
 
     synchronized (ivActCmdLock) {
       handleActionCommand(aMenuItem, anActionCommand);
@@ -264,7 +267,7 @@ public class XICommandMgr {
    * @param aButton button to associated the command to
    * @param anActionCommand command to associate to the button.
    */
-  public void handleCommand(Button aButton, String anActionCommand) {
+  public void handleCommand(@NotNull Button aButton, @Nullable String anActionCommand) {
 
     synchronized (ivActCmdLock) {
       handleActionCommand(aButton, anActionCommand);
@@ -285,7 +288,7 @@ public class XICommandMgr {
    * @param aButton button to associated the command to
    * @param anActionCommand command to associate to the button.
    */
-  public void handleCommand(AbstractButton aButton, String anActionCommand) {
+  public void handleCommand(@NotNull AbstractButton aButton, @Nullable String anActionCommand) {
 
     synchronized (ivActCmdLock) {
       handleActionCommand(aButton, anActionCommand);
@@ -306,7 +309,7 @@ public class XICommandMgr {
    * @param anActionCommand command to enable/disable
    * @param toBeEnabled true to enable the command, false to disable it.
    */
-  public void enableCommand(String anActionCommand, boolean toBeEnabled) {
+  public void enableCommand(@NotNull String anActionCommand, boolean toBeEnabled) {
 
     if (anActionCommand == null) {
       throw new IllegalArgumentException("The ActionCommand can't be null.");
@@ -376,7 +379,7 @@ public class XICommandMgr {
    * @param anActionCommand the action command to associate the command to
    * @param aCommand the command to associate to the action command
    */
-  public void setCommand(String anActionCommand, XICommand aCommand) {
+  public void setCommand(@NotNull String anActionCommand, XICommand aCommand) {
 
     if (anActionCommand == null) {
       throw new IllegalArgumentException("The ActionCommand can't be null.");

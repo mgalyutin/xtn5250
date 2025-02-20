@@ -31,6 +31,8 @@ limitations under the License.
 
 package net.infordata.em.crt;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -74,7 +76,7 @@ public class XICrtBuffer implements Serializable {
   private char[][] ivCharBuffer;
   private int[][]  ivAttrBuffer;
 
-  transient private List<Rectangle> ivDirtyAreas = new ArrayList<>(20);
+  transient private @NotNull List<Rectangle> ivDirtyAreas = new ArrayList<>(20);
 
   transient private XICrt  ivCrt;
 
@@ -103,7 +105,7 @@ public class XICrtBuffer implements Serializable {
    * @param aW number of columns to extract from the given buffer.
    * @param aH number of rows to extract from the given buffer.
    */
-  public XICrtBuffer(XICrtBuffer from, int aC, int aR, int aW, int aH) {
+  public XICrtBuffer(@NotNull XICrtBuffer from, int aC, int aR, int aW, int aH) {
     this(aW, aH);
     copyFrom(0, 0, from, aC, aR, aW, aH);
     setDefAttr(from.getDefAttr());
@@ -116,7 +118,7 @@ public class XICrtBuffer implements Serializable {
    * @return cloned XICrtBuffer.
    */
   @Override
-  public Object clone() {
+  public @NotNull Object clone() {
     return new XICrtBuffer(this, 0, 0, ivNCols, ivNRows);
   }
 
@@ -160,7 +162,7 @@ public class XICrtBuffer implements Serializable {
    *
    * @param out stream where to dump the buffer
    */
-  public void dumpBuffer(PrintStream out) {
+  public void dumpBuffer(@NotNull PrintStream out) {
     out.println("BUFFER DUMP");
     for (int r = 0; r < ivNRows; r++) {
       for (int c = 0; c < ivNCols; c++)
@@ -180,7 +182,7 @@ public class XICrtBuffer implements Serializable {
    *
    * @param from buffer to copy content from.
    */
-  public void copyFrom(XICrtBuffer from) {
+  public void copyFrom(@NotNull XICrtBuffer from) {
     copyFrom(0, 0, from, 0, 0, from.ivNCols, from.ivNRows);
   }
 
@@ -195,8 +197,8 @@ public class XICrtBuffer implements Serializable {
    * @param    aH      the source dimension.
    */
   public synchronized void copyFrom(int col, int row,
-      XICrtBuffer from,
-      int aC, int aR, int aW, int aH) {
+                                    @NotNull XICrtBuffer from,
+                                    int aC, int aR, int aW, int aH) {
     aW = Math.min(aW, from.ivNCols - aC);
     aH = Math.min(aH, from.ivNRows - aR);
     int          nCols = Math.min(ivNCols - col, aW);
@@ -323,7 +325,7 @@ public class XICrtBuffer implements Serializable {
    *
    * @return dimensions in chars.
    */
-  public Dimension getCrtSize() {
+  public @NotNull Dimension getCrtSize() {
     return new Dimension(ivNCols, ivNRows);
   }
 
@@ -332,11 +334,11 @@ public class XICrtBuffer implements Serializable {
    *
    * @return dimensions in pixels.
    */
-  public Dimension getSize() {
+  public @NotNull Dimension getSize() {
     return new Dimension(ivGrW, ivGrH);
   }
 
-  public Dimension getCharSize() {
+  public @NotNull Dimension getCharSize() {
     return new Dimension(ivCharW, ivCharH);
   }
 
@@ -347,7 +349,7 @@ public class XICrtBuffer implements Serializable {
    * @param row row of the position to convert to pixel coordinates.
    * @return pixel coordinates for the given position.
    */
-  public Point toPoint(int col, int row) {
+  public @NotNull Point toPoint(int col, int row) {
     return new Point(col * ivCharW, (row + 1) * ivCharH);
   }
 
@@ -358,7 +360,7 @@ public class XICrtBuffer implements Serializable {
    * @param col column where to print the string
    * @param row row where to print the string
    */
-  public void drawString(String str, int col, int row) {
+  public void drawString(@NotNull String str, int col, int row) {
     drawString(str, col, row, ivDefAttr);
   }
 
@@ -370,8 +372,8 @@ public class XICrtBuffer implements Serializable {
    * @param row row where to print the string
    * @param aAttr attribute of the string
    */
-  public synchronized void drawString(String aStr, int col, int row,
-      int aAttr) {
+  public synchronized void drawString(@NotNull String aStr, int col, int row,
+                                      int aAttr) {
     col = Math.max(0, Math.min(ivNCols - 1, col));
     row = Math.max(0, Math.min(ivNRows - 1, row));
     int len = Math.min(aStr.length(), ivNCols - col);
@@ -387,7 +389,7 @@ public class XICrtBuffer implements Serializable {
     addDirtyArea(new Rectangle(col, row, len, 1));
   }
 
-  private void addDirtyArea(Rectangle newRt) {
+  private void addDirtyArea(@NotNull Rectangle newRt) {
     Rectangle rt;
     Rectangle rtG;
     Rectangle res = new Rectangle(newRt);
@@ -461,8 +463,8 @@ public class XICrtBuffer implements Serializable {
    * @param row row where to print the string
    * @param aAttr attribute of the string
    */
-  protected void _drawString(Graphics gr, String aStr, int col, int row,
-      int aAttr) {
+  protected void _drawString(@NotNull Graphics gr, @NotNull String aStr, int col, int row,
+                             int aAttr) {
     int len = aStr.length();
 
     gr.setColor(getBackground(aAttr));
@@ -481,7 +483,7 @@ public class XICrtBuffer implements Serializable {
         (row + 1) * ivCharH - ivCharD);
   }
 
-  public String getString(int col, int row, int nChars) {
+  public @NotNull String getString(int col, int row, int nChars) {
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < nChars; i++) {
       str.append(getChar(col + i, row));
@@ -489,7 +491,7 @@ public class XICrtBuffer implements Serializable {
     return new String(str);
   }
 
-  public String getString() {
+  public @NotNull String getString() {
     char[] buf = new char[ivNRows * ivNCols];
 
     for (int i = 0; i < ivNRows; i++)
@@ -554,20 +556,20 @@ public class XICrtBuffer implements Serializable {
     return ivDefAttr;
   }
 
-  public Point toPoints(int aCol, int aRow) {
+  public @NotNull Point toPoints(int aCol, int aRow) {
     return new Point(aCol * ivCharW, aRow * ivCharH);
   }
 
-  public Rectangle toPoints(int aCol, int aRow, int aNCols, int aNRows) {
+  public @NotNull Rectangle toPoints(int aCol, int aRow, int aNCols, int aNRows) {
     return new Rectangle(aCol * ivCharW, aRow * ivCharH,
         aNCols * ivCharW, aNRows * ivCharH);
   }
 
-  void writeObject(ObjectOutputStream oos) throws IOException {
+  void writeObject(@NotNull ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
   }
 
-  void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+  void readObject(@NotNull ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
   }
 

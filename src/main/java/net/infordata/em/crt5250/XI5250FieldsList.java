@@ -23,6 +23,9 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.io.IOException;
@@ -40,7 +43,7 @@ import java.util.List;
 public class XI5250FieldsList implements XI5250BaseField, Cloneable {
   private XI5250Crt   ivCrt;
   private ArrayList<XI5250Field> ivFields = new ArrayList<>(40);
-  private List<XI5250Field> ivROFields = Collections.unmodifiableList(ivFields);
+  private @NotNull List<XI5250Field> ivROFields = Collections.unmodifiableList(ivFields);
 
   public XI5250FieldsList(XI5250Crt aCrt) {
     ivCrt = aCrt;
@@ -52,7 +55,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public Object clone() {
+  public @NotNull Object clone() {
     try {
       XI5250FieldsList aClone = (XI5250FieldsList)super.clone();
       // non clono singoli campi perch� vengono sempre ricreati da 0 e mai modificati
@@ -89,7 +92,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * @param aSaver saver where to save the list of fields.
    * @see    XI5250Field#saveTo
    */
-  public void saveTo(XI5250FieldSaver aSaver) throws IOException {
+  public void saveTo(@NotNull XI5250FieldSaver aSaver) throws IOException {
     for (XI5250Field ivField : ivFields) {
       ivField.saveTo(aSaver);
     }
@@ -109,7 +112,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * Lets fields paint themselves.
    * @param g graphic where to paint the fields list.
    */
-  public void paint(Graphics g) {
+  public void paint(@NotNull Graphics g) {
     XI5250Field field;
     Rectangle   clip = g.getClipBounds();
 
@@ -164,7 +167,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * Adds a field to the fields collection.
    * @param aField field to add to the list.
    */
-  public void addField(XI5250Field aField) {
+  public void addField(@NotNull XI5250Field aField) {
     // presente in quella posizione, oppure overlapping,
     // viene sostituito il campo
     XI5250Field field = fieldFromPos(aField.getCol(), aField.getRow());
@@ -184,7 +187,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * @param aRow the row from where to search the field
    * @return the field found before the given position
    */
-  private XI5250Field prevFieldFromPosInternal(int aCol, int aRow) {
+  private @Nullable XI5250Field prevFieldFromPosInternal(int aCol, int aRow) {
     int idx = searchField(aCol, aRow);
     if (idx >= 0)
       return ivFields.get(idx);
@@ -220,7 +223,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * @param aRow row to get the field from
    * @return the field present in the given position, null if none.
    */
-  public XI5250Field fieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field fieldFromPos(int aCol, int aRow) {
     // accedo al precedente
     XI5250Field field = prevFieldFromPosInternal(aCol, aRow);
     if (field == null)
@@ -235,7 +238,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
       return null;
   }
 
-  public XI5250Field nextFieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field nextFieldFromPos(int aCol, int aRow) {
     if (ivFields.isEmpty())
       return null;
     // accedo al precedente
@@ -248,7 +251,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
     return ivFields.get(idx + 1);
   }
 
-  public XI5250Field prevFieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field prevFieldFromPos(int aCol, int aRow) {
     if (ivFields.isEmpty())
       return null;
     XI5250Field field = fieldFromPos(aCol, aRow);
@@ -271,7 +274,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
     return field;
   }
 
-  public List<XI5250Field> getFields() {
+  public @NotNull List<XI5250Field> getFields() {
     return ivROFields;
   }
 
@@ -282,7 +285,7 @@ public class XI5250FieldsList implements XI5250BaseField, Cloneable {
    * @param idx index of the field to get
    * @return the field at the given index (null if none).
    */
-  public XI5250Field getField(int idx) {
+  public @Nullable XI5250Field getField(int idx) {
     try {
       return ivFields.get(idx);
     }

@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 
 import net.infordata.em.util.XICommand;
 import net.infordata.em.util.XICommandMgr;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles common commands.
@@ -51,7 +52,7 @@ public class XI5250CrtCtrl {
 
   private XI5250Crt    ivCrt;
 
-  private XICommandMgr ivCommandMgr = new XICommandMgr();
+  private @NotNull XICommandMgr ivCommandMgr = new XICommandMgr();
 
   public static final String SWITCH_3DFX_CMD      = "SWITCH_3DFX_CMD";
   public static final String REFERENCE_CURSOR_CMD = "REFERENCE_CURSOR_CMD";
@@ -61,7 +62,7 @@ public class XI5250CrtCtrl {
 
   public static final String PRINT_CMD            = "PRINT_CMD";
 
-  public XI5250CrtCtrl(XI5250Crt aCrt) {
+  public XI5250CrtCtrl(@NotNull XI5250Crt aCrt) {
     if (aCrt == null)
       throw new IllegalArgumentException("An XI5250Crt instance is required.");
 
@@ -95,7 +96,7 @@ public class XI5250CrtCtrl {
     return ivCrt;
   }
 
-  public final XICommandMgr getCommandMgr() {
+  public final @NotNull XICommandMgr getCommandMgr() {
     return ivCommandMgr;
   }
 
@@ -135,7 +136,7 @@ public class XI5250CrtCtrl {
     getCrt().setReferenceCursor(flag);
   }
 
-  protected void emulatorPropertyChanged(PropertyChangeEvent e) {
+  protected void emulatorPropertyChanged(@NotNull PropertyChangeEvent e) {
     String propertyName = e.getPropertyName();
 
     if (propertyName == XI5250Crt.SELECTED_AREA) {
@@ -205,7 +206,7 @@ public class XI5250CrtCtrl {
    */
   class PropertyListener implements PropertyChangeListener {
 
-    public void propertyChange(PropertyChangeEvent e) {
+    public void propertyChange(@NotNull PropertyChangeEvent e) {
       emulatorPropertyChanged(e);
     }
 

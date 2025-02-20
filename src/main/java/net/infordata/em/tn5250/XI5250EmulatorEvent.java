@@ -21,6 +21,8 @@ limitations under the License.
  
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.EventObject;
 
 /**
@@ -72,12 +74,12 @@ public class XI5250EmulatorEvent extends EventObject {
   protected int         ivId;
   protected byte        ivAidCode;
 
-  public XI5250EmulatorEvent(int aId, XI5250Emulator aEm) {
+  public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm) {
     super(aEm);
     ivId = aId;
   }
 
-  public XI5250EmulatorEvent(int aId, XI5250Emulator aEm, byte anAidCode) {
+  public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm, byte anAidCode) {
     this(aId, aEm);
     ivAidCode = anAidCode;
   }
@@ -100,7 +102,7 @@ public class XI5250EmulatorEvent extends EventObject {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + "[" + cvIdDescr[ivId] + "]";
   }
 

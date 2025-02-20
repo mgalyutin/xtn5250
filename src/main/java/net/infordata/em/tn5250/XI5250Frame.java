@@ -44,13 +44,14 @@ import net.infordata.em.crt5250.XI5250Crt;
 import net.infordata.em.crt5250.XI5250CrtCtrl;
 import net.infordata.em.crt5250.XI5250CrtFrame;
 import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class XI5250Frame extends XI5250CrtFrame {
 
   private static final long serialVersionUID = 1L;
 
   // images
-  private static XIImagesBdl cvImagesBdl =
+  private static @NotNull XIImagesBdl cvImagesBdl =
       net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
   private static ResourceBundle cvRes =
@@ -58,31 +59,31 @@ public class XI5250Frame extends XI5250CrtFrame {
 
   private final String ivTitle;
 
-  public XI5250Frame(String aTitle, XI5250Emulator aCrt) {
+  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt) {
     super(aTitle, aCrt);
     ivTitle = aTitle;
     init(aCrt);
   }
 
-  public XI5250Frame(String aTitle, XI5250Emulator aCrt, boolean dspToolBar, boolean dspMenuBar) {
+  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt, boolean dspToolBar, boolean dspMenuBar) {
     super(aTitle, aCrt, dspToolBar, dspMenuBar);
     ivTitle = aTitle;
     init(aCrt);
   }
 
-  public XI5250Frame(String aTitle, XI5250Emulator aCrt,
+  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt,
                      boolean sizeControlledFrame, boolean dspToolBar, boolean dspMenuBar) {
     super(aTitle, aCrt, sizeControlledFrame, dspToolBar, dspMenuBar);
     ivTitle = aTitle;
     init(aCrt);
   }
   
-  private void init(XI5250Emulator aCrt) {
+  private void init(@NotNull XI5250Emulator aCrt) {
     if (aCrt.isActive())
       setTitle(ivTitle + " - " + aCrt.getHost());
     aCrt.addEmulatorListener(new XI5250EmulatorAdapter() {
       @Override
-      public void connected(XI5250EmulatorEvent e) {
+      public void connected(@NotNull XI5250EmulatorEvent e) {
         setTitle(ivTitle + " - " + e.get5250Emulator().getHost());
       }
 
@@ -94,7 +95,7 @@ public class XI5250Frame extends XI5250CrtFrame {
   }
 
   @Override
-  protected XI5250CrtCtrl createController(XI5250Crt crt) {
+  protected @NotNull XI5250CrtCtrl createController(XI5250Crt crt) {
     return new XI5250EmulatorCtrl((XI5250Emulator)crt);
   }
 
@@ -128,7 +129,7 @@ public class XI5250Frame extends XI5250CrtFrame {
   }
 
   @Override
-  protected void processWindowEvent(WindowEvent e) {
+  protected void processWindowEvent(@NotNull WindowEvent e) {
     super.processWindowEvent(e);
     switch(e.getID()) {
       case WindowEvent.WINDOW_OPENED:
@@ -139,7 +140,7 @@ public class XI5250Frame extends XI5250CrtFrame {
   }
 
   @Override
-  protected JMenuBar createMenuBar() {
+  protected @NotNull JMenuBar createMenuBar() {
     String str;
 
     str = cvRes.getString("TXT_Communications");
@@ -235,7 +236,7 @@ public class XI5250Frame extends XI5250CrtFrame {
    * @return created toolbar.
    */
   @Override
-  protected JToolBar createToolBar() {
+  protected @NotNull JToolBar createToolBar() {
     // bottoni della tool-bar
     AbstractButton[] buttons = new AbstractButton[] {
       new JButton(cvImagesBdl.getIcon("Connect")),

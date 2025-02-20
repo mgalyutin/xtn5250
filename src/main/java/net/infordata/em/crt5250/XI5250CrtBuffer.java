@@ -34,6 +34,7 @@ import java.awt.Graphics;
 import java.io.Serializable;
 
 import net.infordata.em.crt.XICrtBuffer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Adds capabilities required by 5250 emulation to XICrtBuffer. To be used by XI5250Crt.
@@ -48,7 +49,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
 
   public static final int GRAY_INTENSITY = colorAsIntensity(Color.gray);
 
-  private ColorWrapper ivBackColor = new ColorWrapper(Color.black);
+  private @NotNull ColorWrapper ivBackColor = new ColorWrapper(Color.black);
 
   /**
    * to be used with dark background
@@ -286,20 +287,20 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    * @param aW number of columns to extract from the given buffer.
    * @param aH number of rows to extract from the given buffer.
    */
-  public XI5250CrtBuffer(XI5250CrtBuffer from, int aC, int aR, int aW, int aH) {
+  public XI5250CrtBuffer(@NotNull XI5250CrtBuffer from, int aC, int aR, int aW, int aH) {
     super(from, aC, aR, aW, aH);
     setDefBackground(from.getDefBackground());
   }
 
   @Override
-  public Object clone() {
+  public @NotNull Object clone() {
     return new XI5250CrtBuffer(this, 0, 0,
         getCrtSize().width, getCrtSize().height);
   }
 
   @Override
-  public synchronized void drawString(String aStr, int col, int row,
-      int aAttr) {
+  public synchronized void drawString(@NotNull String aStr, int col, int row,
+                                      int aAttr) {
     int lPos = toLinearPos(col, row);
     col = toColPos(lPos);
     row = toRowPos(lPos);
@@ -337,8 +338,8 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    * @param row column where to draw the attribute place-holder char
    * @param aAttr dummy parameter
    */
-  protected void _drawAttributePlaceHolder(Graphics gr, int col, int row,
-      int aAttr) {
+  protected void _drawAttributePlaceHolder(@NotNull Graphics gr, int col, int row,
+                                           int aAttr) {
     int lPos = toLinearPos(col, row);
     col = toColPos(lPos);
     row = toRowPos(lPos);
@@ -364,8 +365,8 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    * @param len number of characters to apply the attribute
    * @param aAttr dummy parameter
    */
-  protected void _drawExtraAttribute(Graphics gr, int col, int row, int len,
-      int aAttr) {
+  protected void _drawExtraAttribute(@NotNull Graphics gr, int col, int row, int len,
+                                     int aAttr) {
     int extra = getExtraCharAttribute(aAttr);
     int dy = 2;
 
@@ -393,8 +394,8 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
   }
 
   @Override
-  protected void _drawString(Graphics gr, String aStr, int col, int row,
-      int aAttr) {
+  protected void _drawString(@NotNull Graphics gr, @NotNull String aStr, int col, int row,
+                             int aAttr) {
     if (aStr.length() <= 0) {
       return;
     }
@@ -436,7 +437,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    * @see String#indexOf
    */
   @Override
-  public String getString(int col, int row, int nChars) {
+  public @NotNull String getString(int col, int row, int nChars) {
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < nChars; i++) {
       int j = toLinearPos(col + i, row);
@@ -533,7 +534,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    *
    * @see #setDefBackground
    */
-  public static final int colorAsIntensity(Color aColor) {
+  public static final int colorAsIntensity(@NotNull Color aColor) {
     float[] hsb = Color.RGBtoHSB(aColor.getRed(), aColor.getGreen(),
         aColor.getBlue(), null);
     return (int) (hsb[2] * 1000);
@@ -545,7 +546,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
    *
    * @param aColor default background to set
    */
-  public void setDefBackground(Color aColor) {
+  public void setDefBackground(@NotNull Color aColor) {
     if (ivBackColor.equals(aColor)) {
       return;
     }

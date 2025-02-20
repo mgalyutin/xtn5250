@@ -28,6 +28,9 @@ limitations under the License.
 
 package net.infordata.em.tnprot;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -143,20 +146,20 @@ public class XITelnet {
   /**
    * if null then the connection is closed
    */
-  transient private Socket ivSocket;
+  transient private @Nullable Socket ivSocket;
   transient private InputStream ivIn;
   transient private BufferedOutputStream ivOut;
-  transient private RxThread ivReadTh;
+  transient private @Nullable RxThread ivReadTh;
 
   transient private byte ivIACCmd;
   transient private byte ivIACOpt;
   transient private String ivIACStr;
 
-  transient private boolean[] ivLocalFlags = new boolean[128];
-  transient private boolean[] ivRemoteFlags = new boolean[128];
+  transient private boolean @NotNull [] ivLocalFlags = new boolean[128];
+  transient private boolean @NotNull [] ivRemoteFlags = new boolean[128];
 
-  private boolean[] ivLocalReqFlags = new boolean[128];
-  private boolean[] ivRemoteReqFlags = new boolean[128];
+  private boolean @NotNull [] ivLocalReqFlags = new boolean[128];
+  private boolean @NotNull [] ivRemoteReqFlags = new boolean[128];
 
   private String ivTermType;
   private String ivEnvironment;
@@ -174,12 +177,12 @@ public class XITelnet {
     return ((int) bb & 0xff);
   }
 
-  public static String toHex(byte bb) {
+  public static @NotNull String toHex(byte bb) {
     String hex = Integer.toString(toInt(bb), 16);
     return "00".substring(hex.length()) + hex;
   }
 
-  public static String toHex(byte[] buf, int len) {
+  public static @NotNull String toHex(byte[] buf, int len) {
     StringBuilder sb = new StringBuilder(len * 4);
     for (int i = 0; i < len; i++) {
       sb.append(toHex(buf[i])).append(' ');
@@ -187,7 +190,7 @@ public class XITelnet {
     return sb.toString();
   }
 
-  public static String toHex(byte[] buf) {
+  public static @NotNull String toHex(byte @NotNull [] buf) {
     return toHex(buf, buf.length);
   }
 
@@ -196,7 +199,7 @@ public class XITelnet {
    *
    * @param aHost host to connect to.
    */
-  public XITelnet(String aHost) {
+  public XITelnet(@NotNull String aHost) {
     this(aHost, 23);
   }
 
@@ -206,7 +209,7 @@ public class XITelnet {
    * @param aHost host to connect to.
    * @param aPort port to connect to.
    */
-  public XITelnet(String aHost, int aPort) {
+  public XITelnet(@NotNull String aHost, int aPort) {
     if (aHost == null) {
       throw new IllegalArgumentException("Host cannot be null");
     }
@@ -625,7 +628,7 @@ public class XITelnet {
    * @param sendIS whether to send IS sub-command or not.
    * @param aString the command body
    */
-  public synchronized void sendIACStr(byte aCmd, byte aOpt, boolean sendIS, String aString) {
+  public synchronized void sendIACStr(byte aCmd, byte aOpt, boolean sendIS, @NotNull String aString) {
     if (LOGGER.isLoggable(Level.FINE)) {
       LOGGER.fine("t " + aCmd + " " + TELCMD[-(aCmd + 1)] + " " +
           TELOPT[aOpt] + " " + aString);
@@ -673,7 +676,7 @@ public class XITelnet {
    *
    * @param aBuf bytes to send to the terminal server.
    */
-  public void send(byte[] aBuf) {
+  public void send(byte @NotNull [] aBuf) {
     send(aBuf, aBuf.length);
   }
 

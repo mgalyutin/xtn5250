@@ -22,6 +22,9 @@ limitations under the License.
 
 package net.infordata.em.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.applet.Applet;
 import java.awt.Component;
 import java.awt.Frame;
@@ -66,29 +69,29 @@ public class XIUtil {
   private XIUtil() {
   }
 
-  public static final Frame getFrame(Component aComponent) {
+  public static final @Nullable Frame getFrame(Component aComponent) {
     Component comp = aComponent;
     while (comp != null && !(comp instanceof Frame))
       comp = comp.getParent();
     return (Frame)comp;
   }
 
-  public static final Window getWindow(Component aComponent) {
+  public static final @Nullable Window getWindow(Component aComponent) {
     Component comp = aComponent;
     while (comp != null && !(comp instanceof Window))
       comp = comp.getParent();
     return (Window)comp;
   }
 
-  public static final Applet getApplet(Component aComponent) {
+  public static final @Nullable Applet getApplet(Component aComponent) {
     Component comp = aComponent;
     while (comp != null && !(comp instanceof Applet))
       comp = comp.getParent();
     return (Applet)comp;
   }
 
-  public static Image createImage(final Class<?> baseClass,
-                                  final String gifFile) {
+  public static Image createImage(final @NotNull Class<?> baseClass,
+                                  final @NotNull String gifFile) {
     byte[] buffer;
     try {
       /* Copy resource into a byte array.  This is
@@ -126,7 +129,7 @@ public class XIUtil {
     return Toolkit.getDefaultToolkit().createImage(buffer);
   }
 
-  public static char getMnemonic(String str) {
+  public static char getMnemonic(@NotNull String str) {
     char ch;
     int state = 0;
     for (int i = 0; i < str.length(); i++) {
@@ -146,7 +149,7 @@ public class XIUtil {
     return '\u0000';
   }
 
-  public static String removeMnemonics(String str) {
+  public static @NotNull String removeMnemonics(@NotNull String str) {
     StringBuilder sb = new StringBuilder(str.length());
     char ch;
     int state = 0;

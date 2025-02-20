@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,7 +34,7 @@ import java.io.InputStream;
 public class XIReadFieldsCmd extends XICCCmd {
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     readCC(inStream);
   }

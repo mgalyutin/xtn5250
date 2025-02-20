@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Connect an AWT Component to a XI5250Field
@@ -41,7 +42,7 @@ public class XI5250FieldConnection {
   private int ivNCols;
   private int ivNRows;
 
-  public XI5250FieldConnection(XI5250PanelHandler aPanelHndl, XI5250Field aField,
+  public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl, XI5250Field aField,
                                Component aComponent,
                                int aColsDelta, int aRowsDelta,
                                int aNCols, int aNRows) {
@@ -53,13 +54,13 @@ public class XI5250FieldConnection {
     aPanelHndl.connect(aField, this);
   }
 
-  public XI5250FieldConnection(XI5250PanelHandler aPanelHndl,
+  public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl,
                                XI5250Field aField,
                                Component aComponent) {
     this(aPanelHndl, aField, aComponent, 0, 0, 1, 1);
   }
 
-  protected void recalcBounds(XI5250EmulatorExt aEm, XI5250Field aField) {
+  protected void recalcBounds(@NotNull XI5250EmulatorExt aEm, @NotNull XI5250Field aField) {
     Rectangle[] rcts = aField.getRows();
     // use the last row
     Rectangle   rct  = rcts[rcts.length - 1];

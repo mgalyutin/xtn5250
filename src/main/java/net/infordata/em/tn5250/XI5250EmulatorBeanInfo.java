@@ -18,6 +18,9 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -25,9 +28,9 @@ import java.beans.PropertyDescriptor;
 import java.beans.SimpleBeanInfo;
 
 public class XI5250EmulatorBeanInfo extends SimpleBeanInfo {
-  Class<XI5250Emulator> beanClass = XI5250Emulator.class;
-  String iconColor16x16Filename = "resources/XI5250Emulator_16.gif";
-  String iconColor32x32Filename = "resources/XI5250Emulator_32.gif";
+  @NotNull Class<XI5250Emulator> beanClass = XI5250Emulator.class;
+  @NotNull String iconColor16x16Filename = "resources/XI5250Emulator_16.gif";
+  @NotNull String iconColor32x32Filename = "resources/XI5250Emulator_32.gif";
   String iconMono16x16Filename;
   String iconMono32x32Filename;
 
@@ -36,7 +39,7 @@ public class XI5250EmulatorBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public PropertyDescriptor[] getPropertyDescriptors() {
+  public PropertyDescriptor @Nullable [] getPropertyDescriptors() {
     try  {
       PropertyDescriptor _active =
           new PropertyDescriptor("active", beanClass, "isActive", "setActive");
@@ -72,7 +75,7 @@ public class XI5250EmulatorBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public java.awt.Image getIcon(int iconKind) {
+  public java.awt.@Nullable Image getIcon(int iconKind) {
     switch (iconKind) {
     case BeanInfo.ICON_COLOR_16x16:
       return iconColor16x16Filename != null ? loadImage(iconColor16x16Filename) : null;
@@ -87,7 +90,7 @@ public class XI5250EmulatorBeanInfo extends SimpleBeanInfo {
   }
 
   @Override
-  public BeanInfo[] getAdditionalBeanInfo() {
+  public BeanInfo @Nullable [] getAdditionalBeanInfo() {
     Class<?> superclass = beanClass.getSuperclass();
     try  {
       BeanInfo superBeanInfo = Introspector.getBeanInfo(superclass);

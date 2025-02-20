@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,7 +39,7 @@ public class XIRollCmd extends XI5250Cmd {
   int     ivBottomRow;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     int[] bb = new int[3];
     int   i;

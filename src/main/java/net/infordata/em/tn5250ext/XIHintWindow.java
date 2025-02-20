@@ -27,6 +27,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import net.infordata.em.util.*;
+import org.jetbrains.annotations.NotNull;
 
 public class XIHintWindow extends JWindow {
 
@@ -34,9 +35,9 @@ public class XIHintWindow extends JWindow {
 
   private Component ivComponent;
 
-  private WinAdapter ivWinAdapter = new WinAdapter();
+  private @NotNull WinAdapter ivWinAdapter = new WinAdapter();
 
-  public XIHintWindow(XIHint aHint, Component aComponent) {
+  public XIHintWindow(@NotNull XIHint aHint, @NotNull Component aComponent) {
 
     super(XIUtil.getFrame(aComponent));
 
@@ -75,21 +76,21 @@ public class XIHintWindow extends JWindow {
   class CompAdapter extends ComponentAdapter {
 
     @Override
-    public void componentResized(ComponentEvent aEvent) {
+    public void componentResized(@NotNull ComponentEvent aEvent) {
       if (aEvent.getSource() == getParent()) {
         setVisible(false);
       }
     }
 
     @Override
-    public void componentMoved(ComponentEvent aEvent) {
+    public void componentMoved(@NotNull ComponentEvent aEvent) {
       if (aEvent.getSource() == getParent()) {
         setVisible(false);
       }
     }
 
     @Override
-    public void componentShown(ComponentEvent aEvent) {
+    public void componentShown(@NotNull ComponentEvent aEvent) {
       if (aEvent.getSource() == XIHintWindow.this) {
         Frame frm = (Frame) getParent();
         frm.addComponentListener(this);
@@ -98,7 +99,7 @@ public class XIHintWindow extends JWindow {
     }
 
     @Override
-    public void componentHidden(ComponentEvent aEvent) {
+    public void componentHidden(@NotNull ComponentEvent aEvent) {
       if (aEvent.getSource() == XIHintWindow.this) {
         Frame frm = (Frame) getParent();
         frm.removeWindowListener(ivWinAdapter);

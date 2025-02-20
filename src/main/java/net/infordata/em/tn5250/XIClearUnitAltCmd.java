@@ -22,6 +22,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +38,7 @@ public class XIClearUnitAltCmd extends XI5250Cmd {
   protected int ivPar;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException, XI5250Exception {
+  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
     ivPar = Math.max(0, inStream.read());
     if (ivPar != 0x00 && ivPar != 0x80)
       throw new XI5250Exception("Invalid clear unit param: " + ivPar, 

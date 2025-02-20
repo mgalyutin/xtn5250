@@ -30,6 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 5250 Commands list (Works like a macro command).
@@ -40,7 +42,7 @@ public class XI5250CmdList extends XI5250Cmd {
 
   private static final Logger LOGGER = Logger.getLogger(XI5250CmdList.class.getName());
 
-  private static Class<?>[] cv5250CmdClasses = new Class[256];
+  private static Class<?> @NotNull [] cv5250CmdClasses = new Class[256];
 
   protected List<XI5250Cmd> ivCmdVect;
 
@@ -91,7 +93,7 @@ public class XI5250CmdList extends XI5250Cmd {
    * @throws XI5250Exception raised if command parameters are wrong.
    */
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     int bb;
     XI5250Cmd cmd;
@@ -148,7 +150,7 @@ public class XI5250CmdList extends XI5250Cmd {
    * @param aCmd byte identification for the command.
    * @return created command.
    */
-  protected XI5250Cmd createCmdInstance(int aCmd) {
+  protected @Nullable XI5250Cmd createCmdInstance(int aCmd) {
     Class<?> cls;
 
     cls = cv5250CmdClasses[aCmd];
@@ -164,7 +166,7 @@ public class XI5250CmdList extends XI5250Cmd {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + ivCmdVect.toString();
   }
 

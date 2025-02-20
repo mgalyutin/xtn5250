@@ -27,6 +27,8 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * http://www-03.ibm.com/systems/i/software/globalization/ccsid.html
  * http://www-306.ibm.com/software/globalization/ccsid/ccsid_registered.jsp
@@ -589,7 +591,7 @@ public class XIEbcdicNTranslator extends XIEbcdicTranslator {
   public static final XIEbcdicNTranslator TRANSLATOR_CP1160 =
       new XIEbcdicNTranslator.Euro(CP838, (byte) 0xFE);
 
-  private static int[] SCP2CP(String scp) {
+  private static int[] SCP2CP(@NotNull String scp) {
     if (scp.length() != 256) {
       throw new IllegalArgumentException();
     }

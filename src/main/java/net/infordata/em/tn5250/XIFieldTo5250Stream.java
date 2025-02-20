@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.crt5250.XI5250FieldSaver;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Implements XI5250FieldSaver to write fields content to an OutputStream.
@@ -52,7 +53,7 @@ public class XIFieldTo5250Stream implements XI5250FieldSaver {
     ivOnlyMDT = onlyMDT;
   }
 
-  public void write(XI5250Field aField, String aStr)
+  public void write(@NotNull XI5250Field aField, @NotNull String aStr)
       throws IOException {
     if (ivOnlyMDT && !aField.isMDTOn())
       return;

@@ -100,6 +100,8 @@ import net.infordata.em.crt5250.XI5250FieldsList;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tnprot.XITelnet;
 import net.infordata.em.tnprot.XITelnetEmulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * THE 5250 EMULATOR.
@@ -272,8 +274,8 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
           "ST_POWERED"};
 
   // telnet connection
-  transient private XITelnet ivTelnet;
-  transient private byte[] ivRXBuf = new byte[1024 * 8];
+  transient private @Nullable XITelnet ivTelnet;
+  transient private byte @NotNull [] ivRXBuf = new byte[1024 * 8];
   transient private int ivRXBufLen;
 
   // one bit for each function key
@@ -286,7 +288,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
   /**
    * The pending command (used when an aid code is pressed).
    */
-  transient XI5250Cmd ivPendingCmd;
+  transient @Nullable XI5250Cmd ivPendingCmd;
 
   // current and previouos state
   transient private int ivState = ST_NULL;
@@ -296,31 +298,31 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
 
   transient private XI5250StatusBar ivStatusBar;
 
-  transient protected XI5250EmulatorMemento[] ivSavedScreens =
+  transient protected XI5250EmulatorMemento @NotNull [] ivSavedScreens =
       new XI5250EmulatorMemento[10];
   transient protected int ivSavedScreensIdx = 0;
 
-  transient KeyEventQueue ivKeybEventQueue;
-  transient KeyEventDispatchThread ivKeybThread;
+  transient @Nullable KeyEventQueue ivKeybEventQueue;
+  transient @Nullable KeyEventDispatchThread ivKeybThread;
 
   //used when the user switches to SYSTEM_REQUEST state
-  transient private XI5250EmulatorMemento ivSysReqMemento;
-  transient private XI5250Field ivSysReqField;
+  transient private @Nullable XI5250EmulatorMemento ivSysReqMemento;
+  transient private @Nullable XI5250Field ivSysReqField;
 
   //used when the emulator switch to PRE_HELP state
   transient private XI5250CrtBuffer ivPreHelpErrorLine;
 
-  transient private XI5250EmulatorListener ivEmulatorListener;
+  transient private @Nullable XI5250EmulatorListener ivEmulatorListener;
 
   private String ivTermType;
-  private String ivTelnetEnv;
+  private @Nullable String ivTelnetEnv;
 
-  transient private TelnetEmulator ivTelnetEmulator = new TelnetEmulator();
+  transient private @NotNull TelnetEmulator ivTelnetEmulator = new TelnetEmulator();
 
   /**
    * Used when switching from 24x80 to ...
    */
-  transient protected Font ivPrevFont;
+  transient protected @Nullable Font ivPrevFont;
 
   public static final String ACTIVE = "active";
   public static final String TERMINAL_TYPE = "terminalType";
@@ -330,7 +332,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
 
   public static final String STRPCCMD_ENABLED = "strPcCmd";
 
-  private String ivHost;
+  private @Nullable String ivHost;
   private int ivPort = 23;
   private SocketFactory socketFactory = SocketFactory.getDefault();
   private boolean disconnectOnSocketException;
@@ -385,7 +387,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param e emulator event to process.
    */
-  protected void processEmulatorEvent(XI5250EmulatorEvent e) {
+  protected void processEmulatorEvent(@NotNull XI5250EmulatorEvent e) {
     if (ivEmulatorListener == null) {
       return;
     }
@@ -439,7 +441,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param aHost host to connect to.
    */
-  public synchronized void setHost(String aHost) {
+  public synchronized void setHost(@Nullable String aHost) {
     if (aHost == ivHost ||
         (aHost != null && aHost.equals(ivHost))) {
       return;
@@ -454,7 +456,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @return host the emulator will connect to.
    */
-  public final String getHost() {
+  public final @Nullable String getHost() {
     return ivHost;
   }
 
@@ -529,7 +531,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param aTermType terminal type to be used for the connection with the server.
    */
-  public void setTerminalType(String aTermType) {
+  public void setTerminalType(@Nullable String aTermType) {
     if (aTermType != null && aTermType.equals(ivTermType)) {
       return;
     }
@@ -560,7 +562,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param env telnet environment option value to use.
    */
-  public void setTelnetEnv(String env) {
+  public void setTelnetEnv(@Nullable String env) {
     if (env != null && env.equals(ivTelnetEnv)) {
       return;
     }
@@ -576,7 +578,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
     firePropertyChange(TELNET_ENV, old, ivTelnetEnv);
   }
 
-  public String getTelnetEnv() {
+  public @Nullable String getTelnetEnv() {
     return ivTelnetEnv;
   }
 
@@ -632,7 +634,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * Redefined to take care of the status-bar presence
    */
   @Override
-  public Dimension getPreferredSize() {
+  public @NotNull Dimension getPreferredSize() {
     Dimension size = super.getPreferredSize();
     size.height += getCharSize().height + 4;
     return size;
@@ -644,7 +646,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @return the minimum screen size.
    */
   @Override
-  public Dimension getMinimumSize() {
+  public @NotNull Dimension getMinimumSize() {
     Dimension size = super.getMinimumSize();
     size.height += getMinCharSize().height + 4;
     return size;
@@ -658,7 +660,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @see net.infordata.em.crt.XICrt#getTestSize
    */
   @Override
-  protected Dimension getTestSize(Font aFont) {
+  protected @NotNull Dimension getTestSize(Font aFont) {
     FontMetrics fm = getFontMetrics(aFont);
     Dimension res = new Dimension(fm.charWidth('W') * getCrtSize().width,
         fm.getHeight() * (getCrtSize().height + 1) + 4);
@@ -676,9 +678,9 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param aAttr attributes of the field
    * @return created field.
    */
-  protected XI5250Field create5250Field(byte[] aFFW, byte[] aFCW,
-      int aCol, int aRow,
-      int aLen, int aAttr) {
+  protected @NotNull XI5250Field create5250Field(byte[] aFFW, byte[] aFCW,
+                                                 int aCol, int aRow,
+                                                 int aLen, int aAttr) {
     return new XI5250Field(this, aFFW, aFCW, aCol, aRow, aLen, aAttr);
   }
 
@@ -687,7 +689,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @return created memento instance.
    */
-  public synchronized XI5250EmulatorMemento createMemento() {
+  public synchronized @NotNull XI5250EmulatorMemento createMemento() {
     return new XI5250EmulatorMemento((XI5250FieldsList) ivFields.clone(),
         ivFunctionKeysMask, ivPendingCmd,
         ivState, ivPrevState,
@@ -701,7 +703,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param aMemento state to restore to.
    */
-  public void restoreMemento(XI5250EmulatorMemento aMemento) {
+  public void restoreMemento(@NotNull XI5250EmulatorMemento aMemento) {
     //this statement avoids deadlocks with component resizing.
     synchronized (getTreeLock()) {
       synchronized (this) {
@@ -729,7 +731,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @return the created memo.
    */
-  protected synchronized XI5250EmulatorMemento createSysReqMemento() {
+  protected synchronized @NotNull XI5250EmulatorMemento createSysReqMemento() {
     return new XI5250EmulatorMemento((XI5250FieldsList) ivFields.clone(),
         ivFunctionKeysMask, ivPendingCmd,
         ivState, ivPrevState,
@@ -744,7 +746,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param aMemento memento to restore to.
    * @see #createSysReqMemento
    */
-  protected void restoreSysReqMemento(XI5250EmulatorMemento aMemento) {
+  protected void restoreSysReqMemento(@NotNull XI5250EmulatorMemento aMemento) {
     //this statement avoids deadlocks with component resizing
     synchronized (getTreeLock()) {
       synchronized (this) {
@@ -832,7 +834,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param ex exception throw when communicating with terminal server.
    */
-  protected void caughtIOException(final IOException ex) {
+  protected void caughtIOException(final @NotNull IOException ex) {
     if (LOGGER.isLoggable(Level.WARNING)) {
       LOGGER.log(Level.WARNING, "caughtIOException()", ex);
     }
@@ -848,7 +850,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param ex exception throw when there is a problem parsing 5250 packet.
    */
-  protected void caught5250Exception(XI5250Exception ex) {
+  protected void caught5250Exception(@NotNull XI5250Exception ex) {
     if (LOGGER.isLoggable(Level.FINE)) {
       LOGGER.log(Level.FINE, "caught5250Exception()", ex);
     }
@@ -860,14 +862,14 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param ex exception thrown wh
    */
-  protected void caughtException(final Throwable ex) {
+  protected void caughtException(final @NotNull Throwable ex) {
     LOGGER.log(Level.SEVERE, "caughtException()", ex);
     SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(XI5250Emulator.this,
         ex.getMessage() + "\nSee the log for details ",
         "ERROR", JOptionPane.ERROR_MESSAGE));
   }
 
-  protected void receivedData(byte[] buf, int len) {
+  protected void receivedData(byte @NotNull [] buf, int len) {
     if (getState() == ST_POWER_ON) {
       if (LOGGER.isLoggable(Level.WARNING)) {
         LOGGER.log(Level.WARNING, "Discarding received data len: " + len);
@@ -1269,7 +1271,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param aEm emulator to create the command list for.
    * @return created command list
    */
-  protected XI5250CmdList createCmdList(XI5250Emulator aEm) {
+  protected @NotNull XI5250CmdList createCmdList(XI5250Emulator aEm) {
     return new XI5250CmdList(aEm);
   }
 
@@ -1279,7 +1281,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param aEm emulator to create the order list for.
    * @return created order list
    */
-  protected XI5250OrdList createOrdList(XI5250Emulator aEm) {
+  protected @NotNull XI5250OrdList createOrdList(XI5250Emulator aEm) {
     return new XI5250OrdList(aEm);
   }
 
@@ -1313,7 +1315,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param buf additional bytes to send in the packet
    * @param aLen number of bytes from the buffer to send in the patcket
    */
-  public void send5250Packet(byte flags, byte opcode, byte[] buf, int aLen) {
+  public void send5250Packet(byte flags, byte opcode, byte @Nullable [] buf, int aLen) {
     byte[] cBuf = {(byte) 0x00, (byte) 0x00,   //len
         (byte) 0x12, (byte) 0xA0,
         (byte) 0x00, (byte) 0x00,
@@ -1338,7 +1340,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param opcode operation code to use on the packet
    * @param buf additional bytes to send in the packet
    */
-  public void send5250Packet(byte flags, byte opcode, byte[] buf) {
+  public void send5250Packet(byte flags, byte opcode, byte @Nullable [] buf) {
     send5250Packet(flags, opcode, buf, (buf != null) ? buf.length : 0);
   }
 
@@ -1443,7 +1445,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    *
    * @param e event to update the status-bar shift area with.
    */
-  protected void updateStatusBar(InputEvent e) {
+  protected void updateStatusBar(@NotNull InputEvent e) {
     ivStatusBar.setShiftArea((e.isShiftDown()) ?
         XI5250StatusBar.SHIFT_DOWN :
         XI5250StatusBar.SHIFT_UP);
@@ -1471,13 +1473,13 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
   }
 
   @Override
-  protected void processMouseEvent(MouseEvent e) {
+  protected void processMouseEvent(@NotNull MouseEvent e) {
     updateStatusBar(e);
     super.processMouseEvent(e);
   }
 
   @Override
-  protected void processKeyEvent(KeyEvent e) {
+  protected void processKeyEvent(@NotNull KeyEvent e) {
     updateStatusBar(e);
     super.processKeyEvent(e);
   }
@@ -1487,7 +1489,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * the translation process has already been done.
    */
   @Override
-  public synchronized void processRawKeyEvent(KeyEvent e) {
+  public synchronized void processRawKeyEvent(@NotNull KeyEvent e) {
     // keyboard handling that doesn' t depends on 5250 state
     switch (e.getID()) {
       //
@@ -1533,7 +1535,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * when it is safe to handle the key event.
    */
   @Override
-  protected synchronized void doProcessKeyEvent(KeyEvent e) {
+  protected synchronized void doProcessKeyEvent(@NotNull KeyEvent e) {
     // pre
     switch (e.getID()) {
       //
@@ -1564,7 +1566,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param e keyboard event to handle.
    * @return true if the event was correctly processed, false otherwise.
    */
-  protected boolean processKeySystemRequest(KeyEvent e) {
+  protected boolean processKeySystemRequest(@NotNull KeyEvent e) {
     super.doProcessKeyEvent(e);
     if (e.isConsumed()) {
       return true;
@@ -1622,7 +1624,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param e keyboard event to handle.
    * @return true if the event was correctly processed, false otherwise.
    */
-  protected boolean processKeyNormalUnlocked(KeyEvent e) {
+  protected boolean processKeyNormalUnlocked(@NotNull KeyEvent e) {
     super.doProcessKeyEvent(e);
     if (e.isConsumed()) {
       return true;
@@ -1745,7 +1747,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    */
   @SuppressWarnings("deprecation")
   @Override
-  protected KeyEvent translateKeyEvent(KeyEvent e) {
+  protected @NotNull KeyEvent translateKeyEvent(@NotNull KeyEvent e) {
     if (!getAltFKeyRemap()) {
       return e;
     }
@@ -1812,7 +1814,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
     }
 
     @Override
-    protected EventListener remove(EventListener oldl) {
+    protected @Nullable EventListener remove(EventListener oldl) {
       if (oldl == a) {
         return b;
       }
@@ -1827,8 +1829,8 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
       return add((XI5250EmulatorListener) a2, (XI5250EmulatorListener) b2);
     }
 
-    public static XI5250EmulatorListener add(XI5250EmulatorListener a,
-        XI5250EmulatorListener b) {
+    public static @Nullable XI5250EmulatorListener add(@Nullable XI5250EmulatorListener a,
+                                                       @Nullable XI5250EmulatorListener b) {
       if (a == null) {
         return b;
       }
@@ -1838,8 +1840,8 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
       return new Multicaster(a, b);
     }
 
-    public static XI5250EmulatorListener remove(XI5250EmulatorListener a,
-        XI5250EmulatorListener b) {
+    public static @Nullable XI5250EmulatorListener remove(XI5250EmulatorListener a,
+                                                          XI5250EmulatorListener b) {
       return (XI5250EmulatorListener) removeInternal(a, b);
     }
 
@@ -1889,7 +1891,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
     KeyEventQueueItem ivNext;
 
 
-    public KeyEventQueueItem(AWTEvent evt) {
+    public KeyEventQueueItem(@NotNull AWTEvent evt) {
       ivEvent = evt;
       ivId = evt.getID();
     }
@@ -1902,12 +1904,12 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    */
   protected static class KeyEventQueue {
 
-    private KeyEventQueueItem ivQueue;
+    private @Nullable KeyEventQueueItem ivQueue;
 
     public KeyEventQueue() {
     }
 
-    public synchronized void postEvent(AWTEvent theEvent) {
+    public synchronized void postEvent(@NotNull AWTEvent theEvent) {
       KeyEventQueueItem eqi = new KeyEventQueueItem(theEvent);
       if (ivQueue == null) {
         ivQueue = eqi;
@@ -1999,11 +2001,11 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
       XI5250Emulator.this.disconnected(remote);
     }
 
-    public final void caughtIOException(IOException ex) {
+    public final void caughtIOException(@NotNull IOException ex) {
       XI5250Emulator.this.caughtIOException(ex);
     }
 
-    public final void receivedData(byte[] buf, int len) {
+    public final void receivedData(byte @NotNull [] buf, int len) {
       XI5250Emulator.this.receivedData(buf, len);
     }
 

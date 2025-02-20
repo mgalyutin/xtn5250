@@ -12,6 +12,7 @@ import javax.net.SocketFactory;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tn5250.XI5250Emulator;
 import net.infordata.em.tn5250.XI5250EmulatorListener;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class TerminalClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(TerminalClient.class);
 
-  private TerminalClientEmulator emulator = new TerminalClientEmulator();
+  private @NotNull TerminalClientEmulator emulator = new TerminalClientEmulator();
 
   /**
    * Sets the type of terminal to emulate.
@@ -81,7 +82,7 @@ public class TerminalClient {
    * @param column column number where to set the field text. First column is 1.
    * @param text the text to set on the field.
    */
-  public void setFieldTextByCoord(int row, int column, String text) {
+  public void setFieldTextByCoord(int row, int column, @NotNull String text) {
     XI5250Field field = emulator.getFieldFromPos(column - 1, row - 1);
     if (field == null) {
       throw new IllegalArgumentException("Invalid field position " + row + "," + column);
@@ -91,12 +92,12 @@ public class TerminalClient {
   }
 
   @VisibleForTesting
-  public void updateCursorPosition(String text, int col, int row) {
+  public void updateCursorPosition(@NotNull String text, int col, int row) {
     emulator.setCursorPos((col + text.length()) % emulator.getCrtSize().width,
         row + (col + text.length()) / emulator.getCrtSize().width);
   }
 
-  public void setFieldTextByLabel(String label, String text) {
+  public void setFieldTextByLabel(@NotNull String label, @NotNull String text) {
     XI5250Field field = emulator.getFieldNextTo(label);
     if (field == null) {
       throw new IllegalArgumentException("Invalid label" + label);
@@ -105,7 +106,7 @@ public class TerminalClient {
     updateCursorPosition(text, field.getCol(), field.getRow());
   }
 
-  public void setFieldTextByTabulator(int tabs, String text) {
+  public void setFieldTextByTabulator(int tabs, @NotNull String text) {
     int row = emulator.getCursorRow();
     int col = emulator.getCursorCol();
     XI5250Field field = emulator.getFieldFromPos(col, row);
@@ -144,7 +145,7 @@ public class TerminalClient {
    *
    * @return The screen text with newlines separating each row.
    */
-  public String getScreenText() {
+  public @NotNull String getScreenText() {
     int height = emulator.getCrtSize().height;
     int width = emulator.getCrtSize().width;
     StringBuilder screen = new StringBuilder();
@@ -208,7 +209,7 @@ public class TerminalClient {
    * @return The position of the cursor in the screen (x contains the column and y the row). If the
    * cursor is not visible then empty value is returned.
    */
-  public Optional<Point> getCursorPosition() {
+  public @NotNull Optional<Point> getCursorPosition() {
     return emulator.isCursorVisible() ? Optional
         .of(new Point(emulator.getCursorCol() + 1, emulator.getCursorRow() + 1)) : Optional.empty();
   }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.infordata.em.crt5250.XIEbcdicTranslator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 Query command.
@@ -32,10 +33,10 @@ import net.infordata.em.crt5250.XIEbcdicTranslator;
  * @author   Valentino Proietti - Infordata S.p.A.
  */
 public class XIQueryCmd extends XI5250Cmd {
-  protected int[] ivPar = new int[5];
+  protected int @NotNull [] ivPar = new int[5];
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
+  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
     for (int i = 0; i < 5; i++)
       ivPar[i] = inStream.read();
 

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * EA - Erase to address TODO
@@ -47,7 +48,7 @@ public class XIEAOrd extends XI5250Ord {
    * @throws IOException raised when there is an input/output problem.
    */
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     byte[] buf = new byte[3];
     if (inStream.read(buf) < buf.length) {
@@ -74,7 +75,7 @@ public class XIEAOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [" + ivRow + "," + ivCol + "," + ivLen + "," + ",[" +
         XITelnet.toHex(ivAttributeTypes) + "]" + "]";
   }

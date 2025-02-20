@@ -33,6 +33,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The image bundle.
@@ -86,7 +87,7 @@ public class XIImagesBdl extends ListResourceBundle {
   private XIImagesBdl() {
   }
 
-  public static XIImagesBdl getImagesBdl() {
+  public static @NotNull XIImagesBdl getImagesBdl() {
     if (cvImagesBdl == null) {
       cvImagesBdl = new XIImagesBdl();
     }
@@ -98,13 +99,13 @@ public class XIImagesBdl extends ListResourceBundle {
     return cvContents;
   }
 
-  public final Image getImage(String anImageName) {
+  public final Image getImage(@NotNull String anImageName) {
     return ((ImageIcon)getIcon(anImageName)).getImage();
   }
 
-  private Map<String, Icon> ivIcons = new HashMap<>();
+  private @NotNull Map<String, Icon> ivIcons = new HashMap<>();
 
-  public synchronized final Icon getIcon(String anImageName) {
+  public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
     Icon icon = ivIcons.get(anImageName);
     if (icon == null) {
       icon = new ImageIcon((Image)getObject(anImageName));

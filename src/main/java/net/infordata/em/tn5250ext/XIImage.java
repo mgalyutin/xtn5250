@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 
 import javax.swing.*;
@@ -52,7 +54,7 @@ public class XIImage extends JComponent {
   }
 
   @Override
-  public void paintComponent(Graphics gr) {
+  public void paintComponent(@NotNull Graphics gr) {
     Dimension dim = getSize();
 
     if (ivImage != null)

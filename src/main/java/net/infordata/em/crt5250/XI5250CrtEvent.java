@@ -22,6 +22,8 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.event.KeyEvent;
 import java.util.EventObject;
 
@@ -67,7 +69,7 @@ public class XI5250CrtEvent extends EventObject {
   private XI5250Field ivField;
   private KeyEvent    ivKeyEvent;
 
-  protected XI5250CrtEvent(int aId, XI5250Crt aCrt, XI5250Field aField,
+  protected XI5250CrtEvent(int aId, @NotNull XI5250Crt aCrt, XI5250Field aField,
                            KeyEvent aKeyEvent) {
     super(aCrt);
     ivId = aId;
@@ -75,7 +77,7 @@ public class XI5250CrtEvent extends EventObject {
     ivKeyEvent = aKeyEvent;
   }
 
-  public XI5250CrtEvent(int aId, XI5250Crt aCrt, XI5250Field aField) {
+  public XI5250CrtEvent(int aId, @NotNull XI5250Crt aCrt, XI5250Field aField) {
     this(aId, aCrt, aField, null);
   }
 
@@ -96,7 +98,7 @@ public class XI5250CrtEvent extends EventObject {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + "[" + cvIdDescr[getID()] + "," + ivField + "]";
   }
 

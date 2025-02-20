@@ -29,6 +29,8 @@ import java.util.logging.Logger;
 
 import net.infordata.em.tn5250.XI5250EmulatorAdapter;
 import net.infordata.em.tn5250.XI5250EmulatorEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Maintains a set of XI5250PanelHandler and activates them when the related 5250
@@ -41,7 +43,7 @@ public abstract class XI5250PanelsDispatcher {
   protected static final Logger LOGGER = Logger.getLogger(XI5250PanelsDispatcher.class.getName());
   
   transient private XI5250EmulatorExt  ivEm;
-  transient private EmulatorAdapter    ivEmulatorAdapter;
+  transient private @Nullable EmulatorAdapter    ivEmulatorAdapter;
 
   /**
    * The current XI5250PanelHandler.
@@ -111,14 +113,14 @@ public abstract class XI5250PanelsDispatcher {
    * @return the XI5250PanelHandler instance related to the current 5250 panel
    * @see    XI5250PanelHandler#detailedTest
    */
-  protected abstract XI5250PanelHandler getCurrentPanelHandler();
+  protected abstract @Nullable XI5250PanelHandler getCurrentPanelHandler();
 
   /**
    * Returns a Map that can be used to store data shared by different
    * XI5250Panel instances.
    * @return Map that can be used to store data shared by different XI5250Panel instances.
    */
-  public final Map<Object, Object> getSharedData() {
+  public final @NotNull Map<Object, Object> getSharedData() {
     if (ivSharedData == null)
       ivSharedData = new HashMap<>();
     return ivSharedData;
@@ -197,7 +199,7 @@ public abstract class XI5250PanelsDispatcher {
     }
 
     @Override
-    public void dataSended(XI5250EmulatorEvent e) {
+    public void dataSended(@NotNull XI5250EmulatorEvent e) {
       XI5250PanelsDispatcher.this.dataSended(e.getAidCode());
     }
 

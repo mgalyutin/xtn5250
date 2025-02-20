@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import net.infordata.em.util.XIRatioLayout;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The 5250 status bar.
@@ -53,7 +55,7 @@ public class XI5250StatusBar extends JPanel {
   public final static int MESSAGE_ON           =  1;
 
   // images
-  static XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
+  static @NotNull XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
 
   private static Image
       cvTemporaryLockImage  = cvImagesBdl.getImage("TemporaryLock");
@@ -239,8 +241,8 @@ public class XI5250StatusBar extends JPanel {
     public static final int LEFT   = 0;
     public static final int CENTER = 1;
 
-    private Image  ivImage = null;
-    private String ivText = null;
+    private @Nullable Image  ivImage = null;
+    private @Nullable String ivText = null;
 
     private int    ivAlignment;
 
@@ -265,7 +267,7 @@ public class XI5250StatusBar extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics gr) {
+    public void paintComponent(@NotNull Graphics gr) {
 
       Insets    insets = getInsets();
       int       imageWidth = 0;

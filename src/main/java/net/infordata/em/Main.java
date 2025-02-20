@@ -17,6 +17,8 @@ import net.infordata.em.tn5250ext.PSHBTNCHCHandler;
 import net.infordata.em.tn5250ext.XI5250EmulatorExt;
 import net.infordata.em.tn5250ext.XI5250PanelHandler;
 import net.infordata.em.tn5250ext.XI5250PanelsDispatcher;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Command line startup utility. 
@@ -41,7 +43,7 @@ public class Main {
     System.exit(1);
   }
   
-  public static void main(String[] args) {
+  public static void main(String @NotNull [] args) {
 
     boolean pUse3dFX = false;
     boolean pAltFKeyRemap = false;
@@ -190,7 +192,7 @@ public class Main {
   private static class PanelsDispatcher extends XI5250PanelsDispatcher {
 
     private AutoLogonHandler   ivAutoLogonHandler;
-    private XI5250PanelHandler ivHandler;
+    private @Nullable XI5250PanelHandler ivHandler;
     
     @Override
     public synchronized void addPanelHandler(XI5250PanelHandler panel) {
@@ -206,7 +208,7 @@ public class Main {
     }
 
     @Override
-    protected synchronized XI5250PanelHandler getCurrentPanelHandler() {
+    protected synchronized @Nullable XI5250PanelHandler getCurrentPanelHandler() {
       return (ivAutoLogonHandler != null && ivAutoLogonHandler.detailedTest()) ? ivAutoLogonHandler : ivHandler;
     }
 
@@ -226,7 +228,7 @@ public class Main {
     final String user;
     final String passwd;
     
-    private LogonInfo(String info) {
+    private LogonInfo(@NotNull String info) {
       String[] ss = info.split(";", 5);
       if (ss.length < 5)
         throw new IllegalArgumentException("Invalid autoLogon argument");

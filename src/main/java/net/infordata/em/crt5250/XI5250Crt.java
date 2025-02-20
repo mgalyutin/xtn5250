@@ -71,6 +71,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.infordata.em.crt.XICrt;
 import net.infordata.em.crt.XICrtBuffer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds capabilities required by 5250 emulation to XICrt. 5250 requires word-wrap and linear access
@@ -112,7 +114,7 @@ public class XI5250Crt extends XICrt implements Serializable {
 
   private boolean ivInsertState;
 
-  transient private XI5250CrtListener ivCrtListener;
+  transient private @Nullable XI5250CrtListener ivCrtListener;
 
   // used by XI5250Field to jump next KEY_TYPED event
   transient boolean ivDropKeyChar;
@@ -126,9 +128,9 @@ public class XI5250Crt extends XICrt implements Serializable {
   transient private boolean ivDragging;
   transient private boolean ivMousePressed;
   transient private Point ivStartDragging;
-  transient private Rectangle ivSelectedArea;
+  transient private @Nullable Rectangle ivSelectedArea;
 
-  transient private XI5250Field ivHighLightedField;
+  transient private @Nullable XI5250Field ivHighLightedField;
 
   public static final String INSERT_STATE = "insertState";
   public static final String REFERENCE_CURSOR = "referenceCursor";
@@ -143,7 +145,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   public static final String CODE_PAGE = "codePage";
 
   public static final String DEFAULT_CODE_PAGE = "CP1144";
-  private String ivCodePage = DEFAULT_CODE_PAGE;
+  private @NotNull String ivCodePage = DEFAULT_CODE_PAGE;
   transient private XIEbcdicTranslator ivTranslator =
       XIEbcdicTranslator.getTranslator(DEFAULT_CODE_PAGE);
 
@@ -184,7 +186,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @return the copy of the screen.
    */
-  public XI5250Crt getStaticClone() {
+  public @NotNull XI5250Crt getStaticClone() {
     return getStaticClone(0, 0, getCrtSize().width, getCrtSize().height);
   }
 
@@ -197,8 +199,8 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param height number of rows to copy
    * @return the copy of the screen for the given area.
    */
-  public synchronized XI5250Crt getStaticClone(int col, int row,
-      int width, int height) {
+  public synchronized @NotNull XI5250Crt getStaticClone(int col, int row,
+                                                        int width, int height) {
     XI5250Crt crt = new XI5250Crt();
     crt.setCrtBuffer(new XI5250CrtBuffer((XI5250CrtBuffer) getCrtBuffer(),
         col, row, width, height));
@@ -215,7 +217,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @return created buffer.
    */
   @Override
-  protected XICrtBuffer createCrtBuffer(int nCols, int nRows) {
+  protected @NotNull XICrtBuffer createCrtBuffer(int nCols, int nRows) {
     return new XI5250CrtBuffer(nCols, nRows);
   }
 
@@ -237,7 +239,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   }
 
   @Override
-  protected CursorShape getFixedCursorShape() {
+  protected @Nullable CursorShape getFixedCursorShape() {
     return (ivRefCursor) ? ivFixedCursorShape : null;
   }
 
@@ -263,7 +265,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @param e event to process.
    */
-  protected void processCrtEvent(XI5250CrtEvent e) {
+  protected void processCrtEvent(@NotNull XI5250CrtEvent e) {
     if (ivCrtListener == null) {
       return;
     }
@@ -307,7 +309,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aField field to add.
    * @see XI5250FieldsList#addField
    */
-  public void addField(XI5250Field aField) {
+  public void addField(@NotNull XI5250Field aField) {
     ivFields.addField(aField);
     // NO repaint() needed
   }
@@ -339,7 +341,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param idx index to get the field from.
    * @return field with the given index, null if none is found.
    */
-  public XI5250Field getField(int idx) {
+  public @Nullable XI5250Field getField(int idx) {
     return ivFields.getField(idx);
   }
 
@@ -350,7 +352,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aRow row where the field is positioned.
    * @return field at the given column and row, null if none is found.
    */
-  public XI5250Field getFieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field getFieldFromPos(int aCol, int aRow) {
     return ivFields.fieldFromPos(aCol, aRow);
   }
 
@@ -361,7 +363,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aRow the row from where start looking for a field.
    * @return field found after the given column and row, null if none.
    */
-  public XI5250Field getNextFieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field getNextFieldFromPos(int aCol, int aRow) {
     return ivFields.nextFieldFromPos(aCol, aRow);
   }
 
@@ -372,7 +374,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aRow the row from where start looking for a field.
    * @return field found before the given column and row, null if none.
    */
-  public XI5250Field getPrevFieldFromPos(int aCol, int aRow) {
+  public @Nullable XI5250Field getPrevFieldFromPos(int aCol, int aRow) {
     return ivFields.prevFieldFromPos(aCol, aRow);
   }
 
@@ -384,7 +386,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @see #toColPos
    * @see #toRowPos
    */
-  public int getLabelLinearPos(String aLabel) {
+  public int getLabelLinearPos(@NotNull String aLabel) {
     String str = getString();
     for (int pos = str.indexOf(aLabel); pos >= 0;
         pos = str.indexOf(aLabel, pos + 1)) {
@@ -405,7 +407,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @see #getLabelLinearPos
    * @see #getNextFieldFromPos
    */
-  public XI5250Field getFieldNextTo(String aLabel) {
+  public @Nullable XI5250Field getFieldNextTo(@NotNull String aLabel) {
     int pos = getLabelLinearPos(aLabel);
     if (pos < 0) {
       return null;
@@ -443,7 +445,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     return toRowPos(ivSBA);
   }
 
-  public void setCodePage(String cp) {
+  public void setCodePage(@Nullable String cp) {
     if (cp == null) {
       cp = DEFAULT_CODE_PAGE;
     }
@@ -457,7 +459,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     firePropertyChange(CODE_PAGE, old, ivCodePage);
   }
 
-  public String getCodePage() {
+  public @NotNull String getCodePage() {
     return ivCodePage;
   }
 
@@ -648,7 +650,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     return ivCurrentField;
   }
 
-  public void setHighLightedField(XI5250Field field) {
+  public void setHighLightedField(@Nullable XI5250Field field) {
     if (field == ivHighLightedField) {
       return;
     }
@@ -675,7 +677,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     }
   }
 
-  public XI5250Field getHighLightedField() {               //!!1.04c
+  public @Nullable XI5250Field getHighLightedField() {               //!!1.04c
     return ivHighLightedField;
   }
 
@@ -712,7 +714,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     return ivFieldUnderMouse;
   }
 
-  private void checkFieldUnderMouse(MouseEvent e) {
+  private void checkFieldUnderMouse(@NotNull MouseEvent e) {
     switch (e.getID()) {
       case MouseEvent.MOUSE_EXITED:
         setFieldUnderMouse(null);
@@ -729,7 +731,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   }
 
   @Override
-  protected void processMouseEvent(MouseEvent e) {
+  protected void processMouseEvent(@NotNull MouseEvent e) {
     switch (e.getID()) {
       case MouseEvent.MOUSE_PRESSED:
         requestFocus();
@@ -764,7 +766,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   }
 
   @Override
-  protected void processMouseMotionEvent(MouseEvent e) {
+  protected void processMouseMotionEvent(@NotNull MouseEvent e) {
     switch (e.getID()) {
       case MouseEvent.MOUSE_DRAGGED:
         if (!ivMousePressed) {
@@ -785,17 +787,17 @@ public class XI5250Crt extends XICrt implements Serializable {
     ivMousePressed = pressed;
   }
 
-  public void setIvStartDragging(MouseEvent e) {
+  public void setIvStartDragging(@NotNull MouseEvent e) {
     this.ivStartDragging = new Point(assureColIn(e.getX() / getCharSize().width),
         assureRowIn(e.getY() / getCharSize().height));
   }
 
-  private void setSelectedArea(Point p1, Point p2) {
+  private void setSelectedArea(@NotNull Point p1, @NotNull Point p2) {
     setSelectedArea(new Rectangle(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y),
         Math.abs(p1.x - p2.x) + 1, Math.abs(p1.y - p2.y) + 1));
   }
 
-  public void setSelectedArea(Rectangle ivRect) {
+  public void setSelectedArea(@Nullable Rectangle ivRect) {
     Rectangle oldSelectedArea;
 
     synchronized (this) {
@@ -829,11 +831,11 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @return the selected area, null if none.
    */
-  public Rectangle getSelectedArea() {
+  public @Nullable Rectangle getSelectedArea() {
     return (ivSelectedArea == null) ? null : new Rectangle(ivSelectedArea);
   }
 
-  public String getStringSelectedArea() {
+  public @Nullable String getStringSelectedArea() {
     if (ivSelectedArea == null) {
       return null;
     }
@@ -875,7 +877,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     g2.drawLine(x, y, x, y + dy);
   }
 
-  private void drawSelectedArea(Graphics aGc) {
+  private void drawSelectedArea(@NotNull Graphics aGc) {
     Rectangle rt = new Rectangle(ivSelectedArea.x * getCharSize().width,
         ivSelectedArea.y * getCharSize().height,
         ivSelectedArea.width * getCharSize().width,
@@ -897,7 +899,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     gg.dispose();
   }
 
-  public static boolean isCharKey(KeyEvent e) {
+  public static boolean isCharKey(@NotNull KeyEvent e) {
     boolean res =
         (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED &&
             e.getKeyChar() >= ' ' &&
@@ -909,7 +911,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   }
 
   @Override
-  protected synchronized void processKeyEvent(KeyEvent e) {
+  protected synchronized void processKeyEvent(@NotNull KeyEvent e) {
     processRawKeyEvent(translateKeyEvent(e));
     if (!e.isConsumed()) {
       super.processKeyEvent(e);
@@ -931,7 +933,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @param e key event to process.
    */
-  public synchronized void processRawKeyEvent(KeyEvent e) {
+  public synchronized void processRawKeyEvent(@NotNull KeyEvent e) {
     doProcessKeyEvent(e);
   }
 
@@ -941,7 +943,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @param e key event to process.
    */
-  protected synchronized void doProcessKeyEvent(KeyEvent e) {
+  protected synchronized void doProcessKeyEvent(@NotNull KeyEvent e) {
     XI5250Field field = ivFields.fieldFromPos(getCursorCol(), getCursorRow());
     if (field != null && !field.isBypassField()) {
       field.processKeyEvent(e);
@@ -1080,7 +1082,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   }
 
   @Override
-  protected void processFocusEvent(FocusEvent e) {
+  protected void processFocusEvent(@NotNull FocusEvent e) {
     switch (e.getID()) {
       case FocusEvent.FOCUS_GAINED:
         setCursorVisible(true);
@@ -1101,7 +1103,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aAttr attributes of the string.
    */
   @Override
-  public void drawString(String str, int col, int row, int aAttr) {
+  public void drawString(@NotNull String str, int col, int row, int aAttr) {
     int lines = ((col + str.length()) / getCrtSize().width + 1);
 
     if (lines <= 1) {
@@ -1154,7 +1156,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param aFont font to set.
    */
   @Override
-  public void setFont(Font aFont) {
+  public void setFont(@NotNull Font aFont) {
     Font oldFont = getFont();
     super.setFont(aFont);
     // check if font is changed
@@ -1173,7 +1175,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    * @param g graphic where to paint the screen.
    */
   @Override
-  protected void foregroundPaint(Graphics g) {
+  protected void foregroundPaint(@NotNull Graphics g) {
     ivFields.paint(g);
 
     super.foregroundPaint(g);
@@ -1237,7 +1239,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    *
    * @see XI5250CrtBuffer#setDefBackground
    */
-  public synchronized void setDefBackground(Color aColor) {
+  public synchronized void setDefBackground(@NotNull Color aColor) {
     XI5250CrtBuffer ivBuf = (XI5250CrtBuffer) getCrtBuffer();
 
     if (ivBuf.getDefBackground().equals(aColor)) {
@@ -1443,7 +1445,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     }
 
     @Override
-    protected EventListener remove(EventListener oldl) {
+    protected @Nullable EventListener remove(EventListener oldl) {
       if (oldl == a) {
         return b;
       }
@@ -1458,8 +1460,8 @@ public class XI5250Crt extends XICrt implements Serializable {
       return add((XI5250CrtListener) a2, (XI5250CrtListener) b2);
     }
 
-    public static XI5250CrtListener add(XI5250CrtListener a,
-        XI5250CrtListener b) {
+    public static @Nullable XI5250CrtListener add(@Nullable XI5250CrtListener a,
+                                                  @Nullable XI5250CrtListener b) {
       if (a == null) {
         return b;
       }
@@ -1469,8 +1471,8 @@ public class XI5250Crt extends XICrt implements Serializable {
       return new Multicaster(a, b);
     }
 
-    public static XI5250CrtListener remove(XI5250CrtListener a,
-        XI5250CrtListener b) {
+    public static @Nullable XI5250CrtListener remove(XI5250CrtListener a,
+                                                     XI5250CrtListener b) {
       return (XI5250CrtListener) removeInternal(a, b);
     }
 
@@ -1511,7 +1513,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    */
   private class FixedCursorShape implements CursorShape {
 
-    public void drawCursorShape(Graphics gc, Rectangle aRt) {
+    public void drawCursorShape(@NotNull Graphics gc, @NotNull Rectangle aRt) {
       Dimension dim = getCrtBufferSize();
       Graphics gg = gc.create(0, 0, dim.width, dim.height);
       try {
@@ -1535,7 +1537,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    */
   private static class NormalCursorShape implements CursorShape {
 
-    public void drawCursorShape(Graphics gc, Rectangle aRt) {
+    public void drawCursorShape(@NotNull Graphics gc, @NotNull Rectangle aRt) {
       Rectangle rt = new Rectangle(aRt);
       rt.grow(-1, -1);
 
@@ -1555,7 +1557,7 @@ public class XI5250Crt extends XICrt implements Serializable {
    */
   private static class InsertCursorShape implements CursorShape {
 
-    public void drawCursorShape(Graphics gc, Rectangle aRt) {
+    public void drawCursorShape(@NotNull Graphics gc, @NotNull Rectangle aRt) {
       Rectangle rt = new Rectangle(aRt);
       rt.grow(-1, -1);
 
@@ -1577,7 +1579,7 @@ public class XI5250Crt extends XICrt implements Serializable {
 
     private XI5250Crt ivCrt;
 
-    public SupportPanel(XI5250Crt crt) {
+    public SupportPanel(@NotNull XI5250Crt crt) {
       super(null);
       if (crt == null) {
         throw new IllegalArgumentException();
@@ -1612,7 +1614,7 @@ public class XI5250Crt extends XICrt implements Serializable {
     }
 
     @Override
-    public Dimension getPreferredSize() {
+    public @NotNull Dimension getPreferredSize() {
       Insets insets = getInsets();
       Dimension pSize = ivCrt.getPreferredSize();
       pSize.width += insets.left + insets.right;

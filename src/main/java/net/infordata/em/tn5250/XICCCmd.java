@@ -28,6 +28,7 @@ import java.io.InputStream;
 
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstract base class for all 5250 commands with CC parameter.
@@ -55,7 +56,7 @@ public abstract class XICCCmd extends XI5250Cmd {
    * @throws IOException raised if there is an input/output problem.
    * @throws XI5250Exception raised if command parameters are wrong.
    */
-  protected void readCC(InputStream inStream)
+  protected void readCC(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
 
     int bb;
@@ -135,7 +136,7 @@ public abstract class XICCCmd extends XI5250Cmd {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [CC=[" + XITelnet.toHex(ivCC[0]) + "," + XITelnet.toHex(ivCC[1])
         + "]]";
   }

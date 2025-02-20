@@ -22,6 +22,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -35,7 +37,7 @@ public class XIWriteErrorCodeCmd extends XI5250Cmd {
   protected XI5250OrdList ivOrdList;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     ivOrdList = ivEmulator.createOrdList(ivEmulator);
     ivOrdList.readFrom5250Stream(inStream);

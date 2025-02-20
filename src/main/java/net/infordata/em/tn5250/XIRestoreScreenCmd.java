@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +36,7 @@ public class XIRestoreScreenCmd extends XI5250Cmd {
   protected int ivPos;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     ivPos = inStream.read();
     if (ivPos == -1)

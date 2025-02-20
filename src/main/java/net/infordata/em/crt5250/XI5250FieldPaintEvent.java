@@ -23,6 +23,8 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Graphics;
 import java.util.EventObject;
 
@@ -49,7 +51,7 @@ public class XI5250FieldPaintEvent extends EventObject {
   private int         ivId;
   private Graphics    ivGr;
 
-  public XI5250FieldPaintEvent(int aId, XI5250Field aField, Graphics aGr) {
+  public XI5250FieldPaintEvent(int aId, @NotNull XI5250Field aField, Graphics aGr) {
     super(aField);
     ivId = aId;
     ivGr = aGr;
@@ -73,7 +75,7 @@ public class XI5250FieldPaintEvent extends EventObject {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + "[" + cvIdDescr[ivId] + "," + getSource() + "]";
   }
 

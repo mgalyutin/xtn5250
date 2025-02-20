@@ -13,13 +13,14 @@ import javax.swing.JButton;
 
 import net.infordata.em.crt.XICrt;
 import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
 
 /**
  */
 public class PSHBTNCHCHandler extends XI5250PanelHandler {
   
   private PSHBTNCHCHandler.FontsCache    ivFontsCache;
-  private List<JButton> ivButtons = new ArrayList<JButton>();
+  private @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
 
   public PSHBTNCHCHandler(XI5250PanelsDispatcher disp) {
     super(disp, "");
@@ -93,7 +94,7 @@ public class PSHBTNCHCHandler extends XI5250PanelHandler {
   
   private static class FontsCache {
 
-    private Font[] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
+    private Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
     private Font   ivFont;
 
 

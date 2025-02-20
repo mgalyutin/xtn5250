@@ -52,6 +52,8 @@ import javax.swing.JPopupMenu;
 import net.infordata.em.crt5250.XI5250CrtAdapter;
 import net.infordata.em.crt5250.XI5250CrtEvent;
 import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract base class for all classes created to control 5250 panels.
@@ -167,32 +169,32 @@ public abstract class XI5250PanelHandler {
 
   // Hash table used to mantain relations between XI5250Fields and
   // XI5250FieldConnections
-  transient private HashMap<XI5250Field, XI5250FieldConnection> ivConnections;
+  transient private @Nullable HashMap<XI5250Field, XI5250FieldConnection> ivConnections;
 
   // Hash table used to mantain relations between Components and
   // XI5250PanelConnections
-  transient private HashMap<Component, XI5250PanelConnection> ivPanelConnections;
+  transient private @Nullable HashMap<Component, XI5250PanelConnection> ivPanelConnections;
 
   transient private int ivInvalidateCount;
 
   transient private CrtAdapter ivCrtAdapter;
 
-  transient private HashMap<XI5250Field, XIHint> ivHints;
-  transient private XIHintWindow ivHintWindow;
-  transient private javax.swing.Timer ivHintTimer;
+  transient private @Nullable HashMap<XI5250Field, XIHint> ivHints;
+  transient private @Nullable XIHintWindow ivHintWindow;
+  transient private javax.swing.@Nullable Timer ivHintTimer;
   transient private int ivHintDelay = 1000;
 
-  transient private XIHint ivLastHint;
-  transient private HintThread ivHintThread;
+  transient private @Nullable XIHint ivLastHint;
+  transient private @Nullable HintThread ivHintThread;
 
-  transient private HashMap<XI5250Field, JPopupMenu> ivPopupMenus;
-  transient private ArrayList<JPopupMenu> ivPopupList;
+  transient private @Nullable HashMap<XI5250Field, JPopupMenu> ivPopupMenus;
+  transient private @Nullable ArrayList<JPopupMenu> ivPopupList;
   transient private MouseListener ivMouseListener;
 
 
-  transient private ComponentListener ivHintListener = new ComponentAdapter() {
+  transient private @NotNull ComponentListener ivHintListener = new ComponentAdapter() {
     @Override
-    public void componentHidden(ComponentEvent aEvent) {
+    public void componentHidden(@NotNull ComponentEvent aEvent) {
       // ivHintWindow potrebbe essere null
       ((XIHintWindow) aEvent.getSource()).
           removeComponentListener(ivHintListener);
@@ -209,7 +211,7 @@ public abstract class XI5250PanelHandler {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(@NotNull MouseEvent e) {
       XI5250PanelHandler.this.mouseReleased(e);
     }
   }
@@ -255,7 +257,7 @@ public abstract class XI5250PanelHandler {
    * @return Map that can be used to store data shared by different XI5250Panel instances
    * @see XI5250PanelsDispatcher#getSharedData
    */
-  public Map<Object, Object> getSharedData() {
+  public @NotNull Map<Object, Object> getSharedData() {
     return ivDispatcher.getSharedData();
   }
 
@@ -269,7 +271,7 @@ public abstract class XI5250PanelHandler {
    * @param aComp component to get the window for
    * @return Window containing the given component
    */
-  public static Window getWindow(Component aComp) {
+  public static @Nullable Window getWindow(Component aComp) {
     Component comp = aComp;
     while (comp != null && !(comp instanceof Window)) {
       comp = comp.getParent();
@@ -392,7 +394,7 @@ public abstract class XI5250PanelHandler {
    * It is used by XI5250FieldConnection to register itself to be called when a layout validate is
    * required
    */
-  void connect(XI5250Field aField, XI5250FieldConnection aConnection) {
+  void connect(XI5250Field aField, @NotNull XI5250FieldConnection aConnection) {
     XI5250EmulatorExt em = getEmulator();
 
     if (ivConnections == null) {
@@ -417,7 +419,7 @@ public abstract class XI5250PanelHandler {
    *
    * @param aConnection connection to register.
    */
-  void connect(XI5250PanelConnection aConnection) {
+  void connect(@NotNull XI5250PanelConnection aConnection) {
     XI5250EmulatorExt em = getEmulator();
 
     if (ivPanelConnections == null) {
@@ -543,7 +545,7 @@ public abstract class XI5250PanelHandler {
     ivLastHint = hint;
   }
 
-  private void showHint(XIHint aHint, XI5250Field aField) {
+  private void showHint(@NotNull XIHint aHint, XI5250Field aField) {
     synchronized (ivDispatcher.getTreeLock()) {
       hideHint();
 
@@ -606,7 +608,7 @@ public abstract class XI5250PanelHandler {
    * @param aField field to set the hint for
    * @param aHint hint for the given field
    */
-  public void setFieldHint(XI5250Field aField, XIHint aHint) {
+  public void setFieldHint(@Nullable XI5250Field aField, @Nullable XIHint aHint) {
     if (aField == null) {
       return;
     }
@@ -641,7 +643,7 @@ public abstract class XI5250PanelHandler {
    * @param aField field to add the popup menu to
    * @param aPopupMenu popup menu to add to the field. Null to remove the pop up menus.
    */
-  public void setFieldPopupMenu(XI5250Field aField, JPopupMenu aPopupMenu) {
+  public void setFieldPopupMenu(@Nullable XI5250Field aField, @Nullable JPopupMenu aPopupMenu) {
     if (aField == null) {
       return;
     }
@@ -669,7 +671,7 @@ public abstract class XI5250PanelHandler {
   protected void mousePressed(MouseEvent e) {
   }
 
-  protected void mouseReleased(MouseEvent e) {
+  protected void mouseReleased(@NotNull MouseEvent e) {
     XI5250Field fld = getEmulator().getFieldUnderMouse();
     if (fld != null && ivPopupMenus != null &&
         e.isPopupTrigger()) {
@@ -710,7 +712,7 @@ public abstract class XI5250PanelHandler {
    * @param aLabel label to search the field for.
    * @return the field next to the given label (null if none).
    */
-  public final XI5250Field getFieldNextTo(String aLabel) {
+  public final @Nullable XI5250Field getFieldNextTo(@NotNull String aLabel) {
     return getEmulator().getFieldNextTo(aLabel);
   }
 
@@ -720,7 +722,7 @@ public abstract class XI5250PanelHandler {
    * @param aLabel label to check if is present.
    * @return true if the label is present, false otherwise.
    */
-  public final boolean isLabelPresent(String aLabel) {
+  public final boolean isLabelPresent(@NotNull String aLabel) {
     return (getEmulator().getLabelLinearPos(aLabel) >= 0);
   }
 
@@ -733,7 +735,7 @@ public abstract class XI5250PanelHandler {
    * @return true if the field is different from null, it isn' t a bypass field and it has the
    * required length.
    */
-  public boolean checkField(XI5250Field aField, int aLen) {
+  public boolean checkField(@Nullable XI5250Field aField, int aLen) {
     return (aField != null && !aField.isOrgBypassField() &&
         aField.getLength() == aLen);
   }
@@ -741,12 +743,12 @@ public abstract class XI5250PanelHandler {
   class CrtAdapter extends XI5250CrtAdapter {
 
     @Override
-    public void fieldActivated(XI5250CrtEvent e) {
+    public void fieldActivated(@NotNull XI5250CrtEvent e) {
       XI5250PanelHandler.this.fieldActivated(e.getField());
     }
 
     @Override
-    public void fieldDeactivated(XI5250CrtEvent e) {
+    public void fieldDeactivated(@NotNull XI5250CrtEvent e) {
       XI5250PanelHandler.this.fieldDeactivated(e.getField());
     }
 
@@ -756,17 +758,17 @@ public abstract class XI5250PanelHandler {
     }
 
     @Override
-    public void keyEvent(XI5250CrtEvent e) {
+    public void keyEvent(@NotNull XI5250CrtEvent e) {
       XI5250PanelHandler.this.keyEvent(e.getKeyEvent());
     }
 
     @Override
-    public void mouseEntersField(XI5250CrtEvent e) {
+    public void mouseEntersField(@NotNull XI5250CrtEvent e) {
       XI5250PanelHandler.this.mouseEntersField(e.getField());
     }
 
     @Override
-    public void mouseExitsField(XI5250CrtEvent e) {
+    public void mouseExitsField(@NotNull XI5250CrtEvent e) {
       XI5250PanelHandler.this.mouseExitsField(e.getField());
     }
 

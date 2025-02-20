@@ -21,6 +21,8 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Component;
 import java.awt.Point;
 
@@ -42,7 +44,7 @@ public class XI5250PanelConnection {
   private int ivNCols;
   private int ivNRows;
 
-  public XI5250PanelConnection(XI5250PanelHandler aPanelHndl,
+  public XI5250PanelConnection(@NotNull XI5250PanelHandler aPanelHndl,
                                Component aComponent,
                                int aCol, int aRow,
                                int aNCols, int aNRows) {
@@ -54,7 +56,7 @@ public class XI5250PanelConnection {
     aPanelHndl.connect(this);
   }
 
-  protected void recalcBounds(XI5250EmulatorExt aEm) {
+  protected void recalcBounds(@NotNull XI5250EmulatorExt aEm) {
     Point     pt  = aEm.toPoints(ivCol, ivRow);
 
     ivComponent.setBounds(pt.x, pt.y,

@@ -31,6 +31,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 5250 Orders list.
@@ -40,11 +42,11 @@ public class XI5250OrdList extends XI5250Ord {
 
   private static final Logger LOGGER = Logger.getLogger(XI5250OrdList.class.getName());
   
-  private static Class<?>[] cv5250OrdClasses = new Class<?>[256];
+  private static Class<?> @NotNull [] cv5250OrdClasses = new Class<?>[256];
 
   protected List<XI5250Ord> ivOrdVect;
 
-  protected boolean[]    ivOrdPresent = new boolean[256];
+  protected boolean @NotNull []    ivOrdPresent = new boolean[256];
 
   static {
     cv5250OrdClasses[XI5250Emulator.ORD_IC] = XIICOrd.class;
@@ -73,7 +75,7 @@ public class XI5250OrdList extends XI5250Ord {
    * @throws IOException raised when there is an input/output problem.
    */
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
 
     int       bb;
@@ -164,7 +166,7 @@ public class XI5250OrdList extends XI5250Ord {
    * @throws    IllegalAccessException .
    * @throws    InstantiationException .
    */
-  public XI5250Ord createOrdInstance(int aOrd)
+  public @Nullable XI5250Ord createOrdInstance(int aOrd)
       throws IllegalAccessException, InstantiationException {
 
     Class<?>     cls;
@@ -181,7 +183,7 @@ public class XI5250OrdList extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + ivOrdVect.toString();
   }
 

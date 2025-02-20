@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.util.EventListener;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implements behaviour of 5250 fields with some extensions.
@@ -97,8 +99,8 @@ public class XI5250Field implements XI5250BaseField {
   private int ivCurPos;
   private int ivPos;
 
-  private XI5250FieldListener ivFieldListener;
-  private XI5250FieldPaintListener ivFieldPaintListener;
+  private @Nullable XI5250FieldListener ivFieldListener;
+  private @Nullable XI5250FieldPaintListener ivFieldPaintListener;
 
   private boolean ivEnabled = true;
 
@@ -167,7 +169,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param e event to process for the field.
    */
-  protected void processFieldEvent(XI5250FieldEvent e) {
+  protected void processFieldEvent(@NotNull XI5250FieldEvent e) {
     if (ivFieldListener == null) {
       return;
     }
@@ -218,7 +220,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param e event to process
    */
-  protected void processFieldPaintEvent(XI5250FieldPaintEvent e) {
+  protected void processFieldPaintEvent(@NotNull XI5250FieldPaintEvent e) {
     if (ivFieldPaintListener == null) {
       return;
     }
@@ -285,7 +287,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param aSaver saver to field the field to
    */
-  public void saveTo(XI5250FieldSaver aSaver) throws IOException {
+  public void saveTo(@NotNull XI5250FieldSaver aSaver) throws IOException {
     aSaver.write(this, getString());
   }
 
@@ -305,7 +307,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param aStr string to set on the field
    */
-  public void setString(String aStr) {
+  public void setString(@NotNull String aStr) {
     if (aStr.equals(getTrimmedString())) {
       return;
     }
@@ -337,7 +339,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @return Returns value of the field as String, all trailing nulls and blanks are cut off.
    */
-  public String getTrimmedString() {
+  public @NotNull String getTrimmedString() {
     String str = getString();
     int i;
 
@@ -592,7 +594,7 @@ public class XI5250Field implements XI5250BaseField {
     ivPos = ivCurPos - ivFldPos;
   }
 
-  protected void processKeyEvent(KeyEvent e) {
+  protected void processKeyEvent(@NotNull KeyEvent e) {
     processFieldEvent(new XI5250FieldEvent(XI5250FieldEvent.KEY_EVENT,
         this, e));
 
@@ -707,7 +709,7 @@ public class XI5250Field implements XI5250BaseField {
     return true;
   }
 
-  protected boolean processOtherKey(KeyEvent e) {
+  protected boolean processOtherKey(@NotNull KeyEvent e) {
     switch (e.getKeyCode()) {
       case KeyEvent.VK_BACK_SPACE:
         return processBackSpace(e.getModifiers());
@@ -899,7 +901,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @return the bounding rectangle (in pixel)
    */
-  public Rectangle getBoundingRect() {
+  public @NotNull Rectangle getBoundingRect() {
     Dimension charSize = ivCrt.getCharSize();
     int rows = getNRows();
 
@@ -921,7 +923,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @return all the rows occupied by the fields
    */
-  public Rectangle[] getRows() {
+  public Rectangle @NotNull [] getRows() {
     int rows = getNRows();
     //Dimension   charSize = ivCrt.getCharSize();
     Rectangle[] rcts = new Rectangle[rows];
@@ -952,7 +954,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @return all the rectangles that the field is composed of
    */
-  public Rectangle[] getRowsRects() {
+  public Rectangle @NotNull [] getRowsRects() {
     Rectangle[] rcts = getRows();
 
     for (int i = 0; i < rcts.length; i++) {
@@ -975,7 +977,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param g graphics where to pain the field
    */
-  protected void paint(Graphics g) {
+  protected void paint(@NotNull Graphics g) {
     processFieldPaintEvent(
         new XI5250FieldPaintEvent(XI5250FieldPaintEvent.ROW_PAINT,
             this, g));
@@ -1015,7 +1017,7 @@ public class XI5250Field implements XI5250BaseField {
    *
    * @param g graphics where to draw the border of the field.
    */
-  protected void drawBorder(Graphics g) {
+  protected void drawBorder(@NotNull Graphics g) {
     int borderStyle = getUsedBorderStyle();
     if (borderStyle <= NO_BORDER) {
       return;
@@ -1142,7 +1144,7 @@ public class XI5250Field implements XI5250BaseField {
    * @param g graphics where to paint the row.
    * @see #getRowsRects
    */
-  protected void rowPaint(Graphics g) {
+  protected void rowPaint(@NotNull Graphics g) {
     processFieldPaintEvent(new XI5250FieldPaintEvent(XI5250FieldPaintEvent.ROW_PAINT,
         this, g));
     if (!ivEnabled) {
@@ -1238,7 +1240,7 @@ public class XI5250Field implements XI5250BaseField {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return super.toString() + " [FFW=[" + XITelnet.toHex(ivFFW[0]) + "," +
         XITelnet.toHex(ivFFW[1]) + "]," +
         "FCW=[" + XITelnet.toHex(ivFCW[0]) + "," +
@@ -1262,7 +1264,7 @@ public class XI5250Field implements XI5250BaseField {
     }
 
     @Override
-    protected EventListener remove(EventListener oldl) {
+    protected @Nullable EventListener remove(EventListener oldl) {
       if (oldl == a) {
         return b;
       }
@@ -1277,7 +1279,7 @@ public class XI5250Field implements XI5250BaseField {
       return add(a2, b2);
     }
 
-    public static EventListener add(EventListener a, EventListener b) {
+    public static @Nullable EventListener add(@Nullable EventListener a, @Nullable EventListener b) {
       if (a == null) {
         return b;
       }

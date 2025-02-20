@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 write to display command
@@ -37,7 +38,7 @@ public class XIWriteToDisplayCmd extends XICCCmd {
   protected XI5250OrdList ivOrdList;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     readCC(inStream);
 

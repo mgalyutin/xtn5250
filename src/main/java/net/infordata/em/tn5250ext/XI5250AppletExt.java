@@ -17,13 +17,15 @@ limitations under the License.
 package net.infordata.em.tn5250ext;
 
 import net.infordata.em.tn5250.XI5250Applet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class XI5250AppletExt extends XI5250Applet {
 
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected XI5250EmulatorExt createEmulator() {
+  protected @NotNull XI5250EmulatorExt createEmulator() {
     return new XI5250EmulatorExt(); 
   }
   
@@ -45,7 +47,7 @@ public class XI5250AppletExt extends XI5250Applet {
 
   private static class PanelsDispatcher extends XI5250PanelsDispatcher {
 
-    private XI5250PanelHandler ivHandler;
+    private @Nullable XI5250PanelHandler ivHandler;
     
     @Override
     public synchronized void addPanelHandler(XI5250PanelHandler panel) {
@@ -55,7 +57,7 @@ public class XI5250AppletExt extends XI5250Applet {
     }
 
     @Override
-    protected synchronized XI5250PanelHandler getCurrentPanelHandler() {
+    protected synchronized @Nullable XI5250PanelHandler getCurrentPanelHandler() {
       return ivHandler;
     }
 

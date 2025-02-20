@@ -45,13 +45,14 @@ import net.infordata.em.tn5250.XI5250EmulatorCtrl;
 import net.infordata.em.util.XICommand;
 import net.infordata.em.util.XICommandMgr;
 import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class XI5250CrtFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
   // images
-  private static XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
+  private static @NotNull XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
 
   private static ResourceBundle cvRes =
       ResourceBundle.getBundle("net.infordata.em.crt5250.resources.Res");
@@ -66,16 +67,16 @@ public class XI5250CrtFrame extends JFrame {
 
   public static final String EXIT_CMD = "EXIT_CMD";
 
-  public XI5250CrtFrame(String aTitle, XI5250Crt aCrt) {
+  public XI5250CrtFrame(String aTitle, @NotNull XI5250Crt aCrt) {
     this(aTitle, aCrt, false, true, true);
   }
 
-  public XI5250CrtFrame(String aTitle, XI5250Crt aCrt, boolean dspToolBar, boolean dspMenuBar) {
+  public XI5250CrtFrame(String aTitle, @NotNull XI5250Crt aCrt, boolean dspToolBar, boolean dspMenuBar) {
     this(aTitle, aCrt, false, dspToolBar, dspMenuBar);
   }
 
-  public XI5250CrtFrame(String aTitle, XI5250Crt aCrt,
-      boolean sizeControlledFrame, boolean dspToolBar, boolean dspMenuBar) {
+  public XI5250CrtFrame(String aTitle, @NotNull XI5250Crt aCrt,
+                        boolean sizeControlledFrame, boolean dspToolBar, boolean dspMenuBar) {
     super(aTitle);
 
     ivSizeControlledFrame = sizeControlledFrame;
@@ -118,7 +119,7 @@ public class XI5250CrtFrame extends JFrame {
     dispose();
   }
 
-  protected XI5250CrtCtrl createController(XI5250Crt crt) {
+  protected @NotNull XI5250CrtCtrl createController(@NotNull XI5250Crt crt) {
     return new XI5250CrtCtrl(crt);
   }
 
@@ -130,7 +131,7 @@ public class XI5250CrtFrame extends JFrame {
     return ivCrtCtrl.getCrt();
   }
 
-  private void emulatorPropertyChanged(PropertyChangeEvent evt) {
+  private void emulatorPropertyChanged(@NotNull PropertyChangeEvent evt) {
     String propertyName = evt.getPropertyName();
     if ("background".equals(propertyName)) {
       getCrt().getParent().setBackground(getCrt().getBackground());
@@ -186,7 +187,7 @@ public class XI5250CrtFrame extends JFrame {
   }
 
   @Override
-  protected void processWindowEvent(WindowEvent e) {
+  protected void processWindowEvent(@NotNull WindowEvent e) {
     switch (e.getID()) {
       case WindowEvent.WINDOW_OPENED:
         getCrt().requestFocus();
@@ -202,7 +203,7 @@ public class XI5250CrtFrame extends JFrame {
     super.processWindowEvent(e);
   }
 
-  protected JMenuBar createMenuBar() {
+  protected @NotNull JMenuBar createMenuBar() {
     String str;
 
     str = cvRes.getString("TXT_Edit");
@@ -258,7 +259,7 @@ public class XI5250CrtFrame extends JFrame {
    *
    * @return created tool bar
    */
-  protected JToolBar createToolBar() {
+  protected @NotNull JToolBar createToolBar() {
     // bottoni della tool-bar
     AbstractButton[] buttons = new AbstractButton[]{
         new JButton(cvImagesBdl.getIcon("Copy")),

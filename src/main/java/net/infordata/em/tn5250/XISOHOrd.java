@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 SOH Order
@@ -36,7 +37,7 @@ public class XISOHOrd extends XI5250Ord {
   protected int    ivLen;
 
   @Override
-  protected void readFrom5250Stream(InputStream inStream)
+  protected void readFrom5250Stream(@NotNull InputStream inStream)
       throws IOException, XI5250Exception {
     int  i = 0;
     int  bb;
@@ -80,7 +81,7 @@ public class XISOHOrd extends XI5250Ord {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     String str = "";
     for (int i = 0; i < ivLen; i++)
       str += XITelnet.toHex(ivData[i]) + ",";

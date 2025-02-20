@@ -50,6 +50,8 @@ import net.infordata.em.crt5250.XI5250Crt;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.util.XICommandMgr;
 import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class XI5250Applet extends JApplet {
 
@@ -62,22 +64,22 @@ public class XI5250Applet extends JApplet {
   private static final boolean UNDEAD_FRAME = false;
 
   // images
-  private static XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
+  private static @NotNull XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
 
   private static ResourceBundle cvRes =
       ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
 
   private XI5250EmulatorCtrl ivEmulatorCtrl;
-  private EmulatorFrame ivFrame;
+  private @Nullable EmulatorFrame ivFrame;
   private boolean ivFirstTime = true;
 
   private boolean ivDestroyed = false;
 
-  private PropertyChangeListener ivPropertyChangeListener = this::emulatorPropertyChanged;
+  private @NotNull PropertyChangeListener ivPropertyChangeListener = this::emulatorPropertyChanged;
 
   public static final String INFRAME_CMD = "INFRAME_CMD";
 
-  protected XI5250Emulator createEmulator() {
+  protected @NotNull XI5250Emulator createEmulator() {
     return new XI5250Emulator();
   }
 
@@ -257,7 +259,7 @@ public class XI5250Applet extends JApplet {
     }
   }
 
-  private void emulatorPropertyChanged(PropertyChangeEvent evt) {
+  private void emulatorPropertyChanged(@NotNull PropertyChangeEvent evt) {
     String propertyName = evt.getPropertyName();
     if ("background".equals(propertyName)) {
       getEmulator().getParent().setBackground(getEmulator().getBackground());
@@ -267,7 +269,7 @@ public class XI5250Applet extends JApplet {
     }
   }
 
-  private JMenuBar createMenuBar() {
+  private @NotNull JMenuBar createMenuBar() {
     String str;
 
     str = cvRes.getString("TXT_Communications");
@@ -358,7 +360,7 @@ public class XI5250Applet extends JApplet {
   /**
    * Inserisce nella tool-bar i bottoni di default.
    */
-  private JToolBar createToolBar() {
+  private @NotNull JToolBar createToolBar() {
     // bottoni della tool-bar
     AbstractButton[] buttons = new AbstractButton[]{
         new JButton(cvImagesBdl.getIcon("Connect")),
@@ -432,7 +434,7 @@ public class XI5250Applet extends JApplet {
   }
 
   @Override
-  public void paint(Graphics g) {
+  public void paint(@NotNull Graphics g) {
     super.paint(g);
     if (ivFrame != null) {
       Rectangle rt = getBounds();
@@ -449,7 +451,7 @@ public class XI5250Applet extends JApplet {
 
     private static final long serialVersionUID = 1L;
 
-    public EmulatorFrame(String aTitle, XI5250Emulator aCrt) {
+    public EmulatorFrame(String aTitle, @NotNull XI5250Emulator aCrt) {
       super(aTitle, aCrt);
     }
 
@@ -463,7 +465,7 @@ public class XI5250Applet extends JApplet {
     }
 
     @Override
-    protected void processWindowEvent(WindowEvent e) {
+    protected void processWindowEvent(@NotNull WindowEvent e) {
       switch (e.getID()) {
         case WindowEvent.WINDOW_CLOSED:
           XI5250Applet.this.frameClosed();

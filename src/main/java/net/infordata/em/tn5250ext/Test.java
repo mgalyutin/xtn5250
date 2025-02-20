@@ -19,12 +19,13 @@ import net.infordata.em.crt.XICrt;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tn5250.XI5250Emulator;
 import net.infordata.em.tn5250.XI5250Frame;
+import org.jetbrains.annotations.NotNull;
 
 public class Test {
 
   private Test() { }
 
-  public static void main(String[] argv) {
+  public static void main(String @NotNull [] argv) {
     XI5250EmulatorExt em  = new XI5250EmulatorExt();
     em.setTerminalType("IBM-3477-FC");
     em.setKeyboardQueue(true);
@@ -61,7 +62,7 @@ public class Test {
   private static class TestHandler extends XI5250PanelHandler {
     
     private FontsCache    ivFontsCache;
-    private List<JButton> ivButtons = new ArrayList<JButton>();
+    private @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
 
     public TestHandler(XI5250PanelsDispatcher disp) {
       super(disp, "");
@@ -152,7 +153,7 @@ public class Test {
   
   private static class FontsCache {
 
-    private Font[] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
+    private Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
     private Font   ivFont;
 
     public FontsCache(Font font) {

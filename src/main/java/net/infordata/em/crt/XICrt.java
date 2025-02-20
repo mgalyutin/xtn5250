@@ -62,6 +62,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implements a generic monospaced-character panel. It uses an out off screen image buffer to
@@ -93,10 +95,10 @@ public class XICrt extends JComponent implements Serializable {
   // repaint is freezed
   transient private boolean ivFreeze = false;
   transient private int ivRepaintCount;
-  transient private Rectangle ivSumRect;
+  transient private @Nullable Rectangle ivSumRect;
 
   // cursor blinking thread
-  transient private CursorBlinkingThread ivBlinkThread;
+  transient private @Nullable CursorBlinkingThread ivBlinkThread;
 
   // used to calculate minimum-size
   transient private int ivMinCharW;
@@ -110,7 +112,7 @@ public class XICrt extends JComponent implements Serializable {
 
   public static final String CRT_SIZE = "crtSize";
 
-  private transient Cursor ivCursor = new Cursor();
+  private transient @NotNull Cursor ivCursor = new Cursor();
 
   private static final CursorShape cvDefaultCursorShape =
       new DefaultCursorShape();
@@ -134,7 +136,7 @@ public class XICrt extends JComponent implements Serializable {
    * @return created buffer.
    * @see XICrtBuffer
    */
-  protected XICrtBuffer createCrtBuffer(int nCols, int nRows) {
+  protected @NotNull XICrtBuffer createCrtBuffer(int nCols, int nRows) {
     return new XICrtBuffer(nCols, nRows);
   }
 
@@ -144,7 +146,7 @@ public class XICrt extends JComponent implements Serializable {
    * @param aFont font to set.
    */
   @Override
-  public void setFont(Font aFont) {
+  public void setFont(@NotNull Font aFont) {
     if (aFont.getSize() < MIN_FONT_SIZE) {
       throw new IllegalArgumentException("Font too small");
     }
@@ -175,7 +177,7 @@ public class XICrt extends JComponent implements Serializable {
     return ivFont;
   }
 
-  private Graphics initializeVolatileImage() {
+  private @NotNull Graphics initializeVolatileImage() {
     Font font = getFont();
     FontMetrics fontMetrics = getFontMetrics(font);
 
@@ -244,7 +246,7 @@ public class XICrt extends JComponent implements Serializable {
    * @return preferred size based on the current font dimension/
    */
   @Override
-  public Dimension getPreferredSize() {
+  public @NotNull Dimension getPreferredSize() {
     return ivCrtBuffer.getSize();
   }
 
@@ -254,7 +256,7 @@ public class XICrt extends JComponent implements Serializable {
    * @return minimum size based on minimum size of the current font.
    */
   @Override
-  public Dimension getMinimumSize() {
+  public @NotNull Dimension getMinimumSize() {
     return new Dimension(ivMinCharW * ivCrtBuffer.getCrtSize().width,
         ivMinCharH * ivCrtBuffer.getCrtSize().height);
   }
@@ -319,7 +321,7 @@ public class XICrt extends JComponent implements Serializable {
   }
 
   @Override
-  public final void paint(Graphics g) {
+  public final void paint(@NotNull Graphics g) {
     // remove cursor from screen
     // cannot check if the cursor intersects the clipping area, because the
     // cursor shape can exceed the cursor bounding rectangle (5250 reference
@@ -343,7 +345,7 @@ public class XICrt extends JComponent implements Serializable {
    * @see #foregroundPaint
    */
   @Override
-  public synchronized void paintComponent(Graphics g) {
+  public synchronized void paintComponent(@NotNull Graphics g) {
     if (ivImage != null) {
       GraphicsConfiguration gconf = getGraphicsConfiguration(); // acquires a tree-lock
       synchronized (ivCrtBuffer) {
@@ -427,7 +429,7 @@ public class XICrt extends JComponent implements Serializable {
    * @param col column where to draw the string.
    * @param row row where to draw the string.
    */
-  public void drawString(String str, int col, int row) {
+  public void drawString(@NotNull String str, int col, int row) {
     drawString(str, col, row, ivCrtBuffer.getDefAttr());
   }
 
@@ -439,7 +441,7 @@ public class XICrt extends JComponent implements Serializable {
    * @param row row where to draw the string.
    * @param aAttr attribute of the string.
    */
-  public void drawString(String str, int col, int row, int aAttr) {
+  public void drawString(@NotNull String str, int col, int row, int aAttr) {
     ivCrtBuffer.drawString(str, col, row, aAttr);
     repaint(col * ivCrtBuffer.getCharSize().width, row * ivCrtBuffer.getCharSize().height,
         str.length() * ivCrtBuffer.getCharSize().width, ivCrtBuffer.getCharSize().height);
@@ -464,7 +466,7 @@ public class XICrt extends JComponent implements Serializable {
    * @return gets the entire screen text.
    * @see String#indexOf
    */
-  public String getString() {
+  public @NotNull String getString() {
     return ivCrtBuffer.getString();
   }
 
@@ -581,7 +583,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @return dimensions in chars
    */
-  public Dimension getCrtSize() {
+  public @NotNull Dimension getCrtSize() {
     return ivCrtBuffer.getCrtSize();
   }
 
@@ -590,7 +592,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @param aCrt off-screen buffer to set.
    */
-  protected final void setCrtBuffer(XICrtBuffer aCrt) {
+  protected final void setCrtBuffer(@NotNull XICrtBuffer aCrt) {
     if (aCrt == ivCrtBuffer) {
       return;
     }
@@ -617,7 +619,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @return dimension in pixels of the off-screen buffer
    */
-  public Dimension getCrtBufferSize() {
+  public @NotNull Dimension getCrtBufferSize() {
     return ivCrtBuffer.getSize();
   }
 
@@ -626,7 +628,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @return current char size in pixels.
    */
-  public Dimension getCharSize() {
+  public @NotNull Dimension getCharSize() {
     return ivCrtBuffer.getCharSize();
   }
 
@@ -635,7 +637,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @return minimum char size in pixels.
    */
-  public Dimension getMinCharSize() {
+  public @NotNull Dimension getMinCharSize() {
     return new Dimension(ivMinCharW, ivMinCharH);
   }
 
@@ -644,7 +646,7 @@ public class XICrt extends JComponent implements Serializable {
    *
    * @return cursor bounding rectangle.
    */
-  protected Rectangle getCursorRect() {
+  protected @NotNull Rectangle getCursorRect() {
     return ivCursor.getBoundingRect();
   }
 
@@ -685,7 +687,7 @@ public class XICrt extends JComponent implements Serializable {
    * @return size of screen.
    * @see #recalcFontSize
    */
-  protected Dimension getTestSize(Font aFont) {
+  protected @NotNull Dimension getTestSize(Font aFont) {
     FontMetrics fm = getFontMetrics(aFont);
     return new Dimension(fm.charWidth('W') * getCrtSize().width,
         fm.getHeight() * getCrtSize().height);
@@ -766,7 +768,7 @@ public class XICrt extends JComponent implements Serializable {
    * @param aRow row to get the point from
    * @return point for the given position
    */
-  public final Point toPoints(int aCol, int aRow) {
+  public final @NotNull Point toPoints(int aCol, int aRow) {
     return ivCrtBuffer.toPoints(aCol, aRow);
   }
 
@@ -779,7 +781,7 @@ public class XICrt extends JComponent implements Serializable {
    * @param aNRows number of rows for the rectangle
    * @return rectangle for the given position, rows and columns
    */
-  public final Rectangle toPoints(int aCol, int aRow, int aNCols, int aNRows) {
+  public final @NotNull Rectangle toPoints(int aCol, int aRow, int aNCols, int aNRows) {
     return ivCrtBuffer.toPoints(aCol, aRow, aNCols, aNRows);
   }
 
@@ -789,11 +791,11 @@ public class XICrt extends JComponent implements Serializable {
     super.finalize();
   }
 
-  void writeObject(ObjectOutputStream oos) throws IOException {
+  void writeObject(@NotNull ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
   }
 
-  void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+  void readObject(@NotNull ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
   }
 
@@ -801,7 +803,7 @@ public class XICrt extends JComponent implements Serializable {
     return cvDefaultCursorShape;
   }
 
-  protected CursorShape getFixedCursorShape() {
+  protected @Nullable CursorShape getFixedCursorShape() {
     return null;
   }
 
@@ -838,7 +840,7 @@ public class XICrt extends JComponent implements Serializable {
 
   private class FontsCache {
 
-    private Font[] ivFonts = new Font[MAX_FONT_SIZE - MIN_FONT_SIZE + 1];
+    private Font @NotNull [] ivFonts = new Font[MAX_FONT_SIZE - MIN_FONT_SIZE + 1];
     private Font ivFont;
 
 
@@ -904,7 +906,7 @@ public class XICrt extends JComponent implements Serializable {
 
   public static class DefaultCursorShape implements CursorShape {
 
-    public void drawCursorShape(Graphics gc, Rectangle rt) {
+    public void drawCursorShape(@NotNull Graphics gc, @NotNull Rectangle rt) {
       gc.setColor(Color.white);
       gc.setXORMode(Color.black);
       gc.fillRect(rt.x, rt.y, rt.width, rt.height);
@@ -917,21 +919,21 @@ public class XICrt extends JComponent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    transient private List<CursorPlaceHolder> ivCursorsPH = new ArrayList<>(10);
+    transient private @NotNull List<CursorPlaceHolder> ivCursorsPH = new ArrayList<>(10);
 
-    private CursorPlaceHolder ivCurrentCursorPH = new CursorPlaceHolder(0, 0);
+    private @NotNull CursorPlaceHolder ivCurrentCursorPH = new CursorPlaceHolder(0, 0);
 
     private boolean ivVisible = true;
 
     transient private int ivPending = 0;
     transient private int ivPendingBlink = 0;
 
-    transient private Runnable ivPendingEvent = () -> {
+    transient private @NotNull Runnable ivPendingEvent = () -> {
       ivPending = 0;
       sync(false, null, true);
     };
 
-    transient private Runnable ivPendingBlinkEvent = new Runnable() {
+    transient private @NotNull Runnable ivPendingBlinkEvent = new Runnable() {
       private boolean flag;
 
       public void run() {
@@ -992,11 +994,11 @@ public class XICrt extends JComponent implements Serializable {
       return ivVisible;
     }
 
-    public Rectangle getBoundingRect() {
+    public @NotNull Rectangle getBoundingRect() {
       return ivCurrentCursorPH.getBoundingRect();
     }
 
-    private void sync(boolean blinkingShapeOnly, Graphics aGc, boolean showIt) {
+    private void sync(boolean blinkingShapeOnly, @Nullable Graphics aGc, boolean showIt) {
       if (DEBUG >= 1) {
         if (!SwingUtilities.isEventDispatchThread()) {
           throw new IllegalStateException();
@@ -1025,7 +1027,7 @@ public class XICrt extends JComponent implements Serializable {
       // do nothing, cursor place-holders are removed in painting areas
     }
 
-    protected void afterPaint(Graphics g) {
+    protected void afterPaint(@NotNull Graphics g) {
       // restore cursor place-holders in painting areas, if they were visible
       if (DEBUG >= 1) {
         if (!SwingUtilities.isEventDispatchThread()) {
@@ -1048,7 +1050,7 @@ public class XICrt extends JComponent implements Serializable {
     private int ivRow;
 
     transient private CursorShape ivCursorShape;
-    transient private CursorShape ivFixedCursorShape;
+    transient private @Nullable CursorShape ivFixedCursorShape;
 
     transient private boolean ivFixedCursorDrawed;
     transient private boolean ivCursorDrawed;
@@ -1066,7 +1068,7 @@ public class XICrt extends JComponent implements Serializable {
       return ivRow;
     }
 
-    public Rectangle getBoundingRect() {
+    public @NotNull Rectangle getBoundingRect() {
       Dimension sz = ivCrtBuffer.getCharSize();
       Point pt = ivCrtBuffer.toPoint(ivCol, ivRow);
       return new Rectangle(pt.x, pt.y - sz.height, sz.width, sz.height);
@@ -1095,8 +1097,8 @@ public class XICrt extends JComponent implements Serializable {
      * @param aGc graphics where to draw
      * @param showIt true to show the cursor, false to hide it.
      */
-    public void drawShapes(boolean blinkingShapeOnly, Graphics aGc,
-        boolean showIt) {
+    public void drawShapes(boolean blinkingShapeOnly, @Nullable Graphics aGc,
+                           boolean showIt) {
       showIt = showIt && isCursorVisible();
       if (showIt == ivCursorDrawed && showIt == ivFixedCursorDrawed) {
         return;
@@ -1137,7 +1139,7 @@ public class XICrt extends JComponent implements Serializable {
      *
      * @param gc graphics where to draw cursor shape.
      */
-    public void syncShapesAfterPaint(Graphics gc) {
+    public void syncShapesAfterPaint(@NotNull Graphics gc) {
       if (gc == null) {
         throw new IllegalArgumentException();
       }

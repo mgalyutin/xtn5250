@@ -30,6 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.infordata.em.tn5250.XI5250Emulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Maintains a set of XI5250PanelHandler and activates them when the related 5250 screen (or panel)
@@ -72,7 +74,7 @@ public class XI5250SimplePanelsDispatcher extends XI5250PanelsDispatcher {
     super(aEmulator);
   }
 
-  private static String calcKey(String str, int excludeTokens) {
+  private static @NotNull String calcKey(@NotNull String str, int excludeTokens) {
     String res = "";
     StringTokenizer st = new StringTokenizer(str, DELIMITERS);
     int n = Math.max(0, st.countTokens() - excludeTokens);
@@ -91,7 +93,7 @@ public class XI5250SimplePanelsDispatcher extends XI5250PanelsDispatcher {
    * @param aPanel panel to add
    */
   @Override
-  public synchronized void addPanelHandler(XI5250PanelHandler aPanel) {
+  public synchronized void addPanelHandler(@NotNull XI5250PanelHandler aPanel) {
     if (ivPanels == null) {
       ivPanels = new HashMap<>();
     }
@@ -116,7 +118,7 @@ public class XI5250SimplePanelsDispatcher extends XI5250PanelsDispatcher {
    * @param aPanel panel to remove
    */
   @Override
-  public synchronized void removePanelHandler(XI5250PanelHandler aPanel) {
+  public synchronized void removePanelHandler(@NotNull XI5250PanelHandler aPanel) {
     if (ivPanels == null) {
       return;
     }
@@ -151,7 +153,7 @@ public class XI5250SimplePanelsDispatcher extends XI5250PanelsDispatcher {
    * @see XI5250PanelHandler#detailedTest
    */
   @Override
-  protected synchronized XI5250PanelHandler getCurrentPanelHandler() {
+  protected synchronized @Nullable XI5250PanelHandler getCurrentPanelHandler() {
     final XI5250Emulator em = getEmulator();
     String title = em.getString().substring(0, em.getCrtSize().width);
 
