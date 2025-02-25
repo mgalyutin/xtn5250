@@ -1,7 +1,11 @@
 package net.infordata.em.tn5250ext;
 
-import java.awt.Font;
-import java.awt.Insets;
+import net.infordata.em.crt.XICrt;
+import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,18 +13,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JButton;
-
-import net.infordata.em.crt.XICrt;
-import net.infordata.em.crt5250.XI5250Field;
-import org.jetbrains.annotations.NotNull;
-
 /**
  */
 public class PSHBTNCHCHandler extends XI5250PanelHandler {
   
   private PSHBTNCHCHandler.FontsCache    ivFontsCache;
-  private @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
+  private final @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
 
   public PSHBTNCHCHandler(XI5250PanelsDispatcher disp) {
     super(disp, "");
@@ -94,8 +92,8 @@ public class PSHBTNCHCHandler extends XI5250PanelHandler {
   
   private static class FontsCache {
 
-    private Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
-    private Font   ivFont;
+    private final Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
+    private final Font   ivFont;
 
 
     public FontsCache(Font font) {

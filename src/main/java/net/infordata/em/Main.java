@@ -1,17 +1,10 @@
 package net.infordata.em;
 
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tn5250.XI5250Emulator;
+import net.infordata.em.tn5250.XI5250EmulatorEvent;
+import net.infordata.em.tn5250.XI5250EmulatorListener;
 import net.infordata.em.tn5250.XI5250Frame;
 import net.infordata.em.tn5250ext.PSHBTNCHCHandler;
 import net.infordata.em.tn5250ext.XI5250EmulatorExt;
@@ -19,6 +12,13 @@ import net.infordata.em.tn5250ext.XI5250PanelHandler;
 import net.infordata.em.tn5250ext.XI5250PanelsDispatcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Command line startup utility. 
@@ -152,6 +152,43 @@ public class Main {
         em.setAltFKeyRemap(altFKeyRemap);
         em.setCodePage(codePage);
 
+        em.addEmulatorListener(new XI5250EmulatorListener() {
+          @Override
+          public void connecting(XI5250EmulatorEvent e) {
+            System.out.println("Connecting " + e);
+          }
+
+          @Override
+          public void connected(XI5250EmulatorEvent e) {
+            System.out.println("Connected " + e);
+          }
+
+          @Override
+          public void disconnected(XI5250EmulatorEvent e) {
+            System.out.println("Disconnected " + e);
+          }
+
+          @Override
+          public void stateChanged(XI5250EmulatorEvent e) {
+            System.out.println("State changed " + e);
+          }
+
+          @Override
+          public void newPanelReceived(XI5250EmulatorEvent e) {
+            System.out.println("New panel received " + e);
+          }
+
+          @Override
+          public void fieldsRemoved(XI5250EmulatorEvent e) {
+
+          }
+
+          @Override
+          public void dataSended(XI5250EmulatorEvent e) {
+
+          }
+        });
+
         if (deviceName != null)
           em.setTelnetEnv("\u0003DEVNAME\u0001" + deviceName);
 
@@ -267,9 +304,7 @@ public class Main {
       if (!checkField(getFieldNextTo(ivLogonInfo.userLabel), 10))
         return false;
       // Is there the password field ?
-      if (!checkField(getFieldNextTo(ivLogonInfo.passwdLabel), 10))
-        return false;
-      return true;
+        return checkField(getFieldNextTo(ivLogonInfo.passwdLabel), 10);
     }
 
     @Override

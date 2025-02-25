@@ -5,6 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="net.infordata.em.Main" />
     <module name="xtn5250" />
     <option name="PROGRAM_PARAMETERS" value="-PSHBTNCHC jupiter" />
+    <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logging.properties" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="net.infordata.em.*" />

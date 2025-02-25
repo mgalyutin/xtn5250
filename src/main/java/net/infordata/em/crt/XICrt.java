@@ -42,28 +42,21 @@ limitations under the License.
 
 package net.infordata.em.crt;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.Point;
-import java.awt.Rectangle;
+import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import net.infordata.em.util.XIUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Implements a generic monospaced-character panel. It uses an out off screen image buffer to
@@ -72,7 +65,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Valentino Proietti - Infordata S.p.A.
  * @see XICrtBuffer
  */
-public class XICrt extends JComponent implements Serializable {
+public class XICrt extends JComponent implements Serializable, Cleaner.Cleanable {
 
   private static final long serialVersionUID = 1L;
 
@@ -112,7 +105,7 @@ public class XICrt extends JComponent implements Serializable {
 
   public static final String CRT_SIZE = "crtSize";
 
-  private transient @NotNull Cursor ivCursor = new Cursor();
+  private final transient @NotNull Cursor ivCursor = new Cursor();
 
   private static final CursorShape cvDefaultCursorShape =
       new DefaultCursorShape();
@@ -785,10 +778,16 @@ public class XICrt extends JComponent implements Serializable {
     return ivCrtBuffer.toPoints(aCol, aRow, aNCols, aNRows);
   }
 
-  @Override
+  /*@Override
   protected void finalize() throws Throwable {
-    setBlinkingCursor(false);
+    clean();
     super.finalize();
+  }
+*/
+
+  @Override
+  public void clean() {
+    setBlinkingCursor(false);
   }
 
   void writeObject(@NotNull ObjectOutputStream oos) throws IOException {
@@ -840,8 +839,8 @@ public class XICrt extends JComponent implements Serializable {
 
   private class FontsCache {
 
-    private Font @NotNull [] ivFonts = new Font[MAX_FONT_SIZE - MIN_FONT_SIZE + 1];
-    private Font ivFont;
+    private final Font @NotNull [] ivFonts = new Font[MAX_FONT_SIZE - MIN_FONT_SIZE + 1];
+    private final Font ivFont;
 
 
     public FontsCache(Font font) {
@@ -919,7 +918,7 @@ public class XICrt extends JComponent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    transient private @NotNull List<CursorPlaceHolder> ivCursorsPH = new ArrayList<>(10);
+    final transient private @NotNull List<CursorPlaceHolder> ivCursorsPH = new ArrayList<>(10);
 
     private @NotNull CursorPlaceHolder ivCurrentCursorPH = new CursorPlaceHolder(0, 0);
 
@@ -928,12 +927,12 @@ public class XICrt extends JComponent implements Serializable {
     transient private int ivPending = 0;
     transient private int ivPendingBlink = 0;
 
-    transient private @NotNull Runnable ivPendingEvent = () -> {
+    final transient private @NotNull Runnable ivPendingEvent = () -> {
       ivPending = 0;
       sync(false, null, true);
     };
 
-    transient private @NotNull Runnable ivPendingBlinkEvent = new Runnable() {
+    final transient private @NotNull Runnable ivPendingBlinkEvent = new Runnable() {
       private boolean flag;
 
       public void run() {
@@ -1046,8 +1045,8 @@ public class XICrt extends JComponent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int ivCol;
-    private int ivRow;
+    private final int ivCol;
+    private final int ivRow;
 
     transient private CursorShape ivCursorShape;
     transient private @Nullable CursorShape ivFixedCursorShape;

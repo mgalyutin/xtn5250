@@ -59,10 +59,10 @@ public class TerminalClientTest {
       LOG.debug("Finished {}", description.getMethodName());
     }
   };
-  private VirtualTcpService service = new VirtualTcpService();
+  private final VirtualTcpService service = new VirtualTcpService();
   private TerminalClient client;
   private ExceptionWaiter exceptionWaiter;
-  private ScheduledExecutorService stableTimeoutExecutor = Executors
+  private final ScheduledExecutorService stableTimeoutExecutor = Executors
       .newSingleThreadScheduledExecutor();
 
   @Before
@@ -388,7 +388,7 @@ public class TerminalClientTest {
       private final int column;
       private final String text;
       private final byte[] fcw = {0, 0};
-      private byte[] ffw = {FIELD_FORMAT_MASK, 0};
+      private final byte[] ffw = {FIELD_FORMAT_MASK, 0};
       private byte attr = SCREEN_ATTRIBUTE_MASK | UNDERSCORE_MASK;
 
       private Builder(int row, int column, String text) {
@@ -422,8 +422,8 @@ public class TerminalClientTest {
 
   private static class ExceptionWaiter implements ExceptionHandler {
 
-    private CountDownLatch exceptionLatch = new CountDownLatch(1);
-    private CountDownLatch closeLatch = new CountDownLatch(1);
+    private final CountDownLatch exceptionLatch = new CountDownLatch(1);
+    private final CountDownLatch closeLatch = new CountDownLatch(1);
 
     @Override
     public void onException(Throwable ex) {

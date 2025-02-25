@@ -22,16 +22,16 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import net.infordata.em.tnprot.XITelnet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import net.infordata.em.tnprot.XITelnet;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * 5250 Commands list (Works like a macro command).
@@ -42,7 +42,7 @@ public class XI5250CmdList extends XI5250Cmd {
 
   private static final Logger LOGGER = Logger.getLogger(XI5250CmdList.class.getName());
 
-  private static Class<?> @NotNull [] cv5250CmdClasses = new Class[256];
+  private static final Class<?> @NotNull [] cv5250CmdClasses = new Class[256];
 
   protected List<XI5250Cmd> ivCmdVect;
 
@@ -51,6 +51,8 @@ public class XI5250CmdList extends XI5250Cmd {
 
 
   static {
+    // READ immediate
+    // This command sends back the contents of all the input fields on the display.
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_READ_IMMEDIATE)] =
         XIReadImmediateCmd.class;
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_READ_FIELDS)] =
@@ -70,10 +72,14 @@ public class XI5250CmdList extends XI5250Cmd {
         XIClearUnitAltCmd.class;
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_RESTORE_SCREEN)] =
         XIRestoreScreenCmd.class;
+    // Roll
+    // This command allows the lines to be rolled up or down on the display as specified by the size parameter of the command.
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_ROLL)] =
         XIRollCmd.class;
+    // Write error code
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_WRITE_ERROR_CODE)] =
         XIWriteErrorCodeCmd.class;
+    // Wirte to display
     cv5250CmdClasses[XITelnet.toInt(XI5250Emulator.CMD_WRITE_TO_DISPLAY)] =
         XIWriteToDisplayCmd.class;
 

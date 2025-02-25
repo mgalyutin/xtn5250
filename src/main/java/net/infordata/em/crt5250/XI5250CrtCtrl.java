@@ -21,12 +21,12 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.SystemColor;
+import net.infordata.em.util.XICommandMgr;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
@@ -35,14 +35,6 @@ import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
-import net.infordata.em.util.XICommand;
-import net.infordata.em.util.XICommandMgr;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Handles common commands.
  */
@@ -50,9 +42,9 @@ public class XI5250CrtCtrl {
 
   private static final Logger LOGGER = Logger.getLogger(XI5250CrtCtrl.class.getName());
 
-  private XI5250Crt    ivCrt;
+  private final XI5250Crt    ivCrt;
 
-  private @NotNull XICommandMgr ivCommandMgr = new XICommandMgr();
+  private final @NotNull XICommandMgr ivCommandMgr = new XICommandMgr();
 
   public static final String SWITCH_3DFX_CMD      = "SWITCH_3DFX_CMD";
   public static final String REFERENCE_CURSOR_CMD = "REFERENCE_CURSOR_CMD";

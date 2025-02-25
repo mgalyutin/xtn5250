@@ -23,14 +23,14 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import net.infordata.em.tn5250.XI5250EmulatorAdapter;
 import net.infordata.em.tn5250.XI5250EmulatorEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Maintains a set of XI5250PanelHandler and activates them when the related 5250

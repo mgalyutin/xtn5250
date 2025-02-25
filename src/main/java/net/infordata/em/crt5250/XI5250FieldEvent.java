@@ -62,7 +62,7 @@ public class XI5250FieldEvent extends EventObject {
                                              "ENABLED_STATE_CHANGED",
                                              "KEY_EVENT"};
 
-  private int         ivId;
+  private final int         ivId;
   private KeyEvent    ivKeyEvent;
 
   public XI5250FieldEvent(int aId, @NotNull XI5250Field aField) {

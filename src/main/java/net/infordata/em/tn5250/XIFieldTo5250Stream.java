@@ -25,13 +25,13 @@ limitations under the License.
  
 package net.infordata.em.tn5250;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.crt5250.XI5250FieldSaver;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Implements XI5250FieldSaver to write fields content to an OutputStream.

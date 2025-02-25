@@ -26,8 +26,7 @@ package net.infordata.em.crt5250;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +40,7 @@ import java.util.List;
  * @author   Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250FieldsList implements XI5250BaseField, Cloneable {
-  private XI5250Crt   ivCrt;
+  private final XI5250Crt   ivCrt;
   private ArrayList<XI5250Field> ivFields = new ArrayList<>(40);
   private @NotNull List<XI5250Field> ivROFields = Collections.unmodifiableList(ivFields);
 

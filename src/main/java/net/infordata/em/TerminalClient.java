@@ -1,14 +1,6 @@
 package net.infordata.em;
 
 import com.google.common.annotations.VisibleForTesting;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import javax.net.SocketFactory;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tn5250.XI5250Emulator;
 import net.infordata.em.tn5250.XI5250EmulatorListener;
@@ -16,11 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.SocketFactory;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 public class TerminalClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(TerminalClient.class);
 
-  private @NotNull TerminalClientEmulator emulator = new TerminalClientEmulator();
+  private final @NotNull TerminalClientEmulator emulator = new TerminalClientEmulator();
 
   /**
    * Sets the type of terminal to emulate.

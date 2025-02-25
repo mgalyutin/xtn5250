@@ -21,21 +21,23 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
-import java.awt.*;
-import java.awt.event.*;
+import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-
-import net.infordata.em.util.*;
-import org.jetbrains.annotations.NotNull;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class XIHintWindow extends JWindow {
 
   private static final long serialVersionUID = 1L;
 
-  private Component ivComponent;
+  private final Component ivComponent;
 
-  private @NotNull WinAdapter ivWinAdapter = new WinAdapter();
+  private final @NotNull WinAdapter ivWinAdapter = new WinAdapter();
 
   public XIHintWindow(@NotNull XIHint aHint, @NotNull Component aComponent) {
 

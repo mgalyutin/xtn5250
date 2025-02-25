@@ -21,14 +21,13 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.util.ResourceBundle;
-
-import javax.swing.JOptionPane;
-
 import net.infordata.em.crt5250.XI5250Crt;
 import net.infordata.em.crt5250.XI5250CrtCtrl;
 import net.infordata.em.crt5250.XI5250CrtFrame;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.util.ResourceBundle;
 
 /**
  * Handles common commands shared by XI5250Frame and XI5250Applet.
@@ -36,10 +35,10 @@ import org.jetbrains.annotations.NotNull;
 public class XI5250EmulatorCtrl extends XI5250CrtCtrl {
 
   // images
-  private static @NotNull XIImagesBdl cvImagesBdl =
+  private static final @NotNull XIImagesBdl cvImagesBdl =
       net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
-  private static ResourceBundle cvRes =
+  private static final ResourceBundle cvRes =
       ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
 
   public static final String CONNECT_CMD          = "CONNECT_CMD";

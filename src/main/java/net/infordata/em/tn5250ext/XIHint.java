@@ -24,10 +24,10 @@ package net.infordata.em.tn5250ext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-import java.util.*;
-
 import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * XIHint la classe che descrive le caratteristiche di un Hint. Utilizzando i caratteri di controllo
@@ -48,18 +48,18 @@ public class XIHint extends JComponent {
 
   private @Nullable Font ivFont = null;
 
-  private int ivSpaceLine = 1;
-  private int ivSpaceUp = 1;
-  private int ivSpaceDown = 2;
-  private int ivSpaceRight = 2;
-  private int ivSpaceLeft = 4;
+  private final int ivSpaceLine = 1;
+  private final int ivSpaceUp = 1;
+  private final int ivSpaceDown = 2;
+  private final int ivSpaceRight = 2;
+  private final int ivSpaceLeft = 4;
   private int ivHeightShortText;
 
-  private ArrayList<String> ivVectorLines;
+  private final ArrayList<String> ivVectorLines;
 
-  private Font ivFBold;
-  private Font ivFItalic;
-  private Font ivFBoldItalic;
+  private final Font ivFBold;
+  private final Font ivFItalic;
+  private final Font ivFBoldItalic;
 
   public XIHint(String aText) {
     this(aText, 0);

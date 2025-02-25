@@ -29,6 +29,6 @@ public interface XICommand {
 
   /**
    */
-  public void execute();
+  void execute();
 }
 

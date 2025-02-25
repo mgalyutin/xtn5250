@@ -20,16 +20,14 @@ limitations under the License.
  */
 package net.infordata.em.crt5250;
 
-import java.awt.Image;
+import net.infordata.em.util.XIUtil;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.ListResourceBundle;
 import java.util.Map;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import net.infordata.em.util.XIUtil;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The image bundle.
@@ -40,7 +38,7 @@ public class XIImagesBdl extends ListResourceBundle {
 
   private static XIImagesBdl cvImagesBdl;
 
-  private static Object[][] cvContents;
+  private static final Object[][] cvContents;
 
   static {
     cvContents = new Object[][]{
@@ -91,7 +89,7 @@ public class XIImagesBdl extends ListResourceBundle {
     return ((ImageIcon) getIcon(anImageName)).getImage();
   }
 
-  private @NotNull Map<String, Icon> ivIcons = new HashMap<>();
+  private final @NotNull Map<String, Icon> ivIcons = new HashMap<>();
 
   public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
     Icon icon = ivIcons.get(anImageName);

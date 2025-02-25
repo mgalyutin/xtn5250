@@ -21,11 +21,11 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.infordata.em.tnprot.XITelnet;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * WEA - Write extended attribute

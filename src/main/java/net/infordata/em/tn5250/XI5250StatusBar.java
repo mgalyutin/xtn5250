@@ -20,23 +20,15 @@ limitations under the License.
     30/07/99 rel. 1.14b- removed statusbar.* sub package. 
  */
 
-package net.infordata.em.tn5250; 
-
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Insets;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
+package net.infordata.em.tn5250;
 
 import net.infordata.em.util.XIRatioLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 
 /**
  * The 5250 status bar.
@@ -57,19 +49,19 @@ public class XI5250StatusBar extends JPanel {
   // images
   static @NotNull XIImagesBdl cvImagesBdl = XIImagesBdl.getImagesBdl();
 
-  private static Image
+  private static final Image
       cvTemporaryLockImage  = cvImagesBdl.getImage("TemporaryLock");
-  private static Image
+  private static final Image
       cvNormalLockImage     = cvImagesBdl.getImage("NormalLock");
-  private static Image
+  private static final Image
       cvHelpImage           = cvImagesBdl.getImage("Help");
-  private static Image
+  private static final Image
       cvShiftDownImage      = cvImagesBdl.getImage("ShiftDown");
-  private static Image
+  private static final Image
       cvCapsLockImage       = cvImagesBdl.getImage("CapsLock");
-  private static Image
+  private static final Image
       cvMessageImage        = cvImagesBdl.getImage("Message");
-  private static Image
+  private static final Image
       cvFlashImage          = cvImagesBdl.getImage("Flash");
 
   // status bar components
@@ -82,7 +74,7 @@ public class XI5250StatusBar extends JPanel {
 
   private boolean ivFlashOn;
   private int     ivShiftAreaState = -1;
-  private int     ivState          = XI5250Emulator.ST_NULL;
+  private final int     ivState          = XI5250Emulator.ST_NULL;
 
   public XI5250StatusBar() {
     super(new XIRatioLayout(4));
@@ -244,7 +236,7 @@ public class XI5250StatusBar extends JPanel {
     private @Nullable Image  ivImage = null;
     private @Nullable String ivText = null;
 
-    private int    ivAlignment;
+    private final int    ivAlignment;
 
     private final int ivHGap = 2;
 

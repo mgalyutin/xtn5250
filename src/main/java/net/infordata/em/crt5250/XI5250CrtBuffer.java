@@ -29,12 +29,11 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.io.Serializable;
-
 import net.infordata.em.crt.XICrtBuffer;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Adds capabilities required by 5250 emulation to XICrtBuffer. To be used by XI5250Crt.
@@ -49,7 +48,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
 
   public static final int GRAY_INTENSITY = colorAsIntensity(Color.gray);
 
-  private @NotNull ColorWrapper ivBackColor = new ColorWrapper(Color.black);
+  private final @NotNull ColorWrapper ivBackColor = new ColorWrapper(Color.black);
 
   /**
    * to be used with dark background

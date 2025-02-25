@@ -24,15 +24,7 @@ package net.infordata.em.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Button;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
-import java.awt.Panel;
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,9 +39,9 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
 
   public static final int RIGHT  = 2;
 
-  private int ivHGap;
+  private final int ivHGap;
 
-  private @NotNull Map<Component, Constraints> ivConstraints = new HashMap<>();
+  private final @NotNull Map<Component, Constraints> ivConstraints = new HashMap<>();
 
     public XIRatioLayout() {
       this(0);
@@ -271,8 +263,8 @@ public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private float ivHRatio;
-    private int   ivAlign;
+    private final float ivHRatio;
+    private final int   ivAlign;
 
     public Constraints(float hRatio) {
       this(hRatio, LEFT);

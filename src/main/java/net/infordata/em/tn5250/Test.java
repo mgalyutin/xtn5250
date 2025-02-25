@@ -1,15 +1,13 @@
 package net.infordata.em.tn5250;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 
 public class Test {
 

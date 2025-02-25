@@ -23,15 +23,15 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
+import net.infordata.em.tn5250.XI5250Emulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import net.infordata.em.tn5250.XI5250Emulator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Maintains a set of XI5250PanelHandler and activates them when the related 5250 screen (or panel)
@@ -44,7 +44,7 @@ public class XI5250SimplePanelsDispatcher extends XI5250PanelsDispatcher {
   private static final Logger LOGGER = Logger
       .getLogger(XI5250SimplePanelsDispatcher.class.getName());
 
-  transient private static String DELIMITERS;
+  private static String DELIMITERS;
 
   /**
    * Contains relations between XI5250PanelHandler and a tokenized version of the related 5250

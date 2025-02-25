@@ -20,11 +20,7 @@ package net.infordata.em.crt5250;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.beans.SimpleBeanInfo;
+import java.beans.*;
 
 public class XI5250CrtBeanInfo extends SimpleBeanInfo {
   @NotNull Class<XI5250Crt> beanClass = XI5250Crt.class;

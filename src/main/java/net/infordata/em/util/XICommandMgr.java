@@ -24,48 +24,41 @@ package net.infordata.em.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Button;
-import java.awt.CheckboxMenuItem;
-import java.awt.MenuItem;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.AbstractButton;
 
 public class XICommandMgr {
 
   private static final Logger LOGGER = Logger.getLogger(XICommandMgr.class.getName());
 
   // relazione action-command -> XICommand
-  private @NotNull Map<String, XICommand> ivActCmd2Cmd = new HashMap<>();
+  private final @NotNull Map<String, XICommand> ivActCmd2Cmd = new HashMap<>();
 
   // action-commands disabilitati
-  private @NotNull List<String> ivDisabledActCmd = new ArrayList<>();
+  private final @NotNull List<String> ivDisabledActCmd = new ArrayList<>();
 
   // relazione oggetto -> action-command
-  private @NotNull Map<Object, String> ivObj2ActCmd = new HashMap<>();
+  private final @NotNull Map<Object, String> ivObj2ActCmd = new HashMap<>();
 
   // action-command -> boolean value
-  private @NotNull Map<String, Boolean> ivActCmd2Value = new HashMap<>();
+  private final @NotNull Map<String, Boolean> ivActCmd2Value = new HashMap<>();
 
   // lock per gestione action commands
-  private @NotNull Object ivActCmdLock = new Object();
+  private final @NotNull Object ivActCmdLock = new Object();
 
   //
-  private @NotNull ActionListener ivActionListener = XICommandMgr.this::actionPerformed;
+  private final @NotNull ActionListener ivActionListener = XICommandMgr.this::actionPerformed;
 
   // usato per sopperire ad un buco delle AWT - CheckboxMenuItem non inviano
   // action command
-  private ItemListener ivItemListener;
+  private final ItemListener ivItemListener;
 
   public XICommandMgr() {
     ivItemListener = e -> XICommandMgr.this.actionPerformed(new ActionEvent(e.getSource(),
@@ -144,7 +137,7 @@ public class XICommandMgr {
 
       oldCmdState = getCommandState(cmd);
 
-      ivActCmd2Value.put(cmd, new Boolean(value));
+      ivActCmd2Value.put(cmd, value);
 
       // sincronizzo lo stato di tutti gli oggetti associati al comando
       Object obj;

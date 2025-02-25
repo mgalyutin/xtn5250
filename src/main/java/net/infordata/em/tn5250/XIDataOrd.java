@@ -22,12 +22,12 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tnprot.XITelnet;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 5250 Data Order

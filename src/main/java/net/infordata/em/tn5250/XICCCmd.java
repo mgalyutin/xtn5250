@@ -22,13 +22,12 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tnprot.XITelnet;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Abstract base class for all 5250 commands with CC parameter.

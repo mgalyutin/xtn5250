@@ -21,11 +21,11 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 5250 Query command.
@@ -63,8 +63,8 @@ public class XIQueryCmd extends XI5250Cmd {
       (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
       (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,
       (byte)0x01,
-        trans.toEBCDIC('5'), (byte)trans.toEBCDIC('2'), (byte)trans.toEBCDIC('5'), (byte)trans.toEBCDIC('1'), // 5251
-        trans.toEBCDIC('0'), (byte)trans.toEBCDIC('1'), (byte)trans.toEBCDIC('1'),
+        trans.toEBCDIC('5'), trans.toEBCDIC('2'), trans.toEBCDIC('5'), trans.toEBCDIC('1'), // 5251
+        trans.toEBCDIC('0'), trans.toEBCDIC('1'), trans.toEBCDIC('1'),
       (byte)0x02, (byte)0x00,  // keyboard 
       (byte)0x00, 
       (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // S/N

@@ -30,18 +30,14 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
-import java.awt.AWTEventMulticaster;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.EventListener;
-
 import net.infordata.em.tnprot.XITelnet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.EventListener;
 
 /**
  * Implements behaviour of 5250 fields with some extensions.
@@ -80,16 +76,16 @@ public class XI5250Field implements XI5250BaseField {
    */
   public static final int LOWERED_BORDER = 3;
 
-  private XI5250Crt ivCrt;
-  private byte[] ivFFW;
-  private byte[] ivFCW;
-  private int ivCol;
-  private int ivRow;
+  private final XI5250Crt ivCrt;
+  private final byte[] ivFFW;
+  private final byte[] ivFCW;
+  private final int ivCol;
+  private final int ivRow;
 
-  //ivInputLen rapresent the length of the input area
+  //ivInputLen represent the length of the input area
   private int ivInputLen;
   //this is the real field length
-  private int ivLength;
+  private final int ivLength;
 
   private int ivAttr;
 
@@ -346,7 +342,6 @@ public class XI5250Field implements XI5250BaseField {
     // exclude trailing null and blank chars
     for (i = str.length() - 1; (i >= 0) && ((str.charAt(i) == '\u0000') ||
         (str.charAt(i) == ' ')); i--) {
-      ;
     }
 
     return (i < 0) ? "" : str.substring(0, i + 1);
@@ -911,7 +906,7 @@ public class XI5250Field implements XI5250BaseField {
           ivLength * charSize.width,
           rows * charSize.height);
     } else {
-      return new Rectangle(0 * charSize.width,
+      return new Rectangle(0,
           ivRow * charSize.height,
           ivCrt.getCrtBufferSize().width,
           rows * charSize.height);

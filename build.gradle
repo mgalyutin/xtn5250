@@ -1,0 +1,41 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'net.infordata'
+version = '1.0'
+
+repositories {
+    maven {
+        url DISO21_THIRD_PARTY_REPOSITORY
+        credentials {
+            username "$nexusUserName"
+            password "$nexusUserPassword"
+        }
+    }
+    maven {
+        url DISO21_M2CENTRAL
+        credentials {
+            username "$nexusUserName"
+            password "$nexusUserPassword"
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:26.0.1'
+    implementation 'com.google.guava:guava:33.4.0-jre'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+
+    // testImplementation platform('org.junit:junit-bom:5.10.0')
+    // testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'us.abstracta:wiresham:0.2.1'
+    testImplementation 'org.assertj:assertj-swing:3.9.2'
+    testImplementation 'org.assertj:assertj-core:3.10.0'
+}
+
+test {
+    useJUnitPlatform()
+}

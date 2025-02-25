@@ -21,12 +21,10 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.Rectangle;
-
 import net.infordata.em.crt5250.XI5250Field;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
 
 /**
  * Connect an AWT Component to a XI5250Field
@@ -35,12 +33,12 @@ import org.jetbrains.annotations.NotNull;
  * @author   Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250FieldConnection {
-  private Component ivComponent;
+  private final Component ivComponent;
 
-  private int ivColsDelta;
-  private int ivRowsDelta;
-  private int ivNCols;
-  private int ivNRows;
+  private final int ivColsDelta;
+  private final int ivRowsDelta;
+  private final int ivNCols;
+  private final int ivNRows;
 
   public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl, XI5250Field aField,
                                Component aComponent,

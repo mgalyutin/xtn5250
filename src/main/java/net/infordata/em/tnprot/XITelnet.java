@@ -31,6 +31,7 @@ package net.infordata.em.tnprot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.net.SocketFactory;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +41,6 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.net.SocketFactory;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ import javax.net.SocketFactory;
  * @author Valentino Proietti - Infordata S.p.A.
  * @see XITelnetEmulator
  */
-public class XITelnet {
+public class XITelnet implements AutoCloseable {
 
   private static final Logger LOGGER = Logger.getLogger(XITelnet.class.getName());
 
@@ -137,7 +137,7 @@ public class XITelnet {
   static final int SIAC_WOPT = 2;
   static final int SIAC_WSTR = 3;
 
-  private String ivHost;
+  private final String ivHost;
   private int ivPort;
   private int connectionTimeoutMillis;
   private SocketFactory socketFactory = SocketFactory.getDefault();
@@ -155,11 +155,11 @@ public class XITelnet {
   transient private byte ivIACOpt;
   transient private String ivIACStr;
 
-  transient private boolean @NotNull [] ivLocalFlags = new boolean[128];
-  transient private boolean @NotNull [] ivRemoteFlags = new boolean[128];
+  final transient private boolean @NotNull [] ivLocalFlags = new boolean[128];
+  final transient private boolean @NotNull [] ivRemoteFlags = new boolean[128];
 
-  private boolean @NotNull [] ivLocalReqFlags = new boolean[128];
-  private boolean @NotNull [] ivRemoteReqFlags = new boolean[128];
+  private final boolean @NotNull [] ivLocalReqFlags = new boolean[128];
+  private final boolean @NotNull [] ivRemoteReqFlags = new boolean[128];
 
   private String ivTermType;
   private String ivEnvironment;
@@ -811,10 +811,16 @@ public class XITelnet {
     }
   }
 
-  @Override
+  /*@Override
   protected void finalize() throws Throwable {
     disconnect();
     super.finalize();
+  }
+  */
+
+  @Override
+  public void close() throws Exception {
+    disconnect();
   }
 
   /*

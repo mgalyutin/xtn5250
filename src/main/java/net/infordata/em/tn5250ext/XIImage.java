@@ -23,9 +23,8 @@ package net.infordata.em.tn5250ext;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author   Valentino Proietti - Infordata S.p.A.

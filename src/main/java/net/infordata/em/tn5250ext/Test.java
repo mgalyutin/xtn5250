@@ -1,25 +1,17 @@
 package net.infordata.em.tn5250ext;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
 import net.infordata.em.crt.XICrt;
 import net.infordata.em.crt5250.XI5250Field;
 import net.infordata.em.tn5250.XI5250Emulator;
 import net.infordata.em.tn5250.XI5250Frame;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Test {
 
@@ -43,7 +35,7 @@ public class Test {
                                       XI5250Emulator.VERSION, em);
 
     //3D FX
-    if (argv.length >= 2 && "3DFX".equals(argv[1].toUpperCase())) {
+    if (argv.length >= 2 && "3DFX".equalsIgnoreCase(argv[1])) {
       em.setDefFieldsBorderStyle(XI5250Field.LOWERED_BORDER);
       em.setDefBackground(SystemColor.control);
     }
@@ -62,7 +54,7 @@ public class Test {
   private static class TestHandler extends XI5250PanelHandler {
     
     private FontsCache    ivFontsCache;
-    private @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
+    private final @NotNull List<JButton> ivButtons = new ArrayList<JButton>();
 
     public TestHandler(XI5250PanelsDispatcher disp) {
       super(disp, "");
@@ -153,8 +145,8 @@ public class Test {
   
   private static class FontsCache {
 
-    private Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
-    private Font   ivFont;
+    private final Font @NotNull [] ivFonts = new Font[XICrt.MAX_FONT_SIZE - XICrt.MIN_FONT_SIZE + 1];
+    private final Font   ivFont;
 
     public FontsCache(Font font) {
       ivFont = font;

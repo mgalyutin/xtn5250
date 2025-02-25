@@ -22,39 +22,28 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.util.ResourceBundle;
-
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
 import net.infordata.em.crt5250.XI5250Crt;
 import net.infordata.em.crt5250.XI5250CrtCtrl;
 import net.infordata.em.crt5250.XI5250CrtFrame;
 import net.infordata.em.util.XIUtil;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
+
 public class XI5250Frame extends XI5250CrtFrame {
 
   private static final long serialVersionUID = 1L;
 
   // images
-  private static @NotNull XIImagesBdl cvImagesBdl =
+  private static final @NotNull XIImagesBdl cvImagesBdl =
       net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
-  private static ResourceBundle cvRes =
+  private static final ResourceBundle cvRes =
       ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
 
   private final String ivTitle;

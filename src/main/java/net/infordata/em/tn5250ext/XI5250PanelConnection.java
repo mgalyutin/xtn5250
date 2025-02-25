@@ -23,8 +23,7 @@ package net.infordata.em.tn5250ext;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Component;
-import java.awt.Point;
+import java.awt.*;
 
 /**
  * Connect an AWT Component to the XI5250EmulatorExt panel
@@ -37,12 +36,12 @@ import java.awt.Point;
  */
 public class XI5250PanelConnection {
 
-  private Component ivComponent;
+  private final Component ivComponent;
 
-  private int ivCol;
-  private int ivRow;
-  private int ivNCols;
-  private int ivNRows;
+  private final int ivCol;
+  private final int ivRow;
+  private final int ivNCols;
+  private final int ivNRows;
 
   public XI5250PanelConnection(@NotNull XI5250PanelHandler aPanelHndl,
                                Component aComponent,

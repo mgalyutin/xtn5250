@@ -71,12 +71,15 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.awt.AWTEvent;
-import java.awt.AWTEventMulticaster;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Toolkit;
+import net.infordata.em.crt5250.*;
+import net.infordata.em.tnprot.XITelnet;
+import net.infordata.em.tnprot.XITelnetEmulator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.net.SocketFactory;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -85,23 +88,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.EventListener;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.net.SocketFactory;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
-import net.infordata.em.crt5250.XI5250Crt;
-import net.infordata.em.crt5250.XI5250CrtBuffer;
-import net.infordata.em.crt5250.XI5250Field;
-import net.infordata.em.crt5250.XI5250FieldsList;
-import net.infordata.em.crt5250.XIEbcdicTranslator;
-import net.infordata.em.tnprot.XITelnet;
-import net.infordata.em.tnprot.XITelnetEmulator;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * THE 5250 EMULATOR.
@@ -118,7 +107,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Valentino Proietti - Infordata S.p.A.
  */
-public class XI5250Emulator extends XI5250Crt implements Serializable {
+public class XI5250Emulator extends XI5250Crt implements Serializable, AutoCloseable {
 
   private static final Logger LOGGER = Logger.getLogger(XI5250Emulator.class.getName());
 
@@ -275,7 +264,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
 
   // telnet connection
   transient private @Nullable XITelnet ivTelnet;
-  transient private byte @NotNull [] ivRXBuf = new byte[1024 * 8];
+  final transient private byte @NotNull [] ivRXBuf = new byte[1024 * 8];
   transient private int ivRXBufLen;
 
   // one bit for each function key
@@ -296,7 +285,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
 
   transient private int ivErrorRow;
 
-  transient private XI5250StatusBar ivStatusBar;
+  final transient private XI5250StatusBar ivStatusBar;
 
   transient protected XI5250EmulatorMemento @NotNull [] ivSavedScreens =
       new XI5250EmulatorMemento[10];
@@ -317,7 +306,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
   private String ivTermType;
   private @Nullable String ivTelnetEnv;
 
-  transient private @NotNull TelnetEmulator ivTelnetEmulator = new TelnetEmulator();
+  final transient private @NotNull TelnetEmulator ivTelnetEmulator = new TelnetEmulator();
 
   /**
    * Used when switching from 24x80 to ...
@@ -442,8 +431,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @param aHost host to connect to.
    */
   public synchronized void setHost(@Nullable String aHost) {
-    if (aHost == ivHost ||
-        (aHost != null && aHost.equals(ivHost))) {
+    if (Objects.equals(aHost, ivHost)) {
       return;
     }
 
@@ -503,8 +491,10 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
         ivTelnet.connect();
       } else {
         setBlinkingCursor(false);
-        ivTelnet.disconnect();
-        ivTelnet.setEmulator(null);
+        if (ivTelnet != null && ivTelnet.isConnected()) {
+          ivTelnet.disconnect();
+          ivTelnet.setEmulator(null);
+        }
         ivTelnet = null;
       }
     }
@@ -518,7 +508,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
    * @return true if the emulator is connected to the client, false otherwise.
    */
   public boolean isActive() {
-    return (ivTelnet == null) ? false : ivTelnet.isConnected();
+    return ivTelnet != null && ivTelnet.isConnected();
   }
 
   /**
@@ -1006,8 +996,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
                       break;
                     }
                   }
-                  cmd = cmd.substring(0, k + 1);
-                }
+                  cmd = cmd.substring(0, k + 1);             }
                 try {
                   if (LOGGER.isLoggable(Level.INFO)) {
                     if (wait) {
@@ -1681,6 +1670,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
   private static final int AUTO_ENTER_MODIFIERS = (new KeyEvent(new JLabel(""),
       KeyEvent.KEY_PRESSED, 0, -1, KeyEvent.VK_ENTER, (char) KeyEvent.VK_ENTER)).getModifiers();
 
+
   protected boolean processKeyEnter(int aModifier) {
     // Cannot detect -1 modifier directly
     if (aModifier != 0 && aModifier != AUTO_ENTER_MODIFIERS) {
@@ -1765,10 +1755,16 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
     return e;
   }
 
-  @Override
+  /*@Override
   protected void finalize() throws Throwable {
     setActive(false);
     super.finalize();
+  }
+*/
+
+  @Override
+  public void close() throws Exception {
+    setActive(false);
   }
 
   void receivedStrPcCmd() {
@@ -1976,8 +1972,6 @@ public class XI5250Emulator extends XI5250Crt implements Serializable {
           });
         } catch (InterruptedException ex) {
           continue;
-        } catch (ThreadDeath ex) {
-          throw ex;
         } catch (Throwable ex) {
           System.err.println(
               "Exception occurred during 5250 keyboard event dispatching:");

@@ -21,12 +21,12 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
+import net.infordata.em.crt5250.XI5250Field;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-
-import net.infordata.em.crt5250.XI5250Field;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 5250 write to display command

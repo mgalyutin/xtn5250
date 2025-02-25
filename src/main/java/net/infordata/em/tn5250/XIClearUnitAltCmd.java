@@ -24,7 +24,7 @@ package net.infordata.em.tn5250;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Font;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 

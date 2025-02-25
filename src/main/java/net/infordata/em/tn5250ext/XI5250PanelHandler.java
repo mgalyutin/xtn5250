@@ -26,34 +26,17 @@ limitations under the License.
 
 package net.infordata.em.tn5250ext;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JPopupMenu;
-
 import net.infordata.em.crt5250.XI5250CrtAdapter;
 import net.infordata.em.crt5250.XI5250CrtEvent;
 import net.infordata.em.crt5250.XI5250Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * Abstract base class for all classes created to control 5250 panels.
@@ -163,9 +146,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class XI5250PanelHandler {
 
-  private String ivTitle;
+  private final String ivTitle;
 
-  transient private XI5250PanelsDispatcher ivDispatcher;
+  final transient private XI5250PanelsDispatcher ivDispatcher;
 
   // Hash table used to mantain relations between XI5250Fields and
   // XI5250FieldConnections
@@ -182,7 +165,7 @@ public abstract class XI5250PanelHandler {
   transient private @Nullable HashMap<XI5250Field, XIHint> ivHints;
   transient private @Nullable XIHintWindow ivHintWindow;
   transient private javax.swing.@Nullable Timer ivHintTimer;
-  transient private int ivHintDelay = 1000;
+  final transient private int ivHintDelay = 1000;
 
   transient private @Nullable XIHint ivLastHint;
   transient private @Nullable HintThread ivHintThread;
@@ -192,7 +175,7 @@ public abstract class XI5250PanelHandler {
   transient private MouseListener ivMouseListener;
 
 
-  transient private @NotNull ComponentListener ivHintListener = new ComponentAdapter() {
+  final transient private @NotNull ComponentListener ivHintListener = new ComponentAdapter() {
     @Override
     public void componentHidden(@NotNull ComponentEvent aEvent) {
       // ivHintWindow potrebbe essere null
@@ -776,7 +759,7 @@ public abstract class XI5250PanelHandler {
 
   class HintTimer implements ActionListener {
 
-    private XI5250Field ivField;
+    private final XI5250Field ivField;
 
     public HintTimer(XI5250Field aField) {
       ivField = aField;

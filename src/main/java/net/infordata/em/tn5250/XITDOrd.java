@@ -21,12 +21,12 @@ limitations under the License.
 
 package net.infordata.em.tn5250;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import net.infordata.em.crt5250.XIEbcdicTranslator;
 import net.infordata.em.tnprot.XITelnet;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * TD - Transparent data
@@ -58,7 +58,7 @@ public class XITDOrd extends XI5250Ord {
     int count = inStream.read(buf);
     if (count < buf.length) {
       throw new XI5250Exception("EOF reached, requested: " + ivLen +
-          " readden:" + count, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+          " redden:" + count, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
     }
     XIEbcdicTranslator translator = ivEmulator.getTranslator();
     StringBuilder sb = new StringBuilder(ivLen);

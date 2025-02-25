@@ -33,17 +33,8 @@ package net.infordata.em.crt;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.io.Serializable;
+import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,8 +51,8 @@ public class XICrtBuffer implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  private int      ivNCols;
-  private int      ivNRows;
+  private final int      ivNCols;
+  private final int      ivNRows;
 
   transient private Graphics ivGr;
   transient private int      ivCharW;
@@ -73,10 +64,10 @@ public class XICrtBuffer implements Serializable {
   private int      ivDefAttr;     // default char attribute
 
   // [rows][cols]
-  private char[][] ivCharBuffer;
-  private int[][]  ivAttrBuffer;
+  private final char[][] ivCharBuffer;
+  private final int[][]  ivAttrBuffer;
 
-  transient private @NotNull List<Rectangle> ivDirtyAreas = new ArrayList<>(20);
+  final transient private @NotNull List<Rectangle> ivDirtyAreas = new ArrayList<>(20);
 
   transient private XICrt  ivCrt;
 

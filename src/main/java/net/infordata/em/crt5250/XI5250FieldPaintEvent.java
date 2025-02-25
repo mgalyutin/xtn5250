@@ -25,7 +25,7 @@ package net.infordata.em.crt5250;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.EventObject;
 
 /**
@@ -48,8 +48,8 @@ public class XI5250FieldPaintEvent extends EventObject {
 
   private static final String[] cvIdDescr = {"FIELD_PAINT",
                                              "ROW_PAINT"};
-  private int         ivId;
-  private Graphics    ivGr;
+  private final int         ivId;
+  private final Graphics    ivGr;
 
   public XI5250FieldPaintEvent(int aId, @NotNull XI5250Field aField, Graphics aGr) {
     super(aField);

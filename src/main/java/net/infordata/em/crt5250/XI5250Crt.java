@@ -38,41 +38,23 @@ limitations under the License.
 
 package net.infordata.em.crt5250;
 
-import java.awt.AWTEvent;
-import java.awt.AWTEventMulticaster;
-import java.awt.AWTKeyStroke;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import net.infordata.em.crt.XICrt;
+import net.infordata.em.crt.XICrtBuffer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.Serializable;
 import java.util.EventListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import net.infordata.em.crt.XICrt;
-import net.infordata.em.crt.XICrtBuffer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds capabilities required by 5250 emulation to XICrt. 5250 requires word-wrap and linear access
@@ -144,7 +126,7 @@ public class XI5250Crt extends XICrt implements Serializable {
 
   public static final String CODE_PAGE = "codePage";
 
-  public static final String DEFAULT_CODE_PAGE = "CP1144";
+  public static final String DEFAULT_CODE_PAGE = "CP1141";
   private @NotNull String ivCodePage = DEFAULT_CODE_PAGE;
   transient private XIEbcdicTranslator ivTranslator =
       XIEbcdicTranslator.getTranslator(DEFAULT_CODE_PAGE);
@@ -861,7 +843,7 @@ public class XI5250Crt extends XICrt implements Serializable {
   
   private static void drawHorzLine(int inc, Graphics gc, int x, int y, int dx) {
     Graphics2D g2 = (Graphics2D) gc;
-    float dash[] = {6f};
+    float[] dash = {6f};
     BasicStroke b = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
         BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
     g2.setStroke(b);
@@ -870,7 +852,7 @@ public class XI5250Crt extends XICrt implements Serializable {
 
   private static void drawVertLine(int inc, Graphics gc, int x, int y, int dy) {
     Graphics2D g2 = (Graphics2D) gc;
-    float dash[] = {6f};
+    float[] dash = {6f};
     BasicStroke b = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
         BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
     g2.setStroke(b);
@@ -1112,7 +1094,7 @@ public class XI5250Crt extends XICrt implements Serializable {
       XICrtBuffer crtBuffer = getCrtBuffer();
 
       crtBuffer.drawString(str, col, row, aAttr);
-      repaint(0 * crtBuffer.getCharSize().width,
+      repaint(0,
           row * crtBuffer.getCharSize().height,
           crtBuffer.getSize().width,
           lines * crtBuffer.getCharSize().height);
@@ -1577,7 +1559,7 @@ public class XI5250Crt extends XICrt implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private XI5250Crt ivCrt;
+    private final XI5250Crt ivCrt;
 
     public SupportPanel(@NotNull XI5250Crt crt) {
       super(null);

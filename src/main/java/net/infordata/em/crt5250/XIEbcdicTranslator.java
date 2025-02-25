@@ -254,7 +254,6 @@ public abstract class XIEbcdicTranslator {
 
     // strip trailing blanks
     for (i = str.length() - 1; (i >= 0) && (str.charAt(i) == ' '); i--) {
-      ;
     }
 
     return str.substring(0, Math.max(0, Math.min(str.length(), i + 1)));

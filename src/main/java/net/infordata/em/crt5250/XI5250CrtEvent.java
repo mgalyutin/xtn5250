@@ -65,9 +65,9 @@ public class XI5250CrtEvent extends EventObject {
                                              "MOUSE_ENTERS_FIELD",
                                              "MOUSE_EXITS_FIELD"};
 
-  private int         ivId;
-  private XI5250Field ivField;
-  private KeyEvent    ivKeyEvent;
+  private final int         ivId;
+  private final XI5250Field ivField;
+  private final KeyEvent    ivKeyEvent;
 
   protected XI5250CrtEvent(int aId, @NotNull XI5250Crt aCrt, XI5250Field aField,
                            KeyEvent aKeyEvent) {

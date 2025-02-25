@@ -25,12 +25,7 @@ package net.infordata.em.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.applet.Applet;
-import java.awt.Component;
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -58,7 +53,7 @@ public class XIUtil {
     try {
       // Test if method introduced in 1.3 is available.
       Method m = Runtime.class.getMethod("addShutdownHook",
-                                         new Class[] {Thread.class});
+              Thread.class);
       return (m != null);
     }
     catch (NoSuchMethodException e) {
@@ -83,12 +78,7 @@ public class XIUtil {
     return (Window)comp;
   }
 
-  public static final @Nullable Applet getApplet(Component aComponent) {
-    Component comp = aComponent;
-    while (comp != null && !(comp instanceof Applet))
-      comp = comp.getParent();
-    return (Applet)comp;
-  }
+
 
   public static Image createImage(final @NotNull Class<?> baseClass,
                                   final @NotNull String gifFile) {
