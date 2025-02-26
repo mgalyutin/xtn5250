@@ -30,52 +30,52 @@ import java.util.EventListener;
  */
 public interface XI5250EmulatorListener extends EventListener {
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#CONNECTING
-   */
-  void connecting(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#CONNECTING
+     */
+    void connecting(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#CONNECTED
-   */
-  void connected(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#CONNECTED
+     */
+    void connected(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#DISCONNECTED
-   */
-  void disconnected(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#DISCONNECTED
+     */
+    void disconnected(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#STATE_CHANGED
-   */
-  void stateChanged(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#STATE_CHANGED
+     */
+    void stateChanged(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#NEW_PANEL_RECEIVED
-   */
-  void newPanelReceived(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#NEW_PANEL_RECEIVED
+     */
+    void newPanelReceived(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#FIELDS_REMOVED
-   */
-  void fieldsRemoved(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#FIELDS_REMOVED
+     */
+    void fieldsRemoved(XI5250EmulatorEvent e);
 
 
-  /**
-   * @param e emulator event.
-   * @see XI5250EmulatorEvent#DATA_SENDED
-   */
-  void dataSended(XI5250EmulatorEvent e);
+    /**
+     * @param e emulator event.
+     * @see XI5250EmulatorEvent#DATA_SENDED
+     */
+    void dataSended(XI5250EmulatorEvent e);
 
 }

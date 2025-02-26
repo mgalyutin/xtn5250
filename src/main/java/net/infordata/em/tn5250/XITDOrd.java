@@ -30,54 +30,54 @@ import java.io.InputStream;
 
 /**
  * TD - Transparent data
- *
+ * <p>
  * see: http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.10?DT=19950629163252
  *
  * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XITDOrd extends XI5250Ord {
 
-  protected String ivData;
-  protected int ivLen;
+    protected String ivData;
+    protected int ivLen;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
 
-    byte[] buf = new byte[2];
-    if (inStream.read(buf) < buf.length) {
-      throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        byte[] buf = new byte[2];
+        if (inStream.read(buf) < buf.length) {
+            throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
+        ivLen = (XITelnet.toInt(buf[0]) << 8) | XITelnet.toInt(buf[1]);
+        // Cannot deal with real dimensions, since they can be not applied yet
+        if (ivLen < 0 || ivLen > (XI5250Emulator.MAX_ROWS * XI5250Emulator.MAX_COLS)) {
+            throw new XI5250Exception("Invalid len", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
+
+        buf = new byte[ivLen];
+        int count = inStream.read(buf);
+        if (count < buf.length) {
+            throw new XI5250Exception("EOF reached, requested: " + ivLen +
+                    " redden:" + count, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
+        XIEbcdicTranslator translator = ivEmulator.getTranslator();
+        StringBuilder sb = new StringBuilder(ivLen);
+        for (int i = 0; i < count; i++) {
+            sb.append(translator.toChar(buf[i]));
+        }
+        ivData = sb.toString();
+
     }
-    ivLen = (XITelnet.toInt(buf[0]) << 8) | XITelnet.toInt(buf[1]);
-    // Cannot deal with real dimensions, since they can be not applied yet
-    if (ivLen < 0 || ivLen > (XI5250Emulator.MAX_ROWS * XI5250Emulator.MAX_COLS)) {
-      throw new XI5250Exception("Invalid len", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+
+    @Override
+    protected void execute() {
+        ivEmulator.drawString(ivData, ivEmulator.getSBACol(), ivEmulator.getSBARow());
+        ivEmulator.setSBA(ivEmulator.getSBA() + ivData.length());
     }
 
-    buf = new byte[ivLen];
-    int count = inStream.read(buf);
-    if (count < buf.length) {
-      throw new XI5250Exception("EOF reached, requested: " + ivLen +
-          " redden:" + count, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + ivLen + ",\"" + ivData + "\"" + "]";
     }
-    XIEbcdicTranslator translator = ivEmulator.getTranslator();
-    StringBuilder sb = new StringBuilder(ivLen);
-    for (int i = 0; i < count; i++) {
-      sb.append(translator.toChar(buf[i]));
-    }
-    ivData = sb.toString();
-
-  }
-
-  @Override
-  protected void execute() {
-    ivEmulator.drawString(ivData, ivEmulator.getSBACol(), ivEmulator.getSBARow());
-    ivEmulator.setSBA(ivEmulator.getSBA() + ivData.length());
-  }
-
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + ivLen + ",\"" + ivData + "\"" + "]";
-  }
 
 }

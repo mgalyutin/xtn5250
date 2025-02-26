@@ -27,17 +27,17 @@ import java.io.InputStream;
 /**
  * 5250 Read Immediate
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIReadImmediateCmd extends XI5250Cmd {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream) throws IOException {
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.send5250Data(0x00, ivEmulator.isMasterMDTSet(), false);
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.send5250Data(0x00, ivEmulator.isMasterMDTSet(), false);
+    }
 
 }

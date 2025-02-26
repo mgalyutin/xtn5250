@@ -24,28 +24,28 @@ package net.infordata.em.crt5250;
 
 /**
  * XI5250CrtListener adapter.
- * @see    XI5250CrtListener
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
+ * @see XI5250CrtListener
  */
 public class XI5250CrtAdapter implements XI5250CrtListener {
 
-  public void fieldActivated(XI5250CrtEvent e) {
-  }
+    public void fieldActivated(XI5250CrtEvent e) {
+    }
 
-  public void fieldDeactivated(XI5250CrtEvent e) {
-  }
+    public void fieldDeactivated(XI5250CrtEvent e) {
+    }
 
-  public void sizeChanged(XI5250CrtEvent e) {
-  }
+    public void sizeChanged(XI5250CrtEvent e) {
+    }
 
-  public void keyEvent(XI5250CrtEvent e) {
-  }
+    public void keyEvent(XI5250CrtEvent e) {
+    }
 
-  public void mouseEntersField(XI5250CrtEvent e) {
-  }
+    public void mouseEntersField(XI5250CrtEvent e) {
+    }
 
-  public void mouseExitsField(XI5250CrtEvent e) {
-  }
+    public void mouseExitsField(XI5250CrtEvent e) {
+    }
 
 }

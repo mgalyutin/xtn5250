@@ -35,64 +35,64 @@ import java.io.InputStream;
  */
 public class XISFOrd extends XI5250Ord {
 
-  protected byte @NotNull [] FFW = new byte[2];
-  protected byte @NotNull [] FCW = new byte[2];
-  protected byte ivScreenAttr;
-  protected int ivFieldLen;
+    protected byte @NotNull [] FFW = new byte[2];
+    protected byte @NotNull [] FCW = new byte[2];
+    protected byte ivScreenAttr;
+    protected int ivFieldLen;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
-    byte bb;
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
+        byte bb;
 
-    inStream.mark(1);
-    bb = (byte) Math.max(0, inStream.read());
-    // check if FFW is present
-    if ((bb & 0xC0) == 0x40) {
-      FFW[0] = bb;
-      FFW[1] = (byte) Math.max(0, inStream.read());
+        inStream.mark(1);
+        bb = (byte) Math.max(0, inStream.read());
+        // check if FFW is present
+        if ((bb & 0xC0) == 0x40) {
+            FFW[0] = bb;
+            FFW[1] = (byte) Math.max(0, inStream.read());
 
-      inStream.mark(1);
-      bb = (byte) Math.max(0, inStream.read());
-      // check if FCW is present
-      if ((bb & 0xC0) == 0x80) {
-        FCW[0] = bb;
-        FCW[1] = (byte) Math.max(0, inStream.read());
-      } else {
-        inStream.reset();
-      }
-    } else {
-      inStream.reset();
+            inStream.mark(1);
+            bb = (byte) Math.max(0, inStream.read());
+            // check if FCW is present
+            if ((bb & 0xC0) == 0x80) {
+                FCW[0] = bb;
+                FCW[1] = (byte) Math.max(0, inStream.read());
+            } else {
+                inStream.reset();
+            }
+        } else {
+            inStream.reset();
+        }
+
+        ivScreenAttr = (byte) Math.max(0, inStream.read());
+        ivFieldLen = (Math.max(0, inStream.read()) << 8) + Math.max(0, inStream.read());
+        //!!V effettuare check dei parametri
     }
 
-    ivScreenAttr = (byte) Math.max(0, inStream.read());
-    ivFieldLen = (Math.max(0, inStream.read()) << 8) + Math.max(0, inStream.read());
-    //!!V effettuare check dei parametri
-  }
+    @Override
+    protected void execute() {
+        if (ivScreenAttr != 0) {
+            ivEmulator.drawString(String.valueOf(XI5250Emulator.ATTRIBUTE_PLACE_HOLDER),
+                    ivEmulator.getSBACol(), ivEmulator.getSBARow(),
+                    ivScreenAttr);
+            ivEmulator.setSBA(ivEmulator.getSBA() + 1);
+        }
 
-  @Override
-  protected void execute() {
-    if (ivScreenAttr != 0) {
-      ivEmulator.drawString(String.valueOf(XI5250Emulator.ATTRIBUTE_PLACE_HOLDER),
-          ivEmulator.getSBACol(), ivEmulator.getSBARow(),
-          ivScreenAttr);
-      ivEmulator.setSBA(ivEmulator.getSBA() + 1);
+        // -1 to force attribute reload
+        ivEmulator.addField(ivEmulator.create5250Field(FFW.clone(),
+                FCW.clone(),
+                ivEmulator.getSBACol(),
+                ivEmulator.getSBARow(),
+                ivFieldLen, -1));
     }
 
-    // -1 to force attribute reload
-    ivEmulator.addField(ivEmulator.create5250Field(FFW.clone(),
-        FCW.clone(),
-        ivEmulator.getSBACol(),
-        ivEmulator.getSBARow(),
-        ivFieldLen, -1));
-  }
-
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [FFW=[" + XITelnet.toHex(FFW[0]) + "," +
-        XITelnet.toHex(FFW[1]) + "]," +
-        "FCW=[" + XITelnet.toHex(FCW[0]) + "," +
-        XITelnet.toHex(FCW[1]) + "]," +
-        XITelnet.toHex(ivScreenAttr) + "," + ivFieldLen + "]";
-  }
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [FFW=[" + XITelnet.toHex(FFW[0]) + "," +
+                XITelnet.toHex(FFW[1]) + "]," +
+                "FCW=[" + XITelnet.toHex(FCW[0]) + "," +
+                XITelnet.toHex(FCW[1]) + "]," +
+                XITelnet.toHex(ivScreenAttr) + "," + ivFieldLen + "]";
+    }
 
 }

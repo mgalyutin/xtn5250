@@ -29,17 +29,17 @@ package net.infordata.em.tn5250;
  */
 public class XI5250Exception extends Exception {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private final int ivErrorCode;
+    private final int ivErrorCode;
 
-  public XI5250Exception(String s, int errorCode) {
-    super(s);
-    ivErrorCode = errorCode;
-  }
+    public XI5250Exception(String s, int errorCode) {
+        super(s);
+        ivErrorCode = errorCode;
+    }
 
-  public final int getErrorCode() {
-    return ivErrorCode;
-  }
+    public final int getErrorCode() {
+        return ivErrorCode;
+    }
 
 }

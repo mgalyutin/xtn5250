@@ -5,16 +5,16 @@ package net.infordata.em;
  */
 public interface ExceptionHandler {
 
-  /**
-   * Method invoked when an {@link Exception} is thrown.
-   *
-   * @param ex Exception thrown while connected to the terminal server.
-   */
-  void onException(Throwable ex);
+    /**
+     * Method invoked when an {@link Exception} is thrown.
+     *
+     * @param ex Exception thrown while connected to the terminal server.
+     */
+    void onException(Throwable ex);
 
-  /**
-   * Method invoked when connection is closed by terminal server.
-   */
-  void onConnectionClosed();
+    /**
+     * Method invoked when connection is closed by terminal server.
+     */
+    void onConnectionClosed();
 
 }

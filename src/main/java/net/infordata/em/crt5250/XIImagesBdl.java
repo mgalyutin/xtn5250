@@ -36,68 +36,68 @@ import java.util.Map;
  */
 public class XIImagesBdl extends ListResourceBundle {
 
-  private static XIImagesBdl cvImagesBdl;
+    private static XIImagesBdl cvImagesBdl;
 
-  private static final Object[][] cvContents;
+    private static final Object[][] cvContents;
 
-  static {
-    cvContents = new Object[][]{
-        {"ShiftDown",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/ShiftDown.gif")},
-        {"CapsLock",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/CapsLock.gif")},
-        {"3dFx",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/3dFx.gif")},
-        {"Copy",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/Copy.gif")},
-        {"Paste",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/Paste.gif")},
-        {"RefCursor",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/RefCursor.gif")},
-        {"Print",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/Print.gif")},
-        {"Logo",
-            XIUtil.createImage(
-                XIImagesBdl.class, "resources/Logo.gif")},
-    };
-  }
-
-  private XIImagesBdl() {
-  }
-
-  public static @NotNull XIImagesBdl getImagesBdl() {
-    if (cvImagesBdl == null) {
-      cvImagesBdl = new XIImagesBdl();
+    static {
+        cvContents = new Object[][]{
+                {"ShiftDown",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/ShiftDown.gif")},
+                {"CapsLock",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/CapsLock.gif")},
+                {"3dFx",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/3dFx.gif")},
+                {"Copy",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Copy.gif")},
+                {"Paste",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Paste.gif")},
+                {"RefCursor",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/RefCursor.gif")},
+                {"Print",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Print.gif")},
+                {"Logo",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Logo.gif")},
+        };
     }
 
-    return cvImagesBdl;
-  }
-
-  @Override
-  public Object[][] getContents() {
-    return cvContents;
-  }
-
-  public final Image getImage(@NotNull String anImageName) {
-    return ((ImageIcon) getIcon(anImageName)).getImage();
-  }
-
-  private final @NotNull Map<String, Icon> ivIcons = new HashMap<>();
-
-  public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
-    Icon icon = ivIcons.get(anImageName);
-    if (icon == null) {
-      icon = new ImageIcon((Image) getObject(anImageName));
-      ivIcons.put(anImageName, icon);
+    private XIImagesBdl() {
     }
-    return icon;
-  }
+
+    public static @NotNull XIImagesBdl getImagesBdl() {
+        if (cvImagesBdl == null) {
+            cvImagesBdl = new XIImagesBdl();
+        }
+
+        return cvImagesBdl;
+    }
+
+    @Override
+    public Object[][] getContents() {
+        return cvContents;
+    }
+
+    public final Image getImage(@NotNull String anImageName) {
+        return ((ImageIcon) getIcon(anImageName)).getImage();
+    }
+
+    private final @NotNull Map<String, Icon> ivIcons = new HashMap<>();
+
+    public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
+        Icon icon = ivIcons.get(anImageName);
+        if (icon == null) {
+            icon = new ImageIcon((Image) getObject(anImageName));
+            ivIcons.put(anImageName, icon);
+        }
+        return icon;
+    }
 
 }

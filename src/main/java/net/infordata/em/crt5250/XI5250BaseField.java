@@ -28,12 +28,12 @@ import java.io.IOException;
  * Common base interface for XI5250FieldsList and XI5250Field.
  * Only for possible future implementations.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public interface XI5250BaseField {
 
-  void init();
+    void init();
 
-  void saveTo(XI5250FieldSaver aSaver) throws IOException;
+    void saveTo(XI5250FieldSaver aSaver) throws IOException;
 
 }

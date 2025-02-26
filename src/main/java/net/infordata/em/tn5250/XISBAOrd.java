@@ -29,31 +29,31 @@ import java.io.InputStream;
 /**
  * 5250 SBA Order
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XISBAOrd extends XI5250Ord {
 
-  protected int ivRow, ivCol;
+    protected int ivRow, ivCol;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
-    ivRow = Math.max(0, inStream.read());
-    ivCol = Math.max(0, inStream.read());
-    // Cannot deal with real dimensions, since they can be not applied yet 
-    if (ivRow <= 0 || ivRow > XI5250Emulator.MAX_ROWS || 
-        ivCol <= 0 || ivCol > XI5250Emulator.MAX_COLS)
-      throw new XI5250Exception("Invalid screen coord: " + ivRow + "," + ivCol, 
-          XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
-  }
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
+        ivRow = Math.max(0, inStream.read());
+        ivCol = Math.max(0, inStream.read());
+        // Cannot deal with real dimensions, since they can be not applied yet
+        if (ivRow <= 0 || ivRow > XI5250Emulator.MAX_ROWS ||
+                ivCol <= 0 || ivCol > XI5250Emulator.MAX_COLS)
+            throw new XI5250Exception("Invalid screen coord: " + ivRow + "," + ivCol,
+                    XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.setSBA(ivCol - 1, ivRow - 1);
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.setSBA(ivCol - 1, ivRow - 1);
+    }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + ivRow + "," + ivCol + "]";
-  }
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + ivRow + "," + ivCol + "]";
+    }
 
 }

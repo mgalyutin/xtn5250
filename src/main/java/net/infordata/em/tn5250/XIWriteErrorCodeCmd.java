@@ -30,27 +30,27 @@ import java.io.InputStream;
 /**
  * 5250 Write error code command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIWriteErrorCodeCmd extends XI5250Cmd {
 
-  protected XI5250OrdList ivOrdList;
+    protected XI5250OrdList ivOrdList;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    ivOrdList = ivEmulator.createOrdList(ivEmulator);
-    ivOrdList.readFrom5250Stream(inStream);
-  }
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        ivOrdList = ivEmulator.createOrdList(ivEmulator);
+        ivOrdList.readFrom5250Stream(inStream);
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.setState(XI5250Emulator.ST_PRE_HELP);
+    @Override
+    protected void execute() {
+        ivEmulator.setState(XI5250Emulator.ST_PRE_HELP);
 
-    ivEmulator.setDefAttr(0x20);
+        ivEmulator.setDefAttr(0x20);
 
-    ivEmulator.setSBA(0, ivEmulator.getErrorRow());
-    ivOrdList.execute();
-  }
+        ivEmulator.setSBA(0, ivEmulator.getErrorRow());
+        ivOrdList.execute();
+    }
 
 }

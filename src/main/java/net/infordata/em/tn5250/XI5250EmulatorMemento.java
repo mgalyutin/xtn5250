@@ -27,49 +27,49 @@ import net.infordata.em.crt5250.XI5250FieldsList;
 /**
  * Used to store, without exposing it, the internal state of XI5250Emulator.
  *
- * @see    XI5250Emulator#createMemento
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
+ * @see XI5250Emulator#createMemento
  */
 public class XI5250EmulatorMemento {
 
-  protected XI5250FieldsList ivFields;
+    protected XI5250FieldsList ivFields;
 
-  protected int             ivFunctionKeysMask;
+    protected int ivFunctionKeysMask;
 
-  protected XI5250Cmd       ivPendingCmd;
+    protected XI5250Cmd ivPendingCmd;
 
-  protected int             ivState;
-  protected int             ivPrevState;
+    protected int ivState;
+    protected int ivPrevState;
 
-  protected int             ivCol;
-  protected int             ivRow;
+    protected int ivCol;
+    protected int ivRow;
 
-  protected int             ivErrorRow;
+    protected int ivErrorRow;
 
-  // from super classes
-  protected XI5250CrtBuffer ivCrtBuffer;
+    // from super classes
+    protected XI5250CrtBuffer ivCrtBuffer;
 
-  public XI5250EmulatorMemento(XI5250FieldsList aFieldList,
-                               int aFunctionKeysMask, XI5250Cmd aPendingCmd,
-                               int aState, int aPrevState,
-                               int aCol, int aRow,
-                               int aErrorRow,
-                               XI5250CrtBuffer aCrtBuffer) {
-    ivFields = aFieldList;
+    public XI5250EmulatorMemento(XI5250FieldsList aFieldList,
+                                 int aFunctionKeysMask, XI5250Cmd aPendingCmd,
+                                 int aState, int aPrevState,
+                                 int aCol, int aRow,
+                                 int aErrorRow,
+                                 XI5250CrtBuffer aCrtBuffer) {
+        ivFields = aFieldList;
 
-    ivFunctionKeysMask = aFunctionKeysMask;
+        ivFunctionKeysMask = aFunctionKeysMask;
 
-    ivPendingCmd = aPendingCmd;
+        ivPendingCmd = aPendingCmd;
 
-    ivState = aState;
-    ivPrevState = aPrevState;
+        ivState = aState;
+        ivPrevState = aPrevState;
 
-    ivCol = aCol;
-    ivRow = aRow;
+        ivCol = aCol;
+        ivRow = aRow;
 
-    ivErrorRow = aErrorRow;
+        ivErrorRow = aErrorRow;
 
-    ivCrtBuffer = aCrtBuffer;
-  }
+        ivCrtBuffer = aCrtBuffer;
+    }
 
 }

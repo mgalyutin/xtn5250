@@ -36,81 +36,81 @@ import java.util.Map;
 /**
  * The image bundle.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIImagesBdl extends ListResourceBundle {
 
-  private static XIImagesBdl      cvImagesBdl;
+    private static XIImagesBdl cvImagesBdl;
 
-  private static final Object[][] cvContents;
+    private static final Object[][] cvContents;
 
-  static {
-    Object[][] contents = new Object[][] {
-      {"TemporaryLock",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/TemporaryLockState.gif")},
-      {"NormalLock",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/NormalLockState.gif")},
-      {"Help",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/HelpState.gif")},
-      {"Message",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/Message.gif")},
-      {"Flash",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/Flash.gif")},
-      {"Connect",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/Connect.gif")},
-      {"Disconnect",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/Disconnect.gif")},
-      {"InFrame",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/InFrame.gif")},
-      {"SnapShot",
-       XIUtil.createImage(
-           XIImagesBdl.class, "resources/SnapShot.gif")},
-    };
+    static {
+        Object[][] contents = new Object[][]{
+                {"TemporaryLock",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/TemporaryLockState.gif")},
+                {"NormalLock",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/NormalLockState.gif")},
+                {"Help",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/HelpState.gif")},
+                {"Message",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Message.gif")},
+                {"Flash",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Flash.gif")},
+                {"Connect",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Connect.gif")},
+                {"Disconnect",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/Disconnect.gif")},
+                {"InFrame",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/InFrame.gif")},
+                {"SnapShot",
+                        XIUtil.createImage(
+                                XIImagesBdl.class, "resources/SnapShot.gif")},
+        };
 
-    Object[][] superContents =
-        net.infordata.em.crt5250.XIImagesBdl.getImagesBdl().getContents();
-    cvContents = new Object[superContents.length + contents.length][2];
-    System.arraycopy(superContents, 0, cvContents, 0, superContents.length);
-    System.arraycopy(contents, 0, cvContents, superContents.length, contents.length);
-  }
-
-  private XIImagesBdl() {
-  }
-
-  public static @NotNull XIImagesBdl getImagesBdl() {
-    if (cvImagesBdl == null) {
-      cvImagesBdl = new XIImagesBdl();
+        Object[][] superContents =
+                net.infordata.em.crt5250.XIImagesBdl.getImagesBdl().getContents();
+        cvContents = new Object[superContents.length + contents.length][2];
+        System.arraycopy(superContents, 0, cvContents, 0, superContents.length);
+        System.arraycopy(contents, 0, cvContents, superContents.length, contents.length);
     }
-    return cvImagesBdl;
-  }
 
-  @Override
-  public Object[][] getContents() {
-    return cvContents;
-  }
-
-  public final Image getImage(@NotNull String anImageName) {
-    return ((ImageIcon)getIcon(anImageName)).getImage();
-  }
-
-  private final @NotNull Map<String, Icon> ivIcons = new HashMap<>();
-
-  public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
-    Icon icon = ivIcons.get(anImageName);
-    if (icon == null) {
-      icon = new ImageIcon((Image)getObject(anImageName));
-      ivIcons.put(anImageName, icon);
+    private XIImagesBdl() {
     }
-    return icon;
-  }
+
+    public static @NotNull XIImagesBdl getImagesBdl() {
+        if (cvImagesBdl == null) {
+            cvImagesBdl = new XIImagesBdl();
+        }
+        return cvImagesBdl;
+    }
+
+    @Override
+    public Object[][] getContents() {
+        return cvContents;
+    }
+
+    public final Image getImage(@NotNull String anImageName) {
+        return ((ImageIcon) getIcon(anImageName)).getImage();
+    }
+
+    private final @NotNull Map<String, Icon> ivIcons = new HashMap<>();
+
+    public synchronized final @NotNull Icon getIcon(@NotNull String anImageName) {
+        Icon icon = ivIcons.get(anImageName);
+        if (icon == null) {
+            icon = new ImageIcon((Image) getObject(anImageName));
+            ivIcons.put(anImageName, icon);
+        }
+        return icon;
+    }
 
 }
 

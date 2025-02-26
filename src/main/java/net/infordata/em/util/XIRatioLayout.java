@@ -31,260 +31,259 @@ import java.util.Map;
 
 public class XIRatioLayout implements LayoutManager2, java.io.Serializable {
 
-  private static final long serialVersionUID = 1L;
-
-  public static final int LEFT   = 0;   
-
-  public static final int CENTER = 1;
-
-  public static final int RIGHT  = 2;
-
-  private final int ivHGap;
-
-  private final @NotNull Map<Component, Constraints> ivConstraints = new HashMap<>();
-
-    public XIRatioLayout() {
-      this(0);
-  }
-
-  public XIRatioLayout(int hgap) {
-      ivHGap = hgap;
-  }
-
-  public final int getHGap() {
-    return ivHGap;
-  }
-
-  public void addLayoutComponent(@NotNull String aDescriptor, Component comp) {
-    Float fl = Float.valueOf(aDescriptor);
-    addLayoutComponent(comp, new Constraints(fl, LEFT));
-  }
-
-  public void addLayoutComponent(Component comp, @Nullable Object constraints) {
-    if (constraints != null && !(constraints instanceof Constraints))
-      throw new IllegalArgumentException("XIRatioLayout.Constraints expected");
-    ivConstraints.put(comp, (Constraints)constraints);
-  }
-
-  public void removeLayoutComponent(Component comp) {
-    ivConstraints.remove(comp);
-  }
-
-  private static final int PREFERRED = 0;
-  private static final int MINIMUM = 1;
-  private static final int MAXIMUM = 2;
-
-  private @NotNull Dimension layoutSize(@NotNull Container parent, int type) {
-    Insets insets;
-    int[] nComps = new int[3];
-    int maxW, maxH;
-        
-    synchronized (parent.getTreeLock()) {
-      insets = parent.getInsets();
-      maxW = insets.left + insets.right;
-      maxH = insets.top + insets.bottom;
-
-      {
-        int n = parent.getComponentCount();
-        Component comp;
-        Constraints constr;
-        for (int i = 0; i < n; i++) {
-          comp = parent.getComponent(i);
-          if (comp.isVisible()) {
-            constr = ivConstraints.get(comp);
-            if (constr != null) {
-              ++nComps[constr.getAlignment()];
-            }
-            else {
-              Dimension dim;
-              switch (type) {
-                case PREFERRED:
-                  dim = comp.getPreferredSize();
-                  break;
-                case MINIMUM:
-                  dim = comp.getMinimumSize();
-                  break;
-                case MAXIMUM:
-                  dim = comp.getMaximumSize();
-                  break;
-                default:
-                  throw new IllegalStateException();
-              }
-              Point loc = comp.getLocation();
-              maxW = Math.max(maxW, loc.x + dim.width - 1);
-              maxH = Math.max(maxH, loc.y + dim.height - 1);
-            }
-          }
-        }
-      }
-    }
-
-    int w = insets.left + insets.right;
-    for (int i = LEFT; i <= RIGHT; i++)
-      if (nComps[i] > 0)
-        w -= (nComps[i] - 1) * ivHGap;
-
-    maxW = Math.max(maxW, w);
-
-    return new Dimension(maxW, maxH);
-  }
-
-  public @NotNull Dimension preferredLayoutSize(@NotNull Container parent) {
-    return layoutSize(parent, PREFERRED);
-  }
-
-  public @NotNull Dimension minimumLayoutSize(@NotNull Container parent) {
-    return layoutSize(parent, MINIMUM);
-  }
-
-  public @NotNull Dimension maximumLayoutSize(@NotNull Container parent) {
-    return layoutSize(parent, MAXIMUM);
-  }
-
-  @SuppressWarnings("unchecked")
-  public void layoutContainer(@NotNull Container parent) {
-    Insets insets;
-    ArrayList<Component>[] comps;
-    ArrayList<Constraints>[] constrs;
-    Dimension parentDim;
-    
-    synchronized (parent.getTreeLock()) {
-      insets  = parent.getInsets();
-      comps   = new ArrayList[3];  // LEFT, CENTER and RIGHT
-      constrs = new ArrayList[3];  // LEFT, CENTER and RIGHT
-
-      {
-        int nComps = parent.getComponentCount();
-        for (int i = LEFT; i <= RIGHT; i++) {
-          comps[i] = new ArrayList<>(nComps);
-          constrs[i] = new ArrayList<>(nComps);
-        }
-        Component comp;
-        Constraints constr;
-        for (int i = 0; i < nComps; i++) {
-          comp = parent.getComponent(i);
-          if (comp.isVisible()) {
-            constr = ivConstraints.get(comp);
-            if (constr != null) {
-              comps[constr.getAlignment()].add(comp);
-              constrs[constr.getAlignment()].add(constr);
-            }
-          }
-        }
-      }
-
-      parentDim = parent.getSize();
-    }
-
-    if (comps[LEFT].size() == 0 && comps[CENTER].size() == 0 &&
-        comps[RIGHT].size() == 0)
-        return;
-
-      int maxW = parentDim.width - (insets.left + insets.right);
-      int maxH = parentDim.height - (insets.top + insets.bottom);
-    for (int i = LEFT; i <= RIGHT; i++)
-      if (comps[i].size() > 0)
-        maxW -= (comps[i].size() - 1) * ivHGap;
-
-    Component   comp;
-    Constraints constr;
-    int[] totW = new int[3]; 
-
-    for (int i = LEFT; i <= RIGHT; i++) {
-      for (int j = 0; j < comps[i].size(); j++) {
-        comp = comps[i].get(j);
-        constr = constrs[i].get(j);
-        comp.setSize(Math.round(maxW * constr.getHRatio()), maxH); 
-        totW[i] += comp.getSize().width;
-      }
-    }
-
-    if (comps[LEFT].size() > 0) { //LEFT ALIGNED
-      int x = insets.left;
-      Dimension dim;
-      for (int j = 0; j < comps[LEFT].size(); j++) {
-        comp = comps[LEFT].get(j);
-        dim = comp.getSize();
-        comp.setLocation(x, insets.top);
-        x += (dim.width + ivHGap);
-      }
-    }
-
-    if (comps[RIGHT].size() > 0) { //RIGHT ALIGNED
-      int x = parentDim.width - insets.right;
-      Dimension dim;
-      for (int j = 0; j < comps[RIGHT].size(); j++) {
-        comp = comps[RIGHT].get(j);
-        dim = comp.getSize();
-        comp.setLocation(x - dim.width, insets.top);
-        x -= (dim.width + ivHGap);
-      }
-    }
-
-    if (comps[CENTER].size() > 0) { //CENTERED
-      int x = (parentDim.width - totW[CENTER] -
-               (comps[CENTER].size() - 1) * ivHGap) / 2;
-      Dimension dim;
-      for (int j = 0; j < comps[CENTER].size(); j++) {
-        comp = comps[CENTER].get(j);
-        dim = comp.getSize();
-        comp.setLocation(x, insets.top);
-        x += (dim.width + ivHGap);
-      }
-    }
-  }
-
-  public float getLayoutAlignmentX(Container target) {
-    return 0.5f;
-  }
-
-  public float getLayoutAlignmentY(Container target) {
-    return 0.5f;
-  }
-
-  public void invalidateLayout(Container target) {
-  }
-
-  public static void main(String[] args) {
-    Frame frame = new Frame("TEST XIRatioLayout");
-    Panel panel = new Panel(new XIRatioLayout(4));
-    panel.add(new Button("L1"), new Constraints(0.1F, LEFT));
-    panel.add(new Button("L2"), new Constraints(0.2F, LEFT));
-    panel.add(new Button("R1"), new Constraints(0.1F, RIGHT));
-    panel.add(new Button("R2"), new Constraints(0.2F, RIGHT));
-    panel.add(new Button("C1"), new Constraints(0.2F, CENTER));
-    panel.add(new Button("C2"), new Constraints(0.2F, CENTER));
-    frame.add(panel);
-    frame.setBounds(0, 0, 200, 200);
-    frame.setVisible(true);
-  }
-
-  public static class Constraints implements java.io.Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    private final float ivHRatio;
-    private final int   ivAlign;
+    public static final int LEFT = 0;
 
-    public Constraints(float hRatio) {
-      this(hRatio, LEFT);
+    public static final int CENTER = 1;
+
+    public static final int RIGHT = 2;
+
+    private final int ivHGap;
+
+    private final @NotNull Map<Component, Constraints> ivConstraints = new HashMap<>();
+
+    public XIRatioLayout() {
+        this(0);
     }
 
-    public Constraints(float hRatio, int alignment) {
-      if (alignment < LEFT || alignment > RIGHT)
-        throw new IllegalArgumentException();
-      ivHRatio = hRatio;
-      ivAlign = alignment;
+    public XIRatioLayout(int hgap) {
+        ivHGap = hgap;
     }
 
-    public final float getHRatio() {
-      return ivHRatio;
+    public final int getHGap() {
+        return ivHGap;
     }
 
-    public final int getAlignment() {
-      return ivAlign;
+    public void addLayoutComponent(@NotNull String aDescriptor, Component comp) {
+        Float fl = Float.valueOf(aDescriptor);
+        addLayoutComponent(comp, new Constraints(fl, LEFT));
     }
 
-  }
+    public void addLayoutComponent(Component comp, @Nullable Object constraints) {
+        if (constraints != null && !(constraints instanceof Constraints))
+            throw new IllegalArgumentException("XIRatioLayout.Constraints expected");
+        ivConstraints.put(comp, (Constraints) constraints);
+    }
+
+    public void removeLayoutComponent(Component comp) {
+        ivConstraints.remove(comp);
+    }
+
+    private static final int PREFERRED = 0;
+    private static final int MINIMUM = 1;
+    private static final int MAXIMUM = 2;
+
+    private @NotNull Dimension layoutSize(@NotNull Container parent, int type) {
+        Insets insets;
+        int[] nComps = new int[3];
+        int maxW, maxH;
+
+        synchronized (parent.getTreeLock()) {
+            insets = parent.getInsets();
+            maxW = insets.left + insets.right;
+            maxH = insets.top + insets.bottom;
+
+            {
+                int n = parent.getComponentCount();
+                Component comp;
+                Constraints constr;
+                for (int i = 0; i < n; i++) {
+                    comp = parent.getComponent(i);
+                    if (comp.isVisible()) {
+                        constr = ivConstraints.get(comp);
+                        if (constr != null) {
+                            ++nComps[constr.getAlignment()];
+                        } else {
+                            Dimension dim;
+                            switch (type) {
+                                case PREFERRED:
+                                    dim = comp.getPreferredSize();
+                                    break;
+                                case MINIMUM:
+                                    dim = comp.getMinimumSize();
+                                    break;
+                                case MAXIMUM:
+                                    dim = comp.getMaximumSize();
+                                    break;
+                                default:
+                                    throw new IllegalStateException();
+                            }
+                            Point loc = comp.getLocation();
+                            maxW = Math.max(maxW, loc.x + dim.width - 1);
+                            maxH = Math.max(maxH, loc.y + dim.height - 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        int w = insets.left + insets.right;
+        for (int i = LEFT; i <= RIGHT; i++)
+            if (nComps[i] > 0)
+                w -= (nComps[i] - 1) * ivHGap;
+
+        maxW = Math.max(maxW, w);
+
+        return new Dimension(maxW, maxH);
+    }
+
+    public @NotNull Dimension preferredLayoutSize(@NotNull Container parent) {
+        return layoutSize(parent, PREFERRED);
+    }
+
+    public @NotNull Dimension minimumLayoutSize(@NotNull Container parent) {
+        return layoutSize(parent, MINIMUM);
+    }
+
+    public @NotNull Dimension maximumLayoutSize(@NotNull Container parent) {
+        return layoutSize(parent, MAXIMUM);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void layoutContainer(@NotNull Container parent) {
+        Insets insets;
+        ArrayList<Component>[] comps;
+        ArrayList<Constraints>[] constrs;
+        Dimension parentDim;
+
+        synchronized (parent.getTreeLock()) {
+            insets = parent.getInsets();
+            comps = new ArrayList[3];  // LEFT, CENTER and RIGHT
+            constrs = new ArrayList[3];  // LEFT, CENTER and RIGHT
+
+            {
+                int nComps = parent.getComponentCount();
+                for (int i = LEFT; i <= RIGHT; i++) {
+                    comps[i] = new ArrayList<>(nComps);
+                    constrs[i] = new ArrayList<>(nComps);
+                }
+                Component comp;
+                Constraints constr;
+                for (int i = 0; i < nComps; i++) {
+                    comp = parent.getComponent(i);
+                    if (comp.isVisible()) {
+                        constr = ivConstraints.get(comp);
+                        if (constr != null) {
+                            comps[constr.getAlignment()].add(comp);
+                            constrs[constr.getAlignment()].add(constr);
+                        }
+                    }
+                }
+            }
+
+            parentDim = parent.getSize();
+        }
+
+        if (comps[LEFT].size() == 0 && comps[CENTER].size() == 0 &&
+                comps[RIGHT].size() == 0)
+            return;
+
+        int maxW = parentDim.width - (insets.left + insets.right);
+        int maxH = parentDim.height - (insets.top + insets.bottom);
+        for (int i = LEFT; i <= RIGHT; i++)
+            if (comps[i].size() > 0)
+                maxW -= (comps[i].size() - 1) * ivHGap;
+
+        Component comp;
+        Constraints constr;
+        int[] totW = new int[3];
+
+        for (int i = LEFT; i <= RIGHT; i++) {
+            for (int j = 0; j < comps[i].size(); j++) {
+                comp = comps[i].get(j);
+                constr = constrs[i].get(j);
+                comp.setSize(Math.round(maxW * constr.getHRatio()), maxH);
+                totW[i] += comp.getSize().width;
+            }
+        }
+
+        if (comps[LEFT].size() > 0) { //LEFT ALIGNED
+            int x = insets.left;
+            Dimension dim;
+            for (int j = 0; j < comps[LEFT].size(); j++) {
+                comp = comps[LEFT].get(j);
+                dim = comp.getSize();
+                comp.setLocation(x, insets.top);
+                x += (dim.width + ivHGap);
+            }
+        }
+
+        if (comps[RIGHT].size() > 0) { //RIGHT ALIGNED
+            int x = parentDim.width - insets.right;
+            Dimension dim;
+            for (int j = 0; j < comps[RIGHT].size(); j++) {
+                comp = comps[RIGHT].get(j);
+                dim = comp.getSize();
+                comp.setLocation(x - dim.width, insets.top);
+                x -= (dim.width + ivHGap);
+            }
+        }
+
+        if (comps[CENTER].size() > 0) { //CENTERED
+            int x = (parentDim.width - totW[CENTER] -
+                    (comps[CENTER].size() - 1) * ivHGap) / 2;
+            Dimension dim;
+            for (int j = 0; j < comps[CENTER].size(); j++) {
+                comp = comps[CENTER].get(j);
+                dim = comp.getSize();
+                comp.setLocation(x, insets.top);
+                x += (dim.width + ivHGap);
+            }
+        }
+    }
+
+    public float getLayoutAlignmentX(Container target) {
+        return 0.5f;
+    }
+
+    public float getLayoutAlignmentY(Container target) {
+        return 0.5f;
+    }
+
+    public void invalidateLayout(Container target) {
+    }
+
+    public static void main(String[] args) {
+        Frame frame = new Frame("TEST XIRatioLayout");
+        Panel panel = new Panel(new XIRatioLayout(4));
+        panel.add(new Button("L1"), new Constraints(0.1F, LEFT));
+        panel.add(new Button("L2"), new Constraints(0.2F, LEFT));
+        panel.add(new Button("R1"), new Constraints(0.1F, RIGHT));
+        panel.add(new Button("R2"), new Constraints(0.2F, RIGHT));
+        panel.add(new Button("C1"), new Constraints(0.2F, CENTER));
+        panel.add(new Button("C2"), new Constraints(0.2F, CENTER));
+        frame.add(panel);
+        frame.setBounds(0, 0, 200, 200);
+        frame.setVisible(true);
+    }
+
+    public static class Constraints implements java.io.Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private final float ivHRatio;
+        private final int ivAlign;
+
+        public Constraints(float hRatio) {
+            this(hRatio, LEFT);
+        }
+
+        public Constraints(float hRatio, int alignment) {
+            if (alignment < LEFT || alignment > RIGHT)
+                throw new IllegalArgumentException();
+            ivHRatio = hRatio;
+            ivAlign = alignment;
+        }
+
+        public final float getHRatio() {
+            return ivHRatio;
+        }
+
+        public final int getAlignment() {
+            return ivAlign;
+        }
+
+    }
 
 }

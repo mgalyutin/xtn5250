@@ -36,89 +36,89 @@ import java.io.InputStream;
  */
 public class XIDataOrd extends XI5250Ord {
 
-  protected String ivData;
-  protected byte ivColor;
+    protected String ivData;
+    protected byte ivColor;
 
-  /**
-   * see <a href="http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.2?SHELF=&DT=19950629163252&CASE=">IBM
-   * functions reference</a> and IBM SA21-9247-6 pg. 2.13
-   *
-   * @param bb byte representation to check if is a data character or not
-   * @return true if is a data character, false otherwise.
-   */
-  public static boolean isDataCharacter(int bb) {
-    // 0x1F instead of 0x20 and keep 0xFF chars
-    switch (bb) {
-      case XI5250Emulator.ORD_IC:
-      case XI5250Emulator.ORD_RA:
-      case XI5250Emulator.ORD_SBA:
-      case XI5250Emulator.ORD_SF:
-      case XI5250Emulator.ORD_SOH:
-      case XI5250Emulator.ORD_MC:
-      case XI5250Emulator.ORD_EA:
-      case XI5250Emulator.ORD_TD:
-      case XI5250Emulator.ORD_WEA:
-      case XI5250Emulator.ORD_WDSF:
-      case XI5250Emulator.ESC:
-        return false;
-      default:
-        return true;
-    }
-  }
-
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
-    XIEbcdicTranslator translator = ivEmulator.getTranslator();
-    int bb;
-
-    ivColor = 0;
-    StringBuilder sb = new StringBuilder(128);
-
-    for (int i = 0; ; i++) {
-      inStream.mark(1);
-      bb = inStream.read();
-
-      if (bb == -1) {
-        break;
-      }
-
-      // see IBM SA21-9247-6 pg. 2.13
-      if (isDataCharacter(bb)) {
-        // is it a color ?
-        if (bb > 0x1F && bb <= 0x3F) {
-          if (i == 0) {
-            ivColor = (byte) bb;
-          } else {
-            // cut string if different color
-            inStream.reset();
-            break;
-          }
-        } else {
-          sb.append(translator.toChar((byte) bb));
+    /**
+     * see <a href="http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.2?SHELF=&DT=19950629163252&CASE=">IBM
+     * functions reference</a> and IBM SA21-9247-6 pg. 2.13
+     *
+     * @param bb byte representation to check if is a data character or not
+     * @return true if is a data character, false otherwise.
+     */
+    public static boolean isDataCharacter(int bb) {
+        // 0x1F instead of 0x20 and keep 0xFF chars
+        switch (bb) {
+            case XI5250Emulator.ORD_IC:
+            case XI5250Emulator.ORD_RA:
+            case XI5250Emulator.ORD_SBA:
+            case XI5250Emulator.ORD_SF:
+            case XI5250Emulator.ORD_SOH:
+            case XI5250Emulator.ORD_MC:
+            case XI5250Emulator.ORD_EA:
+            case XI5250Emulator.ORD_TD:
+            case XI5250Emulator.ORD_WEA:
+            case XI5250Emulator.ORD_WDSF:
+            case XI5250Emulator.ESC:
+                return false;
+            default:
+                return true;
         }
-      } else {
-        inStream.reset();
-        break;
-      }
     }
-    ivData = sb.toString();
-  }
 
-  @Override
-  protected void execute() {
-    if (ivColor != 0) {
-      ivEmulator.setDefAttr(XITelnet.toInt(ivColor));
-      ivEmulator.drawString(String.valueOf(XI5250Emulator.ATTRIBUTE_PLACE_HOLDER),
-          ivEmulator.getSBACol(), ivEmulator.getSBARow());
-      ivEmulator.setSBA(ivEmulator.getSBA() + 1);
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException {
+        XIEbcdicTranslator translator = ivEmulator.getTranslator();
+        int bb;
+
+        ivColor = 0;
+        StringBuilder sb = new StringBuilder(128);
+
+        for (int i = 0; ; i++) {
+            inStream.mark(1);
+            bb = inStream.read();
+
+            if (bb == -1) {
+                break;
+            }
+
+            // see IBM SA21-9247-6 pg. 2.13
+            if (isDataCharacter(bb)) {
+                // is it a color ?
+                if (bb > 0x1F && bb <= 0x3F) {
+                    if (i == 0) {
+                        ivColor = (byte) bb;
+                    } else {
+                        // cut string if different color
+                        inStream.reset();
+                        break;
+                    }
+                } else {
+                    sb.append(translator.toChar((byte) bb));
+                }
+            } else {
+                inStream.reset();
+                break;
+            }
+        }
+        ivData = sb.toString();
     }
-    ivEmulator.drawString(ivData, ivEmulator.getSBACol(), ivEmulator.getSBARow());
-    ivEmulator.setSBA(ivEmulator.getSBA() + ivData.length());
-  }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + XITelnet.toHex(ivColor) + "," + ",\"" + ivData + "\"" + "]";
-  }
+    @Override
+    protected void execute() {
+        if (ivColor != 0) {
+            ivEmulator.setDefAttr(XITelnet.toInt(ivColor));
+            ivEmulator.drawString(String.valueOf(XI5250Emulator.ATTRIBUTE_PLACE_HOLDER),
+                    ivEmulator.getSBACol(), ivEmulator.getSBARow());
+            ivEmulator.setSBA(ivEmulator.getSBA() + 1);
+        }
+        ivEmulator.drawString(ivData, ivEmulator.getSBACol(), ivEmulator.getSBARow());
+        ivEmulator.setSBA(ivEmulator.getSBA() + ivData.length());
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + XITelnet.toHex(ivColor) + "," + ",\"" + ivData + "\"" + "]";
+    }
 
 }

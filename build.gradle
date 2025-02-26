@@ -1,10 +1,11 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    // id 'org.openrewrite.rewrite' version '7.1.5'
 }
 
 group = 'net.infordata'
-version = '1.0'
+version = '1.0.1'
 
 repositories {
     maven {
@@ -21,12 +22,26 @@ repositories {
             password "$nexusUserPassword"
         }
     }
+   //  mavenCentral()
 }
+/*
+rewrite {
+    configFile = file("jul-to-slf4j.yml")
+    activeRecipe('org.openrewrite.jul.ToSlf4j')
+}
+*/
+
 
 dependencies {
+    // implementation 'org.openrewrite:rewrite-javascript:8.37.3'
+    // implementation 'org.openrewrite:rewrite-logging:8.37.3'
+
     implementation 'org.jetbrains:annotations:26.0.1'
     implementation 'com.google.guava:guava:33.4.0-jre'
     implementation 'org.slf4j:slf4j-api:2.0.16'
+
+    implementation "org.openrewrite:rewrite-core:8.0.0"
+    implementation "org.openrewrite:rewrite-java:8.0.0"
 
     // testImplementation platform('org.junit:junit-bom:5.10.0')
     // testImplementation 'org.junit.jupiter:junit-jupiter'

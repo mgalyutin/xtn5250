@@ -32,22 +32,22 @@ import java.util.EventListener;
  */
 public interface XI5250FieldPaintListener extends EventListener {
 
-  /**
-   * One event for paint, the bounding rectangle is setted as the clip region. Coordinate are
-   * relative to the field bounding rectangle
-   *
-   * @param e triggered event.
-   * @see XI5250Field#getBoundingRect
-   */
-  void fieldPaint(XI5250FieldPaintEvent e);
+    /**
+     * One event for paint, the bounding rectangle is setted as the clip region. Coordinate are
+     * relative to the field bounding rectangle
+     *
+     * @param e triggered event.
+     * @see XI5250Field#getBoundingRect
+     */
+    void fieldPaint(XI5250FieldPaintEvent e);
 
-  /**
-   * One event for each row that makes up the field (a field can be splitted over multiple rows)
-   * Coordinate are relative to the field bounding rectangle
-   *
-   * @param e triggered event.
-   * @see XI5250Field#getRowsRects
-   */
-  void rowPaint(XI5250FieldPaintEvent e);
+    /**
+     * One event for each row that makes up the field (a field can be splitted over multiple rows)
+     * Coordinate are relative to the field bounding rectangle
+     *
+     * @param e triggered event.
+     * @see XI5250Field#getRowsRects
+     */
+    void rowPaint(XI5250FieldPaintEvent e);
 
 }

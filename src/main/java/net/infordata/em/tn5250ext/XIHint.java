@@ -40,237 +40,237 @@ import java.util.StringTokenizer;
  */
 public class XIHint extends JComponent {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private @Nullable String ivText = null;
+    private @Nullable String ivText = null;
 
-  private int ivMaxWidth = 0;
+    private int ivMaxWidth = 0;
 
-  private @Nullable Font ivFont = null;
+    private @Nullable Font ivFont = null;
 
-  private final int ivSpaceLine = 1;
-  private final int ivSpaceUp = 1;
-  private final int ivSpaceDown = 2;
-  private final int ivSpaceRight = 2;
-  private final int ivSpaceLeft = 4;
-  private int ivHeightShortText;
+    private final int ivSpaceLine = 1;
+    private final int ivSpaceUp = 1;
+    private final int ivSpaceDown = 2;
+    private final int ivSpaceRight = 2;
+    private final int ivSpaceLeft = 4;
+    private int ivHeightShortText;
 
-  private final ArrayList<String> ivVectorLines;
+    private final ArrayList<String> ivVectorLines;
 
-  private final Font ivFBold;
-  private final Font ivFItalic;
-  private final Font ivFBoldItalic;
+    private final Font ivFBold;
+    private final Font ivFItalic;
+    private final Font ivFBoldItalic;
 
-  public XIHint(String aText) {
-    this(aText, 0);
-  }
+    public XIHint(String aText) {
+        this(aText, 0);
+    }
 
-  public XIHint(String aText, int aWidth) {
-    ivText = aText;
+    public XIHint(String aText, int aWidth) {
+        ivText = aText;
 
-    ivFont = new Font("Helvetica", Font.PLAIN, 11);
+        ivFont = new Font("Helvetica", Font.PLAIN, 11);
 
-    ivFBold = new Font(ivFont.getName(), Font.BOLD, ivFont.getSize());
-    ivFItalic = new Font(ivFont.getName(), Font.ITALIC, ivFont.getSize());
-    ivFBoldItalic = new Font(ivFont.getName(), (Font.BOLD | Font.ITALIC),
-        ivFont.getSize());
+        ivFBold = new Font(ivFont.getName(), Font.BOLD, ivFont.getSize());
+        ivFItalic = new Font(ivFont.getName(), Font.ITALIC, ivFont.getSize());
+        ivFBoldItalic = new Font(ivFont.getName(), (Font.BOLD | Font.ITALIC),
+                ivFont.getSize());
 
-    ivMaxWidth = aWidth;
+        ivMaxWidth = aWidth;
 
-    ivVectorLines = calculateLines(ivText, ivFont);
-  }
+        ivVectorLines = calculateLines(ivText, ivFont);
+    }
 
-  @Override
-  public @NotNull Dimension getPreferredSize() {
-    int x = ivSpaceLeft;
-    int y;
+    @Override
+    public @NotNull Dimension getPreferredSize() {
+        int x = ivSpaceLeft;
+        int y;
 
-    x += getTextSize(ivFont).width + 2;
-    y = getTextSize(ivFont).height + 2;
+        x += getTextSize(ivFont).width + 2;
+        y = getTextSize(ivFont).height + 2;
 
-    x += ivSpaceRight;
-    y += ivSpaceDown;
+        x += ivSpaceRight;
+        y += ivSpaceDown;
 
-    return new Dimension(x, y);
-  }
+        return new Dimension(x, y);
+    }
 
-  public @Nullable String getText() {
-    return ivText;
-  }
+    public @Nullable String getText() {
+        return ivText;
+    }
 
-  @Override
-  protected void paintComponent(@NotNull Graphics aGraphics) {
-    int vXPos = 0;
+    @Override
+    protected void paintComponent(@NotNull Graphics aGraphics) {
+        int vXPos = 0;
 
-    aGraphics.setFont(ivFont);
-    aGraphics.setColor(Color.black);
+        aGraphics.setFont(ivFont);
+        aGraphics.setColor(Color.black);
 
-    drawMultiLineString(aGraphics, ivVectorLines,
-        ivFont, vXPos + ivSpaceLeft, ivSpaceUp);
-  }
+        drawMultiLineString(aGraphics, ivVectorLines,
+                ivFont, vXPos + ivSpaceLeft, ivSpaceUp);
+    }
 
-  @SuppressWarnings("deprecation")
-  private int strWidth(@NotNull String str, Font f) {
-    return Toolkit.getDefaultToolkit().getFontMetrics(f).stringWidth(str);
-  }
+    @SuppressWarnings("deprecation")
+    private int strWidth(@NotNull String str, Font f) {
+        return Toolkit.getDefaultToolkit().getFontMetrics(f).stringWidth(str);
+    }
 
-  @SuppressWarnings("deprecation")
-  private int strHeight(Font f) {
-    return Toolkit.getDefaultToolkit().getFontMetrics(f).getHeight();
-  }
+    @SuppressWarnings("deprecation")
+    private int strHeight(Font f) {
+        return Toolkit.getDefaultToolkit().getFontMetrics(f).getHeight();
+    }
 
-  @SuppressWarnings("deprecation")
-  private FontMetrics fontMetrics(Font f) {
-    return Toolkit.getDefaultToolkit().getFontMetrics(f);
-  }
+    @SuppressWarnings("deprecation")
+    private FontMetrics fontMetrics(Font f) {
+        return Toolkit.getDefaultToolkit().getFontMetrics(f);
+    }
 
-  private @NotNull Dimension textDim(@NotNull ArrayList<String> v, Font f) {
+    private @NotNull Dimension textDim(@NotNull ArrayList<String> v, Font f) {
 
-    int maxW = 0;
-    int lineW = 0;
-    int h = 0;
+        int maxW = 0;
+        int lineW = 0;
+        int h = 0;
 
-    boolean bold = false;
-    boolean italic = false;
+        boolean bold = false;
+        boolean italic = false;
 
-    for (String str : v) {
+        for (String str : v) {
 
-      if (isEscapeChar(str, "#") ||
-          isEscapeChar(str, "@")) {
+            if (isEscapeChar(str, "#") ||
+                    isEscapeChar(str, "@")) {
 
-        StringTokenizer st = new StringTokenizer(str, "#@", true);
+                StringTokenizer st = new StringTokenizer(str, "#@", true);
 
-        while (st.hasMoreElements()) {
-          String token = st.nextToken();
+                while (st.hasMoreElements()) {
+                    String token = st.nextToken();
 
-          if ("#".equals(token)) {
-            bold = !bold;
-          } else if ("@".equals(token)) {
-            italic = !italic;
-          } else {
-            if (bold && italic) {
-              lineW += strWidth(token, ivFBoldItalic);
-            } else if (bold) {
-              lineW += strWidth(token, ivFBold);
-            } else if (italic) {
-              lineW += strWidth(token, ivFItalic);
+                    if ("#".equals(token)) {
+                        bold = !bold;
+                    } else if ("@".equals(token)) {
+                        italic = !italic;
+                    } else {
+                        if (bold && italic) {
+                            lineW += strWidth(token, ivFBoldItalic);
+                        } else if (bold) {
+                            lineW += strWidth(token, ivFBold);
+                        } else if (italic) {
+                            lineW += strWidth(token, ivFItalic);
+                        } else {
+                            lineW += strWidth(token, f);
+                        }
+                    }
+                }
             } else {
-              lineW += strWidth(token, f);
+                lineW = strWidth(str, f);
             }
-          }
-        }
-      } else {
-        lineW = strWidth(str, f);
-      }
 
-      maxW = Math.max(maxW, lineW);
-      lineW = 0;
-      h += strHeight(f) - fontMetrics(f).getDescent() + ivSpaceLine;
-    }
-
-    return new Dimension(maxW, h);
-  }
-
-  private boolean isEscapeChar(@NotNull String text, @Nullable String escChar) {
-    if (escChar == null) {
-      return false;
-    }
-
-    StringTokenizer st = new StringTokenizer(text, escChar, true);
-
-    while (st.hasMoreTokens()) {
-      if (escChar.equals(st.nextToken())) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public @NotNull Dimension getTextSize(Font f) {
-    return new Dimension(textDim(ivVectorLines, f));
-  }
-
-  private void drawMultiLineString(@NotNull Graphics g, @NotNull ArrayList<String> v,
-                                   Font f, int x, int y) {
-    int xBegin = x;
-
-    boolean bold = false;
-    boolean italic = false;
-
-    for (String aV : v) {
-      y += ivHeightShortText - fontMetrics(f).getDescent();
-      StringTokenizer st = new StringTokenizer(aV, "#@", true);
-
-      while (st.hasMoreElements()) {
-        String token = st.nextToken();
-
-        if ("#".equals(token)) {
-          bold = !bold;
-        } else if ("@".equals(token)) {
-          italic = !italic;
-        } else {
-          if (bold && italic) {
-            g.setFont(ivFBoldItalic);
-          } else if (bold) {
-            g.setFont(ivFBold);
-          } else if (italic) {
-            g.setFont(ivFItalic);
-          } else {
-            g.setFont(f);
-          }
-
-          g.drawString(token, x, y);
-          x += strWidth(token, g.getFont());
-        }
-      }
-
-      x = xBegin;
-      y += ivSpaceLine;
-    }
-  }
-
-  private @NotNull ArrayList<String> calculateLines(@NotNull String text, Font f) {
-    StringTokenizer st = new StringTokenizer(text, "\n");
-    ArrayList<String> v = new ArrayList<>(10);
-
-    ivHeightShortText = strHeight(f);
-
-    while (st.hasMoreTokens()) {
-
-      String token = st.nextToken();
-
-      if ((ivMaxWidth > 0) && (strWidth(token, f) > ivMaxWidth)) {
-        StringTokenizer subSt = new StringTokenizer(token);
-        String subToken = "";
-
-        while (subSt.hasMoreTokens()) {
-          String str1 = subSt.nextToken();
-
-          if (strWidth((subToken + str1), f) < ivMaxWidth) {
-            subToken += str1 + " ";
-          } else {
-            v.add(trimRight(subToken));
-            subToken = str1 + " ";
-          }
+            maxW = Math.max(maxW, lineW);
+            lineW = 0;
+            h += strHeight(f) - fontMetrics(f).getDescent() + ivSpaceLine;
         }
 
-        v.add(trimRight(subToken));
-      } else {
-        v.add(trimRight(token));
-      }
+        return new Dimension(maxW, h);
     }
 
-    return v;
-  }
+    private boolean isEscapeChar(@NotNull String text, @Nullable String escChar) {
+        if (escChar == null) {
+            return false;
+        }
 
-  private @NotNull String trimRight(@NotNull String str) {
-    String str1 = str;
-    while (str.endsWith(" ")) {
-      str1 = str.substring(0, str.length() - 1);
-      str = str1;
+        StringTokenizer st = new StringTokenizer(text, escChar, true);
+
+        while (st.hasMoreTokens()) {
+            if (escChar.equals(st.nextToken())) {
+                return true;
+            }
+        }
+
+        return false;
     }
-    return str1;
-  }
+
+    public @NotNull Dimension getTextSize(Font f) {
+        return new Dimension(textDim(ivVectorLines, f));
+    }
+
+    private void drawMultiLineString(@NotNull Graphics g, @NotNull ArrayList<String> v,
+                                     Font f, int x, int y) {
+        int xBegin = x;
+
+        boolean bold = false;
+        boolean italic = false;
+
+        for (String aV : v) {
+            y += ivHeightShortText - fontMetrics(f).getDescent();
+            StringTokenizer st = new StringTokenizer(aV, "#@", true);
+
+            while (st.hasMoreElements()) {
+                String token = st.nextToken();
+
+                if ("#".equals(token)) {
+                    bold = !bold;
+                } else if ("@".equals(token)) {
+                    italic = !italic;
+                } else {
+                    if (bold && italic) {
+                        g.setFont(ivFBoldItalic);
+                    } else if (bold) {
+                        g.setFont(ivFBold);
+                    } else if (italic) {
+                        g.setFont(ivFItalic);
+                    } else {
+                        g.setFont(f);
+                    }
+
+                    g.drawString(token, x, y);
+                    x += strWidth(token, g.getFont());
+                }
+            }
+
+            x = xBegin;
+            y += ivSpaceLine;
+        }
+    }
+
+    private @NotNull ArrayList<String> calculateLines(@NotNull String text, Font f) {
+        StringTokenizer st = new StringTokenizer(text, "\n");
+        ArrayList<String> v = new ArrayList<>(10);
+
+        ivHeightShortText = strHeight(f);
+
+        while (st.hasMoreTokens()) {
+
+            String token = st.nextToken();
+
+            if ((ivMaxWidth > 0) && (strWidth(token, f) > ivMaxWidth)) {
+                StringTokenizer subSt = new StringTokenizer(token);
+                String subToken = "";
+
+                while (subSt.hasMoreTokens()) {
+                    String str1 = subSt.nextToken();
+
+                    if (strWidth((subToken + str1), f) < ivMaxWidth) {
+                        subToken += str1 + " ";
+                    } else {
+                        v.add(trimRight(subToken));
+                        subToken = str1 + " ";
+                    }
+                }
+
+                v.add(trimRight(subToken));
+            } else {
+                v.add(trimRight(token));
+            }
+        }
+
+        return v;
+    }
+
+    private @NotNull String trimRight(@NotNull String str) {
+        String str1 = str;
+        while (str.endsWith(" ")) {
+            str1 = str.substring(0, str.length() - 1);
+            str = str1;
+        }
+        return str1;
+    }
 
 }

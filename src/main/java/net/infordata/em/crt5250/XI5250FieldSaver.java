@@ -26,13 +26,12 @@ import java.io.IOException;
 
 /**
  * Interface that must be implemented to save XI5250 field status.
- * 
- * @see    XI5250Field#saveTo
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
+ * @see XI5250Field#saveTo
  */
 public interface XI5250FieldSaver {
 
-  void write(XI5250Field aField, String aStr) throws IOException;
+    void write(XI5250Field aField, String aStr) throws IOException;
 
 }

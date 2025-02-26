@@ -29,30 +29,29 @@ import java.io.InputStream;
 /**
  * 5250 Restore screen command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIRestoreScreenCmd extends XI5250Cmd {
 
-  protected int ivPos;
+    protected int ivPos;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    ivPos = inStream.read();
-    if (ivPos == -1)
-      throw new XI5250Exception("Restore screen position required", 
-          XI5250Emulator.ERR_INVALID_COMMAND);
-  }
-
-  @Override
-  protected void execute() {
-    try {
-      XI5250EmulatorMemento mm = ivEmulator.ivSavedScreens[ivPos];
-
-      ivEmulator.restoreMemento(mm);
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        ivPos = inStream.read();
+        if (ivPos == -1)
+            throw new XI5250Exception("Restore screen position required",
+                    XI5250Emulator.ERR_INVALID_COMMAND);
     }
-    catch (ArrayIndexOutOfBoundsException ex) {
+
+    @Override
+    protected void execute() {
+        try {
+            XI5250EmulatorMemento mm = ivEmulator.ivSavedScreens[ivPos];
+
+            ivEmulator.restoreMemento(mm);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+        }
     }
-  }
 
 }

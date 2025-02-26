@@ -32,39 +32,39 @@ import java.awt.*;
  *   new XI5250PanelConnection(this, new XIImage(logo), 29, 12, 20, 10);
  * </pre>
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250PanelConnection {
 
-  private final Component ivComponent;
+    private final Component ivComponent;
 
-  private final int ivCol;
-  private final int ivRow;
-  private final int ivNCols;
-  private final int ivNRows;
+    private final int ivCol;
+    private final int ivRow;
+    private final int ivNCols;
+    private final int ivNRows;
 
-  public XI5250PanelConnection(@NotNull XI5250PanelHandler aPanelHndl,
-                               Component aComponent,
-                               int aCol, int aRow,
-                               int aNCols, int aNRows) {
-    ivCol = aCol;
-    ivRow = aRow;
-    ivNCols = aNCols;
-    ivNRows = aNRows;
-    ivComponent = aComponent;
-    aPanelHndl.connect(this);
-  }
+    public XI5250PanelConnection(@NotNull XI5250PanelHandler aPanelHndl,
+                                 Component aComponent,
+                                 int aCol, int aRow,
+                                 int aNCols, int aNRows) {
+        ivCol = aCol;
+        ivRow = aRow;
+        ivNCols = aNCols;
+        ivNRows = aNRows;
+        ivComponent = aComponent;
+        aPanelHndl.connect(this);
+    }
 
-  protected void recalcBounds(@NotNull XI5250EmulatorExt aEm) {
-    Point     pt  = aEm.toPoints(ivCol, ivRow);
+    protected void recalcBounds(@NotNull XI5250EmulatorExt aEm) {
+        Point pt = aEm.toPoints(ivCol, ivRow);
 
-    ivComponent.setBounds(pt.x, pt.y,
-                          ivNCols * aEm.getCharSize().width,
-                          ivNRows * aEm.getCharSize().height);
-  }
+        ivComponent.setBounds(pt.x, pt.y,
+                ivNCols * aEm.getCharSize().width,
+                ivNRows * aEm.getCharSize().height);
+    }
 
-  public final Component getComponent() {
-    return ivComponent;
-  }
+    public final Component getComponent() {
+        return ivComponent;
+    }
 
 }

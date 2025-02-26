@@ -18,7 +18,7 @@ limitations under the License.
     ***
     30/06/98 rel. _.___- Swing, JBuilder2 e VSS.
  */
- 
+
 package net.infordata.em.tn5250;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,82 +28,82 @@ import java.util.EventObject;
 /**
  * XI5250Emulator notification event.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250EmulatorEvent extends EventObject {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Fired just before trying to connect.
-   */
-  public static final int CONNECTING         = 0;
-  /**
-   * Connection established.
-   */
-  public static final int CONNECTED          = 1;
-  /**
-   * Connection closed.
-   */
-  public static final int DISCONNECTED       = 2;
-  /**
-   * Internal state is changed.
-   */
-  public static final int STATE_CHANGED      = 3;
-  /**
-   * A new 5250 panel has been received and it is ready for the user.
-   */
-  public static final int NEW_PANEL_RECEIVED = 4;
-  /**
-   * Fields removed.
-   */
-  public static final int FIELDS_REMOVED     = 5;
-  /**
-   * Data have been sended (ie. an aid-code was pressed)
-   */
-  public static final int DATA_SENDED        = 6;
+    /**
+     * Fired just before trying to connect.
+     */
+    public static final int CONNECTING = 0;
+    /**
+     * Connection established.
+     */
+    public static final int CONNECTED = 1;
+    /**
+     * Connection closed.
+     */
+    public static final int DISCONNECTED = 2;
+    /**
+     * Internal state is changed.
+     */
+    public static final int STATE_CHANGED = 3;
+    /**
+     * A new 5250 panel has been received and it is ready for the user.
+     */
+    public static final int NEW_PANEL_RECEIVED = 4;
+    /**
+     * Fields removed.
+     */
+    public static final int FIELDS_REMOVED = 5;
+    /**
+     * Data have been sended (ie. an aid-code was pressed)
+     */
+    public static final int DATA_SENDED = 6;
 
-  protected static final String[] cvIdDescr = {"CONNECTING",
-                                               "CONNECTED",
-                                               "DISCONNECTED",
-                                               "STATE_CHANGED",
-                                               "NEW_PANEL_RECEIVED",
-                                               "FIELDS_REMOVED",
-                                               "DATA_SENDED"};
+    protected static final String[] cvIdDescr = {"CONNECTING",
+            "CONNECTED",
+            "DISCONNECTED",
+            "STATE_CHANGED",
+            "NEW_PANEL_RECEIVED",
+            "FIELDS_REMOVED",
+            "DATA_SENDED"};
 
-  protected int         ivId;
-  protected byte        ivAidCode;
+    protected int ivId;
+    protected byte ivAidCode;
 
-  public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm) {
-    super(aEm);
-    ivId = aId;
-  }
+    public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm) {
+        super(aEm);
+        ivId = aId;
+    }
 
-  public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm, byte anAidCode) {
-    this(aId, aEm);
-    ivAidCode = anAidCode;
-  }
+    public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm, byte anAidCode) {
+        this(aId, aEm);
+        ivAidCode = anAidCode;
+    }
 
-  public int getID() {
-    return ivId;
-  }
+    public int getID() {
+        return ivId;
+    }
 
-  public XI5250Emulator get5250Emulator() {
-    return (XI5250Emulator)getSource();
-  }
+    public XI5250Emulator get5250Emulator() {
+        return (XI5250Emulator) getSource();
+    }
 
-  /**
-   * The aid code (DATA_SENDED event)
-   *
-   * @return The aid code (DATA_SENDED event).
-   */
-  public byte getAidCode() {
-    return ivAidCode;
-  }
+    /**
+     * The aid code (DATA_SENDED event)
+     *
+     * @return The aid code (DATA_SENDED event).
+     */
+    public byte getAidCode() {
+        return ivAidCode;
+    }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + "[" + cvIdDescr[ivId] + "]";
-  }
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + "[" + cvIdDescr[ivId] + "]";
+    }
 
 }

@@ -29,63 +29,64 @@ import java.io.InputStream;
 
 /**
  * 5250 SOH Order
- * @author   Valentino Proietti - Infordata S.p.A.
+ *
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XISOHOrd extends XI5250Ord {
 
-  protected byte[] ivData;
-  protected int    ivLen;
+    protected byte[] ivData;
+    protected int ivLen;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    int  i = 0;
-    int  bb;
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        int i = 0;
+        int bb;
 
-    ivLen = inStream.read();
-    if (ivLen > 0) {
-      ivData = new byte[ivLen];
-      for (i = 0; (i < ivLen) && ((bb = inStream.read()) != -1); i++)
-        ivData[i] = (byte)bb;
-    }
-    // parameters check
-    if (ivLen < 0 || ivLen > 7 || i < ivLen)
-      throw new XI5250Exception("Bad SOH Order", XI5250Emulator.ERR_INVALID_SOH_LENGTH);
-  }
-
-  @Override
-  protected void execute() {
-    // I didn' t found them on docs, but i need them
-    ivEmulator.ivCmdList.ivICOrderExecuted = false;
-    ivEmulator.removeFields();
-
-    ivEmulator.ivPendingCmd = null;
-
-    if (ivLen >= 2) {
-      // resequencing byte present
-      if (ivLen >= 3) {
-        // error line address present
-        if (ivLen >= 4) {
-          ivEmulator.setErrorRow(ivData[3] - 1);
-          // function keys mask present
-          if (ivLen >= 7) {
-            int xx = XITelnet.toInt(ivData[4]) << 16 |
-                     XITelnet.toInt(ivData[5]) << 8 |
-                     XITelnet.toInt(ivData[6]);
-
-            ivEmulator.setFunctionKeysMask(xx);
-          }
+        ivLen = inStream.read();
+        if (ivLen > 0) {
+            ivData = new byte[ivLen];
+            for (i = 0; (i < ivLen) && ((bb = inStream.read()) != -1); i++)
+                ivData[i] = (byte) bb;
         }
-      }
+        // parameters check
+        if (ivLen < 0 || ivLen > 7 || i < ivLen)
+            throw new XI5250Exception("Bad SOH Order", XI5250Emulator.ERR_INVALID_SOH_LENGTH);
     }
-  }
 
-  @Override
-  public @NotNull String toString() {
-    String str = "";
-    for (int i = 0; i < ivLen; i++)
-      str += XITelnet.toHex(ivData[i]) + ",";
-    return super.toString() + " [" + ivLen + ",[" + str + "]]";
-  }
+    @Override
+    protected void execute() {
+        // I didn' t found them on docs, but i need them
+        ivEmulator.ivCmdList.ivICOrderExecuted = false;
+        ivEmulator.removeFields();
+
+        ivEmulator.ivPendingCmd = null;
+
+        if (ivLen >= 2) {
+            // resequencing byte present
+            if (ivLen >= 3) {
+                // error line address present
+                if (ivLen >= 4) {
+                    ivEmulator.setErrorRow(ivData[3] - 1);
+                    // function keys mask present
+                    if (ivLen >= 7) {
+                        int xx = XITelnet.toInt(ivData[4]) << 16 |
+                                XITelnet.toInt(ivData[5]) << 8 |
+                                XITelnet.toInt(ivData[6]);
+
+                        ivEmulator.setFunctionKeysMask(xx);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public @NotNull String toString() {
+        String str = "";
+        for (int i = 0; i < ivLen; i++)
+            str += XITelnet.toHex(ivData[i]) + ",";
+        return super.toString() + " [" + ivLen + ",[" + str + "]]";
+    }
 
 }

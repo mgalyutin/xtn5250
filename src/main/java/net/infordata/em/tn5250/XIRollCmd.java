@@ -29,43 +29,43 @@ import java.io.InputStream;
 /**
  * 5250 Roll command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIRollCmd extends XI5250Cmd {
 
-  boolean ivDown;
-  int     ivNRows;
-  int     ivTopRow;
-  int     ivBottomRow;
+    boolean ivDown;
+    int ivNRows;
+    int ivTopRow;
+    int ivBottomRow;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    int[] bb = new int[3];
-    int   i;
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        int[] bb = new int[3];
+        int i;
 
-    for (i = 0; i < 3 && (bb[i] = inStream.read()) >= 0; i++)
-      ;
+        for (i = 0; i < 3 && (bb[i] = inStream.read()) >= 0; i++)
+            ;
 
-    if (i < 3)
-      throw new XI5250Exception("Roll parameter missing", 
-          XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        if (i < 3)
+            throw new XI5250Exception("Roll parameter missing",
+                    XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
 
-    ivDown = ((bb[0] & 0x80) != 0);
+        ivDown = ((bb[0] & 0x80) != 0);
 
-    ivNRows = (bb[0] & 0x1F);
+        ivNRows = (bb[0] & 0x1F);
 
-    ivTopRow = bb[1];
-    ivBottomRow = bb[2];
+        ivTopRow = bb[1];
+        ivBottomRow = bb[2];
 
-    if (ivTopRow > ivBottomRow)
-      throw new XI5250Exception("TopRow greater then BottomRow", 
-          XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
-  }
+        if (ivTopRow > ivBottomRow)
+            throw new XI5250Exception("TopRow greater then BottomRow",
+                    XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.scroll(ivDown, ivTopRow - 1, ivBottomRow, ivNRows);
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.scroll(ivDown, ivTopRow - 1, ivBottomRow, ivNRows);
+    }
 
 }

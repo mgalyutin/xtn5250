@@ -26,22 +26,22 @@ import java.io.InputStream;
 /**
  * Clear Format Table
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIClearFmtTableCmd extends XI5250Cmd {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream) {
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream) {
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
-    ivEmulator.ivPendingCmd = null;
+    @Override
+    protected void execute() {
+        ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
+        ivEmulator.ivPendingCmd = null;
 
-    ivEmulator.setDefAttr(0x20);
-    ivEmulator.removeFields();
-    ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
-  }
+        ivEmulator.setDefAttr(0x20);
+        ivEmulator.removeFields();
+        ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
+    }
 
 }

@@ -27,20 +27,20 @@ import java.io.InputStream;
 /**
  * 5250 Save screen command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XISaveScreenCmd extends XI5250Cmd {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream) throws IOException {
+    }
 
-  @Override
-  protected void execute() {
-    int pos = (ivEmulator.ivSavedScreensIdx++) % ivEmulator.ivSavedScreens.length;
-    ivEmulator.ivSavedScreens[pos] = ivEmulator.createMemento();
+    @Override
+    protected void execute() {
+        int pos = (ivEmulator.ivSavedScreensIdx++) % ivEmulator.ivSavedScreens.length;
+        ivEmulator.ivSavedScreens[pos] = ivEmulator.createMemento();
 
-    ivEmulator.send5250SavedScreen(pos);
-  }
+        ivEmulator.send5250SavedScreen(pos);
+    }
 
 }

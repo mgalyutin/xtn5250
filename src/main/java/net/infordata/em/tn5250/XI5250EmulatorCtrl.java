@@ -34,127 +34,127 @@ import java.util.ResourceBundle;
  */
 public class XI5250EmulatorCtrl extends XI5250CrtCtrl {
 
-  // images
-  private static final @NotNull XIImagesBdl cvImagesBdl =
-      net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
+    // images
+    private static final @NotNull XIImagesBdl cvImagesBdl =
+            net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
-  private static final ResourceBundle cvRes =
-      ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
+    private static final ResourceBundle cvRes =
+            ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
 
-  public static final String CONNECT_CMD          = "CONNECT_CMD";
-  public static final String DISCONNECT_CMD       = "DISCONNECT_CMD";
+    public static final String CONNECT_CMD = "CONNECT_CMD";
+    public static final String DISCONNECT_CMD = "DISCONNECT_CMD";
 
-  public static final String ABOUT_CMD            = "ABOUT_CMD";
+    public static final String ABOUT_CMD = "ABOUT_CMD";
 
-  public static final String SNAPSHOT_CMD         = "SNAPSHOT_CMD";
+    public static final String SNAPSHOT_CMD = "SNAPSHOT_CMD";
 
-  private int ivSnapShotCount = 0;
+    private int ivSnapShotCount = 0;
 
-  public XI5250EmulatorCtrl(@NotNull XI5250Emulator aCrt) {
-    super(aCrt);
+    public XI5250EmulatorCtrl(@NotNull XI5250Emulator aCrt) {
+        super(aCrt);
 
-    getEmulator().addEmulatorListener(new EmulatorListener());
+        getEmulator().addEmulatorListener(new EmulatorListener());
 
-    // Connect command
-    getCommandMgr().enableCommand(
-        CONNECT_CMD, !getEmulator().isActive());
-    getCommandMgr().setCommand(CONNECT_CMD, this::processConnectCmd);
+        // Connect command
+        getCommandMgr().enableCommand(
+                CONNECT_CMD, !getEmulator().isActive());
+        getCommandMgr().setCommand(CONNECT_CMD, this::processConnectCmd);
 
-    // Disconnect command
-    getCommandMgr().enableCommand(
-        DISCONNECT_CMD, getEmulator().isActive());
-    getCommandMgr().setCommand(DISCONNECT_CMD, this::processDisconnectCmd);
+        // Disconnect command
+        getCommandMgr().enableCommand(
+                DISCONNECT_CMD, getEmulator().isActive());
+        getCommandMgr().setCommand(DISCONNECT_CMD, this::processDisconnectCmd);
 
-    // About command
-    getCommandMgr().setCommand(ABOUT_CMD, this::processAboutCmd);
+        // About command
+        getCommandMgr().setCommand(ABOUT_CMD, this::processAboutCmd);
 
-    // Snapshot command
-    getCommandMgr().setCommand(SNAPSHOT_CMD, this::processSnapShotCmd);
-  }
-
- public final XI5250Emulator getEmulator() {
-    return (XI5250Emulator)getCrt();
-  }
-
-  protected void processConnectCmd() {
-    if (!getEmulator().isActive()) {
-      Object ret = JOptionPane.showInputDialog(
-                       getEmulator(),
-                       cvRes.getString("TXT_HostNameInput"),
-                       "", JOptionPane.QUESTION_MESSAGE, null,
-                       null, getEmulator().getHost());
-      if (ret == null)
-        return;
-      getEmulator().setHost((String)ret);
-    }
-    getEmulator().setActive(true);
-  }
-
-  protected void processDisconnectCmd() {
-    if (getEmulator().isActive()) {
-      int ret = JOptionPane.showConfirmDialog(
-                   getEmulator(),
-                   cvRes.getString("TXT_ConfirmDisconnect"),
-                   "", JOptionPane.YES_NO_OPTION);
-      if (ret == JOptionPane.NO_OPTION)
-        return;
-    }
-    getEmulator().setActive(false);
-  }
-
-  protected void processAboutCmd() {
-    JOptionPane.showMessageDialog(getEmulator(),
-                                  "Version " + XI5250Emulator.VERSION + "\n" +
-                                  "\n" +
-                                  "Infordata S.p.A.\n" +
-                                  "http://xtn5250.sourceforge.net",
-                                  "About",
-                                  JOptionPane.INFORMATION_MESSAGE,
-                                  cvImagesBdl.getIcon("Logo"));
-  }
-
-  protected void processSnapShotCmd() {
-    XI5250Crt clone = getEmulator().getStaticClone();
-    String title = "Snap-shot " + getEmulator().getHost() + " #" +
-                   (++ivSnapShotCount);
-    XI5250CrtFrame frm = new XI5250CrtFrame(title, clone);
-    frm.setBounds(0, 0, 728, 512);
-    frm.centerOnScreen();
-    frm.setVisible(true);
-  }
-
-  /**
-   * Usata per sincronizzare i comandi con lo stato dell' emulator.
-   */
-  class EmulatorListener extends XI5250EmulatorAdapter {
-
-    protected void enableCmd() {
-      getCommandMgr().enableCommand(
-          CONNECT_CMD, !getEmulator().isActive());
-      getCommandMgr().enableCommand(
-          DISCONNECT_CMD, getEmulator().isActive());
+        // Snapshot command
+        getCommandMgr().setCommand(SNAPSHOT_CMD, this::processSnapShotCmd);
     }
 
-    @Override
-    public void connecting(XI5250EmulatorEvent e) {
-      enableCmd();
+    public final XI5250Emulator getEmulator() {
+        return (XI5250Emulator) getCrt();
     }
 
-    @Override
-    public void connected(XI5250EmulatorEvent e) {
-      enableCmd();
+    protected void processConnectCmd() {
+        if (!getEmulator().isActive()) {
+            Object ret = JOptionPane.showInputDialog(
+                    getEmulator(),
+                    cvRes.getString("TXT_HostNameInput"),
+                    "", JOptionPane.QUESTION_MESSAGE, null,
+                    null, getEmulator().getHost());
+            if (ret == null)
+                return;
+            getEmulator().setHost((String) ret);
+        }
+        getEmulator().setActive(true);
     }
 
-    @Override
-    public void disconnected(XI5250EmulatorEvent e) {
-      enableCmd();
+    protected void processDisconnectCmd() {
+        if (getEmulator().isActive()) {
+            int ret = JOptionPane.showConfirmDialog(
+                    getEmulator(),
+                    cvRes.getString("TXT_ConfirmDisconnect"),
+                    "", JOptionPane.YES_NO_OPTION);
+            if (ret == JOptionPane.NO_OPTION)
+                return;
+        }
+        getEmulator().setActive(false);
     }
 
-    @Override
-    public void stateChanged(XI5250EmulatorEvent e) {
+    protected void processAboutCmd() {
+        JOptionPane.showMessageDialog(getEmulator(),
+                "Version " + XI5250Emulator.VERSION + "\n" +
+                        "\n" +
+                        "Infordata S.p.A.\n" +
+                        "http://xtn5250.sourceforge.net",
+                "About",
+                JOptionPane.INFORMATION_MESSAGE,
+                cvImagesBdl.getIcon("Logo"));
     }
 
-  }
+    protected void processSnapShotCmd() {
+        XI5250Crt clone = getEmulator().getStaticClone();
+        String title = "Snap-shot " + getEmulator().getHost() + " #" +
+                (++ivSnapShotCount);
+        XI5250CrtFrame frm = new XI5250CrtFrame(title, clone);
+        frm.setBounds(0, 0, 728, 512);
+        frm.centerOnScreen();
+        frm.setVisible(true);
+    }
+
+    /**
+     * Usata per sincronizzare i comandi con lo stato dell' emulator.
+     */
+    class EmulatorListener extends XI5250EmulatorAdapter {
+
+        protected void enableCmd() {
+            getCommandMgr().enableCommand(
+                    CONNECT_CMD, !getEmulator().isActive());
+            getCommandMgr().enableCommand(
+                    DISCONNECT_CMD, getEmulator().isActive());
+        }
+
+        @Override
+        public void connecting(XI5250EmulatorEvent e) {
+            enableCmd();
+        }
+
+        @Override
+        public void connected(XI5250EmulatorEvent e) {
+            enableCmd();
+        }
+
+        @Override
+        public void disconnected(XI5250EmulatorEvent e) {
+            enableCmd();
+        }
+
+        @Override
+        public void stateChanged(XI5250EmulatorEvent e) {
+        }
+
+    }
 
 }
 

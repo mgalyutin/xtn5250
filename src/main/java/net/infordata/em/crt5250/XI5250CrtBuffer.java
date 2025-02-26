@@ -44,596 +44,596 @@ import java.io.Serializable;
 public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
 
 
-  private static final long serialVersionUID = 1L;
-
-  public static final int GRAY_INTENSITY = colorAsIntensity(Color.gray);
-
-  private final @NotNull ColorWrapper ivBackColor = new ColorWrapper(Color.black);
-
-  /**
-   * to be used with dark background
-   */
-  private static final Color blue = new Color(128, 128, 255);
-
-  /**
-   * The character foreground color map used with dark background colors
-   */
-  private final Color[][] DK_FORE_COLORS_MAP = {
-      {
-          // normal                          reverse
-          Color.green, ivBackColor,
-          Color.white, ivBackColor,
-          Color.green, ivBackColor, // underscore
-          Color.white,                       // underscore
-          ivBackColor,                       // invisible
-          Color.red, ivBackColor,
-          Color.red.brighter(), ivBackColor, // blink
-          Color.red, ivBackColor, // underscore
-          Color.red.brighter(),              // blink, underscore
-          ivBackColor,                       // invisible
-          Color.cyan, ivBackColor, // column separator
-          Color.yellow, ivBackColor, // column separator
-          Color.cyan, ivBackColor, // column separator, underscore
-          Color.yellow,                      // column separator, underscore
-          ivBackColor,                       // invisible
-          Color.pink, ivBackColor,
-          blue, ivBackColor,
-          Color.pink, ivBackColor, // underscore
-          blue,                              // underscore
-          ivBackColor                        // invisible
-      }
-  };
-
-  /**
-   * The character background color map used with dark background colors
-   */
-  private final Color[][] DK_BACK_COLORS_MAP = {
-      {
-          // normal                          reverse
-          ivBackColor, Color.green,
-          ivBackColor, Color.white,
-          ivBackColor, Color.green, // underscore
-          ivBackColor,                       // underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.red,
-          ivBackColor, Color.red.brighter(),   // blink
-          ivBackColor, Color.red,   // underscore
-          ivBackColor,                       // blink, underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.cyan,  // column separator
-          ivBackColor, Color.yellow,// column separator
-          ivBackColor, Color.cyan,  // column separator, underscore
-          ivBackColor,                       // column separator, underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.pink,
-          ivBackColor, blue,
-          ivBackColor, Color.pink,  // underscore
-          ivBackColor,                       // underscore
-          ivBackColor                        // invisible
-      }
-  };
-
-  /**
-   * The character foreground color map used with bright background colors
-   */
-  private final Color[][] LT_FORE_COLORS_MAP = {
-      {
-          // normal                          reverse
-          Color.green.darker().darker(), ivBackColor,
-          Color.darkGray, ivBackColor,
-          Color.green.darker().darker(), ivBackColor, // underscore
-          Color.darkGray,                    // underscore
-          ivBackColor,                       // invisible
-          Color.red, ivBackColor,
-          Color.red.brighter(), ivBackColor, // blink
-          Color.red, ivBackColor, // underscore
-          Color.red.brighter(),              // blink, underscore
-          ivBackColor,                       // invisible
-          Color.blue, ivBackColor, // column separator
-          Color.yellow.darker(), ivBackColor, // column separator
-          Color.blue, ivBackColor, // column separator, underscore
-          Color.yellow.darker(),             // column separator, underscore
-          ivBackColor,                       // invisible
-          Color.pink.darker(), ivBackColor,
-          blue.darker(), ivBackColor,
-          Color.pink.darker(), ivBackColor, // underscore
-          blue.darker(),                     // underscore
-          ivBackColor                        // invisible
-      },
-      { //** input fields color map
-          // normal                          reverse
-          Color.green.darker().darker(), Color.white,
-          Color.darkGray, Color.white,
-          Color.green.darker().darker(), Color.white, // underscore
-          Color.darkGray,                    // underscore
-          Color.white,                       // invisible
-          Color.red, Color.white,
-          Color.red.brighter(), Color.white, // blink
-          Color.red, Color.white, // underscore
-          Color.red.brighter(),              // blink, underscore
-          Color.white,                       // invisible
-          Color.blue, Color.white, // column separator
-          Color.yellow.darker(), Color.white, // column separator
-          Color.blue, Color.white, // column separator, underscore
-          Color.yellow.darker(),             // column separator, underscore
-          ivBackColor,                       // invisible
-          Color.pink.darker(), Color.white,
-          blue.darker(), Color.white,
-          Color.pink.darker(), Color.white, // underscore
-          blue.darker(),                     // underscore
-          ivBackColor                        // invisible
-      }
-  };
-
-  /**
-   * The character background color map used with bright background colors
-   */
-  private final Color[][] LT_BACK_COLORS_MAP = {
-      {
-          // normal                          reverse
-          ivBackColor, Color.green.darker().darker(),
-          ivBackColor, Color.darkGray,
-          ivBackColor, Color.green.darker().darker(), // underscore
-          ivBackColor,                       // underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.red,
-          ivBackColor, Color.red.brighter(),   // blink
-          ivBackColor, Color.red,   // underscore
-          ivBackColor,                       // blink, underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.blue,  // column separator
-          ivBackColor, Color.yellow.darker(),// column separator
-          ivBackColor, Color.blue,  // column separator, underscore
-          ivBackColor,                       // column separator, underscore
-          ivBackColor,                       // invisible
-          ivBackColor, Color.pink.darker(),
-          ivBackColor, blue.darker(),
-          ivBackColor, Color.pink.darker(),  // underscore
-          ivBackColor,                       // underscore
-          ivBackColor                        // invisible
-      },
-      { //** input fields color map
-          // normal                          reverse
-          Color.white, Color.green.darker().darker(),
-          Color.white, Color.darkGray,
-          Color.white, Color.green.darker().darker(), // underscore
-          Color.white,                       // underscore
-          Color.white,                       // invisible
-          Color.white, Color.red,
-          Color.white, Color.red.brighter(),   // blink
-          Color.white, Color.red,   // underscore
-          Color.white,                       // blink, underscore
-          Color.white,                       // invisible
-          Color.white, Color.blue,  // column separator
-          Color.white, Color.yellow.darker(),// column separator
-          Color.white, Color.blue,  // column separator, underscore
-          Color.white,                       // column separator, underscore
-          Color.white,                       // invisible
-          Color.white, Color.pink.darker(),
-          Color.white, blue.darker(),
-          Color.white, Color.pink.darker(),  // underscore
-          Color.white,                       // underscore
-          Color.white                        // invisible
-      }
-  };
-
-  private Color[][] ivForegroundColorsMap = DK_FORE_COLORS_MAP;
-  private Color[][] ivBackgroundColorsMap = DK_BACK_COLORS_MAP;
-
-  /**
-   * 5250 Extra char attribute
-   */
-  static final int UNDERSCORE = 0x01;
-  /**
-   * 5250 Extra char attribute
-   */
-  static final int COLUMN_SEPARATOR = 0x02;
-
-  static final int[] EXTRA_ATTR_MAP = {
-      // normal               reverse
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      UNDERSCORE,
-      UNDERSCORE,
-      UNDERSCORE,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      UNDERSCORE,
-      UNDERSCORE,
-      UNDERSCORE,
-      0x00,
-      COLUMN_SEPARATOR,
-      COLUMN_SEPARATOR,
-      COLUMN_SEPARATOR,
-      COLUMN_SEPARATOR,
-      COLUMN_SEPARATOR | UNDERSCORE,
-      COLUMN_SEPARATOR | UNDERSCORE,
-      COLUMN_SEPARATOR | UNDERSCORE,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      0x00,
-      UNDERSCORE,
-      UNDERSCORE,
-      UNDERSCORE,
-      0x00
-  };
-
-  /**
-   * Constructs a XI5250CrtBuffer with the given dimensions expressed in number of chars.
-   *
-   * @param nCols number of columns for the buffer.
-   * @param nRows number of rows for the buffer.
-   */
-  public XI5250CrtBuffer(int nCols, int nRows) {
-    super(nCols, nRows);
-    setDefAttr(0x20);
-    clear();            // sets new attribute
-  }
-
-  /**
-   * Creates a XI5250CrtBuffer from a portion of another one.
-   *
-   * @param from buffer from where to create the new buffer
-   * @param aC column from where to extract from the given buffer.
-   * @param aR row from where to extract from the given buffer.
-   * @param aW number of columns to extract from the given buffer.
-   * @param aH number of rows to extract from the given buffer.
-   */
-  public XI5250CrtBuffer(@NotNull XI5250CrtBuffer from, int aC, int aR, int aW, int aH) {
-    super(from, aC, aR, aW, aH);
-    setDefBackground(from.getDefBackground());
-  }
-
-  @Override
-  public @NotNull Object clone() {
-    return new XI5250CrtBuffer(this, 0, 0,
-        getCrtSize().width, getCrtSize().height);
-  }
-
-  @Override
-  public synchronized void drawString(@NotNull String aStr, int col, int row,
-                                      int aAttr) {
-    int lPos = toLinearPos(col, row);
-    col = toColPos(lPos);
-    row = toRowPos(lPos);
-
-    // if attribute == USE_PRESENT_ATTRIBUTE then get previous attribute
-    if (aAttr == XI5250Crt.USE_PRESENT_ATTRIBUTE) {
-      aAttr = getAttr(col, row);
-    }
-
-    // split line to handle wrap
-    int len = aStr.length();
-    int x = col;
-    int y = row;
-    int dx;
-    int i = 0;
-    int maxW = getCrtSize().width;
-
-    while (len > 0) {
-      dx = Math.min(maxW - x, len);
-
-      super.drawString(aStr.substring(i, i + dx), x, y, aAttr);
-
-      i += dx;
-      len -= dx;
-      x = 0;
-      ++y;
-    }
-  }
-
-  /**
-   * Draws attribute place-holder char.
-   *
-   * @param gr graphics where to draw the attribute place-holder char
-   * @param col column where to draw the attribute place-holder char
-   * @param row column where to draw the attribute place-holder char
-   * @param aAttr dummy parameter
-   */
-  protected void _drawAttributePlaceHolder(@NotNull Graphics gr, int col, int row,
-                                           int aAttr) {
-    int lPos = toLinearPos(col, row);
-    col = toColPos(lPos);
-    row = toRowPos(lPos);
-
-    int charW = getCharSize().width;
-    int charH = getCharSize().height;
-
-    gr.setColor(getBackground(0x20));
-    gr.fillRect(col * charW, row * charH, charW, charH);
-
-    if (XI5250Crt.DEBUG >= 2) { // to see them
-      gr.setColor(getForeground(0x20));
-      gr.drawString("#", col * charW, (row + 1) * charH);
-    }
-  }
-
-  /**
-   * Draws 5250 extra attribute (UNDERLINE and COLUMN_SEPARATOR).
-   *
-   * @param gr graphics where to draw the extra attribute
-   * @param col column where to draw the extra attribute
-   * @param row column where to draw the extra attribute
-   * @param len number of characters to apply the attribute
-   * @param aAttr dummy parameter
-   */
-  protected void _drawExtraAttribute(@NotNull Graphics gr, int col, int row, int len,
-                                     int aAttr) {
-    int extra = getExtraCharAttribute(aAttr);
-    int dy = 2;
-
-    int charW = getCharSize().width;
-    int charH = getCharSize().height;
-
-    gr.setColor(getForeground(aAttr));
-
-    if ((extra & UNDERSCORE) != 0) {
-      gr.drawLine(col * charW, (row + 1) * charH - dy - 1,
-          (col + len) * charW - 1, (row + 1) * charH - dy - 1);
-    }
-
-    if ((extra & COLUMN_SEPARATOR) != 0) {
-      gr.setColor(getForeground(0x22));
-
-      for (int i = 0; i < len; i++) {
-        gr.drawLine((col + i) * charW, (row + 1) * charH - dy,
-            (col + i) * charW, (row + 1) * charH - dy);
-
-        gr.drawLine((col + i + 1) * charW - 1, (row + 1) * charH - dy,
-            (col + i + 1) * charW - 1, (row + 1) * charH - dy);
-      }
-    }
-  }
-
-  @Override
-  protected void _drawString(@NotNull Graphics gr, @NotNull String aStr, int col, int row,
-                             int aAttr) {
-    if (aStr.length() <= 0) {
-      return;
-    }
-
-    int pos = -1;
-    for (int i = 0; i < aStr.length(); i++) {
-      if (aStr.charAt(i) == XI5250Crt.ATTRIBUTE_PLACE_HOLDER) {
-        pos = i;
-        break;
-      }
-    }
-
-    if (pos == -1) {
-      super._drawString(gr, aStr, col, row, aAttr);
-      _drawExtraAttribute(gr, col, row, aStr.length(), aAttr);
-    } else {
-      // draw string portion before attribute place-holder
-      if (pos > 0) {
-        super._drawString(gr, aStr, col, row, aAttr);
-        _drawExtraAttribute(gr, col, row, aStr.length(), aAttr);
-      }
-      // draw attribute place-holder
-      _drawAttributePlaceHolder(gr, col + pos, row, aAttr);
-      // draw string portion after attribute place-holder
-      if (pos < (aStr.length() - 1)) {
-        _drawString(gr, aStr.substring(pos + 1), col + pos + 1, row, aAttr);
-      }
-    }
-  }
-
-  /**
-   * Can be used to verify the presence of a string in the buffer. Redefined to implement lines
-   * wrap.
-   *
-   * @param col column from where to get the string
-   * @param row row from where to get the string
-   * @param nChars number of characters to get from the given position
-   * @return the string in the given position with the given length.
-   * @see String#indexOf
-   */
-  @Override
-  public @NotNull String getString(int col, int row, int nChars) {
-    StringBuilder str = new StringBuilder();
-    for (int i = 0; i < nChars; i++) {
-      int j = toLinearPos(col + i, row);
-      str.append(getChar(toColPos(j), toRowPos(j)));
-    }
-    return new String(str);
-  }
-
-  @Override
-  protected Color getBackground(int aAttribute) {
-    // see SA21-9247-6 pg 2-143
-    int mapIdx = Math.min(ivBackgroundColorsMap.length - 1,
-        getColorMapIdx(aAttribute));
-    return ivBackgroundColorsMap[mapIdx]
-        [getColorAttributeIdx(aAttribute) - 0x20];
-  }
-
-  @Override
-  protected Color getForeground(int aAttribute) {
-    // see SA21-9247-6 pg 2-143
-    int mapIdx = Math.min(ivForegroundColorsMap.length - 1,
-        getColorMapIdx(aAttribute));
-    return ivForegroundColorsMap[mapIdx]
-        [getColorAttributeIdx(aAttribute) - 0x20];
-  }
-
-  /**
-   * Attribute to extra char attribute mapping.
-   * @param aAttribute the attribute to get the extra char attribute from
-   * @return the extra char attribute obtained from the given attribute
-   */
-  protected int getExtraCharAttribute(int aAttribute) {
-    return EXTRA_ATTR_MAP[getColorAttributeIdx(aAttribute) - 0x20];
-  }
-
-  protected final byte getColorMapIdx(int aAttribute) {
-    return (byte) ((aAttribute >> 24) & 0xFF);
-  }
-
-  protected final int getColorAttributeIdx(int aAttribute) {
-    return aAttribute & 0x00FFFFFF;
-  }
-
-  @Override
-  public int getAttr(int col, int row) {
-    int attr = super.getAttr(col, row);
-    XI5250Crt crt = (XI5250Crt) getCrt();
-    if (crt != null) {
-      //change color table
-      XI5250Field field = crt.getFieldFromPos(col, row);
-      if (field != null && !field.isOrgBypassField()) {
-        attr |= (1 << 24);
-      }
-    }
-    return attr;
-  }
-
-  /**
-   * Converts x-y coord to buffer linear position.
-   *
-   * @param aCol column of the position to convert to linear position
-   * @param aRow row of the position to convert to linear position
-   * @return linear position for the given column and row
-   */
-  public final int toLinearPos(int aCol, int aRow) {
-    return (aRow * getCrtSize().width) + aCol;
-  }
-
-  /**
-   * Converts buffer linear position to x-y coord.
-   *
-   * @param aPos linear position from where to get the column
-   * @return column for the given linear position
-   */
-  public final int toColPos(int aPos) {
-    return aPos % getCrtSize().width;
-  }
-
-  /**
-   * Converts buffer linear position to x-y coord.
-   *
-   * @param aPos linear position from where to get the row
-   * @return row for the given linear position
-   */
-  public final int toRowPos(int aPos) {
-    return aPos / getCrtSize().width;
-  }
-
-  /**
-   * Converts color to an intensity value (0 to 1000)
-   *
-   * @param aColor color to get the intensity from
-   * @return the intensity (0 to 1000) for the given color
-   *
-   * @see #setDefBackground
-   */
-  public static final int colorAsIntensity(@NotNull Color aColor) {
-    float[] hsb = Color.RGBtoHSB(aColor.getRed(), aColor.getGreen(),
-        aColor.getBlue(), null);
-    return (int) (hsb[2] * 1000);
-  }
-
-  /**
-   * Changes the default background color. The new color intensity is used to choose which colors
-   * table must be used.
-   *
-   * @param aColor default background to set
-   */
-  public void setDefBackground(@NotNull Color aColor) {
-    if (ivBackColor.equals(aColor)) {
-      return;
-    }
-
-    // check if background color intensity (referred to GRAY_INTENSITY)
-    // has changed
-    if ((colorAsIntensity(ivBackColor) >= GRAY_INTENSITY) !=
-        (colorAsIntensity(aColor) >= GRAY_INTENSITY)) {
-      boolean dark = (colorAsIntensity(aColor) < GRAY_INTENSITY);
-
-      ivBackgroundColorsMap = (dark) ? DK_BACK_COLORS_MAP : LT_BACK_COLORS_MAP;
-      ivForegroundColorsMap = (dark) ? DK_FORE_COLORS_MAP : LT_FORE_COLORS_MAP;
-    }
-
-    ivBackColor.setColor(aColor);
-  }
-
-  public Color getDefBackground() {
-    return ivBackColor.getColor();
-  }
-
-  /**
-   * Simply routes all method calls to the contained color methods
-   */
-  private static class ColorWrapper extends Color implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    private Color ivColor;
+    public static final int GRAY_INTENSITY = colorAsIntensity(Color.gray);
 
-    public ColorWrapper(Color aColor) {
-      super(0);
-      ivColor = aColor;
+    private final @NotNull ColorWrapper ivBackColor = new ColorWrapper(Color.black);
+
+    /**
+     * to be used with dark background
+     */
+    private static final Color blue = new Color(128, 128, 255);
+
+    /**
+     * The character foreground color map used with dark background colors
+     */
+    private final Color[][] DK_FORE_COLORS_MAP = {
+            {
+                    // normal                          reverse
+                    Color.green, ivBackColor,
+                    Color.white, ivBackColor,
+                    Color.green, ivBackColor, // underscore
+                    Color.white,                       // underscore
+                    ivBackColor,                       // invisible
+                    Color.red, ivBackColor,
+                    Color.red.brighter(), ivBackColor, // blink
+                    Color.red, ivBackColor, // underscore
+                    Color.red.brighter(),              // blink, underscore
+                    ivBackColor,                       // invisible
+                    Color.cyan, ivBackColor, // column separator
+                    Color.yellow, ivBackColor, // column separator
+                    Color.cyan, ivBackColor, // column separator, underscore
+                    Color.yellow,                      // column separator, underscore
+                    ivBackColor,                       // invisible
+                    Color.pink, ivBackColor,
+                    blue, ivBackColor,
+                    Color.pink, ivBackColor, // underscore
+                    blue,                              // underscore
+                    ivBackColor                        // invisible
+            }
+    };
+
+    /**
+     * The character background color map used with dark background colors
+     */
+    private final Color[][] DK_BACK_COLORS_MAP = {
+            {
+                    // normal                          reverse
+                    ivBackColor, Color.green,
+                    ivBackColor, Color.white,
+                    ivBackColor, Color.green, // underscore
+                    ivBackColor,                       // underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.red,
+                    ivBackColor, Color.red.brighter(),   // blink
+                    ivBackColor, Color.red,   // underscore
+                    ivBackColor,                       // blink, underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.cyan,  // column separator
+                    ivBackColor, Color.yellow,// column separator
+                    ivBackColor, Color.cyan,  // column separator, underscore
+                    ivBackColor,                       // column separator, underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.pink,
+                    ivBackColor, blue,
+                    ivBackColor, Color.pink,  // underscore
+                    ivBackColor,                       // underscore
+                    ivBackColor                        // invisible
+            }
+    };
+
+    /**
+     * The character foreground color map used with bright background colors
+     */
+    private final Color[][] LT_FORE_COLORS_MAP = {
+            {
+                    // normal                          reverse
+                    Color.green.darker().darker(), ivBackColor,
+                    Color.darkGray, ivBackColor,
+                    Color.green.darker().darker(), ivBackColor, // underscore
+                    Color.darkGray,                    // underscore
+                    ivBackColor,                       // invisible
+                    Color.red, ivBackColor,
+                    Color.red.brighter(), ivBackColor, // blink
+                    Color.red, ivBackColor, // underscore
+                    Color.red.brighter(),              // blink, underscore
+                    ivBackColor,                       // invisible
+                    Color.blue, ivBackColor, // column separator
+                    Color.yellow.darker(), ivBackColor, // column separator
+                    Color.blue, ivBackColor, // column separator, underscore
+                    Color.yellow.darker(),             // column separator, underscore
+                    ivBackColor,                       // invisible
+                    Color.pink.darker(), ivBackColor,
+                    blue.darker(), ivBackColor,
+                    Color.pink.darker(), ivBackColor, // underscore
+                    blue.darker(),                     // underscore
+                    ivBackColor                        // invisible
+            },
+            { //** input fields color map
+                    // normal                          reverse
+                    Color.green.darker().darker(), Color.white,
+                    Color.darkGray, Color.white,
+                    Color.green.darker().darker(), Color.white, // underscore
+                    Color.darkGray,                    // underscore
+                    Color.white,                       // invisible
+                    Color.red, Color.white,
+                    Color.red.brighter(), Color.white, // blink
+                    Color.red, Color.white, // underscore
+                    Color.red.brighter(),              // blink, underscore
+                    Color.white,                       // invisible
+                    Color.blue, Color.white, // column separator
+                    Color.yellow.darker(), Color.white, // column separator
+                    Color.blue, Color.white, // column separator, underscore
+                    Color.yellow.darker(),             // column separator, underscore
+                    ivBackColor,                       // invisible
+                    Color.pink.darker(), Color.white,
+                    blue.darker(), Color.white,
+                    Color.pink.darker(), Color.white, // underscore
+                    blue.darker(),                     // underscore
+                    ivBackColor                        // invisible
+            }
+    };
+
+    /**
+     * The character background color map used with bright background colors
+     */
+    private final Color[][] LT_BACK_COLORS_MAP = {
+            {
+                    // normal                          reverse
+                    ivBackColor, Color.green.darker().darker(),
+                    ivBackColor, Color.darkGray,
+                    ivBackColor, Color.green.darker().darker(), // underscore
+                    ivBackColor,                       // underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.red,
+                    ivBackColor, Color.red.brighter(),   // blink
+                    ivBackColor, Color.red,   // underscore
+                    ivBackColor,                       // blink, underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.blue,  // column separator
+                    ivBackColor, Color.yellow.darker(),// column separator
+                    ivBackColor, Color.blue,  // column separator, underscore
+                    ivBackColor,                       // column separator, underscore
+                    ivBackColor,                       // invisible
+                    ivBackColor, Color.pink.darker(),
+                    ivBackColor, blue.darker(),
+                    ivBackColor, Color.pink.darker(),  // underscore
+                    ivBackColor,                       // underscore
+                    ivBackColor                        // invisible
+            },
+            { //** input fields color map
+                    // normal                          reverse
+                    Color.white, Color.green.darker().darker(),
+                    Color.white, Color.darkGray,
+                    Color.white, Color.green.darker().darker(), // underscore
+                    Color.white,                       // underscore
+                    Color.white,                       // invisible
+                    Color.white, Color.red,
+                    Color.white, Color.red.brighter(),   // blink
+                    Color.white, Color.red,   // underscore
+                    Color.white,                       // blink, underscore
+                    Color.white,                       // invisible
+                    Color.white, Color.blue,  // column separator
+                    Color.white, Color.yellow.darker(),// column separator
+                    Color.white, Color.blue,  // column separator, underscore
+                    Color.white,                       // column separator, underscore
+                    Color.white,                       // invisible
+                    Color.white, Color.pink.darker(),
+                    Color.white, blue.darker(),
+                    Color.white, Color.pink.darker(),  // underscore
+                    Color.white,                       // underscore
+                    Color.white                        // invisible
+            }
+    };
+
+    private Color[][] ivForegroundColorsMap = DK_FORE_COLORS_MAP;
+    private Color[][] ivBackgroundColorsMap = DK_BACK_COLORS_MAP;
+
+    /**
+     * 5250 Extra char attribute
+     */
+    static final int UNDERSCORE = 0x01;
+    /**
+     * 5250 Extra char attribute
+     */
+    static final int COLUMN_SEPARATOR = 0x02;
+
+    static final int[] EXTRA_ATTR_MAP = {
+            // normal               reverse
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            UNDERSCORE,
+            UNDERSCORE,
+            UNDERSCORE,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            UNDERSCORE,
+            UNDERSCORE,
+            UNDERSCORE,
+            0x00,
+            COLUMN_SEPARATOR,
+            COLUMN_SEPARATOR,
+            COLUMN_SEPARATOR,
+            COLUMN_SEPARATOR,
+            COLUMN_SEPARATOR | UNDERSCORE,
+            COLUMN_SEPARATOR | UNDERSCORE,
+            COLUMN_SEPARATOR | UNDERSCORE,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            UNDERSCORE,
+            UNDERSCORE,
+            UNDERSCORE,
+            0x00
+    };
+
+    /**
+     * Constructs a XI5250CrtBuffer with the given dimensions expressed in number of chars.
+     *
+     * @param nCols number of columns for the buffer.
+     * @param nRows number of rows for the buffer.
+     */
+    public XI5250CrtBuffer(int nCols, int nRows) {
+        super(nCols, nRows);
+        setDefAttr(0x20);
+        clear();            // sets new attribute
     }
 
-    public void setColor(Color aColor) {
-      ivColor = aColor;
-    }
-
-    public Color getColor() {
-      return ivColor;
+    /**
+     * Creates a XI5250CrtBuffer from a portion of another one.
+     *
+     * @param from buffer from where to create the new buffer
+     * @param aC   column from where to extract from the given buffer.
+     * @param aR   row from where to extract from the given buffer.
+     * @param aW   number of columns to extract from the given buffer.
+     * @param aH   number of rows to extract from the given buffer.
+     */
+    public XI5250CrtBuffer(@NotNull XI5250CrtBuffer from, int aC, int aR, int aW, int aH) {
+        super(from, aC, aR, aW, aH);
+        setDefBackground(from.getDefBackground());
     }
 
     @Override
-    public int getRed() {
-      return ivColor.getRed();
+    public @NotNull Object clone() {
+        return new XI5250CrtBuffer(this, 0, 0,
+                getCrtSize().width, getCrtSize().height);
     }
 
     @Override
-    public int getGreen() {
-      return ivColor.getGreen();
+    public synchronized void drawString(@NotNull String aStr, int col, int row,
+                                        int aAttr) {
+        int lPos = toLinearPos(col, row);
+        col = toColPos(lPos);
+        row = toRowPos(lPos);
+
+        // if attribute == USE_PRESENT_ATTRIBUTE then get previous attribute
+        if (aAttr == XI5250Crt.USE_PRESENT_ATTRIBUTE) {
+            aAttr = getAttr(col, row);
+        }
+
+        // split line to handle wrap
+        int len = aStr.length();
+        int x = col;
+        int y = row;
+        int dx;
+        int i = 0;
+        int maxW = getCrtSize().width;
+
+        while (len > 0) {
+            dx = Math.min(maxW - x, len);
+
+            super.drawString(aStr.substring(i, i + dx), x, y, aAttr);
+
+            i += dx;
+            len -= dx;
+            x = 0;
+            ++y;
+        }
+    }
+
+    /**
+     * Draws attribute place-holder char.
+     *
+     * @param gr    graphics where to draw the attribute place-holder char
+     * @param col   column where to draw the attribute place-holder char
+     * @param row   column where to draw the attribute place-holder char
+     * @param aAttr dummy parameter
+     */
+    protected void _drawAttributePlaceHolder(@NotNull Graphics gr, int col, int row,
+                                             int aAttr) {
+        int lPos = toLinearPos(col, row);
+        col = toColPos(lPos);
+        row = toRowPos(lPos);
+
+        int charW = getCharSize().width;
+        int charH = getCharSize().height;
+
+        gr.setColor(getBackground(0x20));
+        gr.fillRect(col * charW, row * charH, charW, charH);
+
+        if (XI5250Crt.DEBUG >= 2) { // to see them
+            gr.setColor(getForeground(0x20));
+            gr.drawString("#", col * charW, (row + 1) * charH);
+        }
+    }
+
+    /**
+     * Draws 5250 extra attribute (UNDERLINE and COLUMN_SEPARATOR).
+     *
+     * @param gr    graphics where to draw the extra attribute
+     * @param col   column where to draw the extra attribute
+     * @param row   column where to draw the extra attribute
+     * @param len   number of characters to apply the attribute
+     * @param aAttr dummy parameter
+     */
+    protected void _drawExtraAttribute(@NotNull Graphics gr, int col, int row, int len,
+                                       int aAttr) {
+        int extra = getExtraCharAttribute(aAttr);
+        int dy = 2;
+
+        int charW = getCharSize().width;
+        int charH = getCharSize().height;
+
+        gr.setColor(getForeground(aAttr));
+
+        if ((extra & UNDERSCORE) != 0) {
+            gr.drawLine(col * charW, (row + 1) * charH - dy - 1,
+                    (col + len) * charW - 1, (row + 1) * charH - dy - 1);
+        }
+
+        if ((extra & COLUMN_SEPARATOR) != 0) {
+            gr.setColor(getForeground(0x22));
+
+            for (int i = 0; i < len; i++) {
+                gr.drawLine((col + i) * charW, (row + 1) * charH - dy,
+                        (col + i) * charW, (row + 1) * charH - dy);
+
+                gr.drawLine((col + i + 1) * charW - 1, (row + 1) * charH - dy,
+                        (col + i + 1) * charW - 1, (row + 1) * charH - dy);
+            }
+        }
     }
 
     @Override
-    public int getBlue() {
-      return ivColor.getBlue();
+    protected void _drawString(@NotNull Graphics gr, @NotNull String aStr, int col, int row,
+                               int aAttr) {
+        if (aStr.length() <= 0) {
+            return;
+        }
+
+        int pos = -1;
+        for (int i = 0; i < aStr.length(); i++) {
+            if (aStr.charAt(i) == XI5250Crt.ATTRIBUTE_PLACE_HOLDER) {
+                pos = i;
+                break;
+            }
+        }
+
+        if (pos == -1) {
+            super._drawString(gr, aStr, col, row, aAttr);
+            _drawExtraAttribute(gr, col, row, aStr.length(), aAttr);
+        } else {
+            // draw string portion before attribute place-holder
+            if (pos > 0) {
+                super._drawString(gr, aStr, col, row, aAttr);
+                _drawExtraAttribute(gr, col, row, aStr.length(), aAttr);
+            }
+            // draw attribute place-holder
+            _drawAttributePlaceHolder(gr, col + pos, row, aAttr);
+            // draw string portion after attribute place-holder
+            if (pos < (aStr.length() - 1)) {
+                _drawString(gr, aStr.substring(pos + 1), col + pos + 1, row, aAttr);
+            }
+        }
+    }
+
+    /**
+     * Can be used to verify the presence of a string in the buffer. Redefined to implement lines
+     * wrap.
+     *
+     * @param col    column from where to get the string
+     * @param row    row from where to get the string
+     * @param nChars number of characters to get from the given position
+     * @return the string in the given position with the given length.
+     * @see String#indexOf
+     */
+    @Override
+    public @NotNull String getString(int col, int row, int nChars) {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < nChars; i++) {
+            int j = toLinearPos(col + i, row);
+            str.append(getChar(toColPos(j), toRowPos(j)));
+        }
+        return new String(str);
     }
 
     @Override
-    public int getRGB() {
-      return ivColor.getRGB();
+    protected Color getBackground(int aAttribute) {
+        // see SA21-9247-6 pg 2-143
+        int mapIdx = Math.min(ivBackgroundColorsMap.length - 1,
+                getColorMapIdx(aAttribute));
+        return ivBackgroundColorsMap[mapIdx]
+                [getColorAttributeIdx(aAttribute) - 0x20];
     }
 
     @Override
-    public Color brighter() {
-      return ivColor.brighter();
+    protected Color getForeground(int aAttribute) {
+        // see SA21-9247-6 pg 2-143
+        int mapIdx = Math.min(ivForegroundColorsMap.length - 1,
+                getColorMapIdx(aAttribute));
+        return ivForegroundColorsMap[mapIdx]
+                [getColorAttributeIdx(aAttribute) - 0x20];
+    }
+
+    /**
+     * Attribute to extra char attribute mapping.
+     *
+     * @param aAttribute the attribute to get the extra char attribute from
+     * @return the extra char attribute obtained from the given attribute
+     */
+    protected int getExtraCharAttribute(int aAttribute) {
+        return EXTRA_ATTR_MAP[getColorAttributeIdx(aAttribute) - 0x20];
+    }
+
+    protected final byte getColorMapIdx(int aAttribute) {
+        return (byte) ((aAttribute >> 24) & 0xFF);
+    }
+
+    protected final int getColorAttributeIdx(int aAttribute) {
+        return aAttribute & 0x00FFFFFF;
     }
 
     @Override
-    public Color darker() {
-      return ivColor.darker();
+    public int getAttr(int col, int row) {
+        int attr = super.getAttr(col, row);
+        XI5250Crt crt = (XI5250Crt) getCrt();
+        if (crt != null) {
+            //change color table
+            XI5250Field field = crt.getFieldFromPos(col, row);
+            if (field != null && !field.isOrgBypassField()) {
+                attr |= (1 << 24);
+            }
+        }
+        return attr;
     }
 
-    @Override
-    public int hashCode() {
-      return ivColor.hashCode();
+    /**
+     * Converts x-y coord to buffer linear position.
+     *
+     * @param aCol column of the position to convert to linear position
+     * @param aRow row of the position to convert to linear position
+     * @return linear position for the given column and row
+     */
+    public final int toLinearPos(int aCol, int aRow) {
+        return (aRow * getCrtSize().width) + aCol;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-      return ivColor.equals(obj);
+    /**
+     * Converts buffer linear position to x-y coord.
+     *
+     * @param aPos linear position from where to get the column
+     * @return column for the given linear position
+     */
+    public final int toColPos(int aPos) {
+        return aPos % getCrtSize().width;
     }
 
-    @Override
-    public String toString() {
-      return ivColor.toString();
+    /**
+     * Converts buffer linear position to x-y coord.
+     *
+     * @param aPos linear position from where to get the row
+     * @return row for the given linear position
+     */
+    public final int toRowPos(int aPos) {
+        return aPos / getCrtSize().width;
     }
 
-  }
+    /**
+     * Converts color to an intensity value (0 to 1000)
+     *
+     * @param aColor color to get the intensity from
+     * @return the intensity (0 to 1000) for the given color
+     * @see #setDefBackground
+     */
+    public static final int colorAsIntensity(@NotNull Color aColor) {
+        float[] hsb = Color.RGBtoHSB(aColor.getRed(), aColor.getGreen(),
+                aColor.getBlue(), null);
+        return (int) (hsb[2] * 1000);
+    }
+
+    /**
+     * Changes the default background color. The new color intensity is used to choose which colors
+     * table must be used.
+     *
+     * @param aColor default background to set
+     */
+    public void setDefBackground(@NotNull Color aColor) {
+        if (ivBackColor.equals(aColor)) {
+            return;
+        }
+
+        // check if background color intensity (referred to GRAY_INTENSITY)
+        // has changed
+        if ((colorAsIntensity(ivBackColor) >= GRAY_INTENSITY) !=
+                (colorAsIntensity(aColor) >= GRAY_INTENSITY)) {
+            boolean dark = (colorAsIntensity(aColor) < GRAY_INTENSITY);
+
+            ivBackgroundColorsMap = (dark) ? DK_BACK_COLORS_MAP : LT_BACK_COLORS_MAP;
+            ivForegroundColorsMap = (dark) ? DK_FORE_COLORS_MAP : LT_FORE_COLORS_MAP;
+        }
+
+        ivBackColor.setColor(aColor);
+    }
+
+    public Color getDefBackground() {
+        return ivBackColor.getColor();
+    }
+
+    /**
+     * Simply routes all method calls to the contained color methods
+     */
+    private static class ColorWrapper extends Color implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private Color ivColor;
+
+        public ColorWrapper(Color aColor) {
+            super(0);
+            ivColor = aColor;
+        }
+
+        public void setColor(Color aColor) {
+            ivColor = aColor;
+        }
+
+        public Color getColor() {
+            return ivColor;
+        }
+
+        @Override
+        public int getRed() {
+            return ivColor.getRed();
+        }
+
+        @Override
+        public int getGreen() {
+            return ivColor.getGreen();
+        }
+
+        @Override
+        public int getBlue() {
+            return ivColor.getBlue();
+        }
+
+        @Override
+        public int getRGB() {
+            return ivColor.getRGB();
+        }
+
+        @Override
+        public Color brighter() {
+            return ivColor.brighter();
+        }
+
+        @Override
+        public Color darker() {
+            return ivColor.darker();
+        }
+
+        @Override
+        public int hashCode() {
+            return ivColor.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return ivColor.equals(obj);
+        }
+
+        @Override
+        public String toString() {
+            return ivColor.toString();
+        }
+
+    }
 
 }

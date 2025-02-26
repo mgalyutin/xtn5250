@@ -27,31 +27,31 @@ import java.io.InputStream;
 /**
  * 5250 Clear unit command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIClearUnitCmd extends XI5250Cmd {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream) {
-  }
-
-  @Override
-  protected void execute() {
-    ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
-    ivEmulator.ivPendingCmd = null;
-
-    ivEmulator.setCrtSize(80, 24);
-
-    ivEmulator.setDefAttr(0x20);
-    ivEmulator.clear();
-    ivEmulator.removeFields();
-    ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
-
-    // switch back to the previous used font
-    if (ivEmulator.ivPrevFont != null) {
-      ivEmulator.setFont(ivEmulator.ivPrevFont);
-      ivEmulator.ivPrevFont = null;
+    @Override
+    protected void readFrom5250Stream(InputStream inStream) {
     }
-  }
+
+    @Override
+    protected void execute() {
+        ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
+        ivEmulator.ivPendingCmd = null;
+
+        ivEmulator.setCrtSize(80, 24);
+
+        ivEmulator.setDefAttr(0x20);
+        ivEmulator.clear();
+        ivEmulator.removeFields();
+        ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
+
+        // switch back to the previous used font
+        if (ivEmulator.ivPrevFont != null) {
+            ivEmulator.setFont(ivEmulator.ivPrevFont);
+            ivEmulator.ivPrevFont = null;
+        }
+    }
 
 }

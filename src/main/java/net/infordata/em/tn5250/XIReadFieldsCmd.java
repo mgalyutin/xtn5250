@@ -29,27 +29,27 @@ import java.io.InputStream;
 /**
  * 5250 Read fields
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIReadFieldsCmd extends XICCCmd {
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    readCC(inStream);
-  }
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        readCC(inStream);
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.ivPendingCmd = this;
-    executeCC1();
-    executeCC2();
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.ivPendingCmd = this;
+        executeCC1();
+        executeCC2();
+    }
 
-  @Override
-  protected void executePending(int anAidCode, boolean isMasked) {
-    ivEmulator.setState(XI5250Emulator.ST_TEMPORARY_LOCK);
-    ivEmulator.send5250Data(anAidCode, ivEmulator.isMasterMDTSet() && !isMasked, false);
-  }
+    @Override
+    protected void executePending(int anAidCode, boolean isMasked) {
+        ivEmulator.setState(XI5250Emulator.ST_TEMPORARY_LOCK);
+        ivEmulator.send5250Data(anAidCode, ivEmulator.isMasterMDTSet() && !isMasked, false);
+    }
 
 }

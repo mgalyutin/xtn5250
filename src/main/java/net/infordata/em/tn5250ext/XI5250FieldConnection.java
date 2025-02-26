@@ -30,51 +30,51 @@ import java.awt.*;
  * Connect an AWT Component to a XI5250Field
  * moving and resizing the Component as the field grows or shrinks.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250FieldConnection {
-  private final Component ivComponent;
+    private final Component ivComponent;
 
-  private final int ivColsDelta;
-  private final int ivRowsDelta;
-  private final int ivNCols;
-  private final int ivNRows;
+    private final int ivColsDelta;
+    private final int ivRowsDelta;
+    private final int ivNCols;
+    private final int ivNRows;
 
-  public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl, XI5250Field aField,
-                               Component aComponent,
-                               int aColsDelta, int aRowsDelta,
-                               int aNCols, int aNRows) {
-    ivColsDelta = aColsDelta;
-    ivRowsDelta = aRowsDelta;
-    ivNCols = aNCols;
-    ivNRows = aNRows;
-    ivComponent = aComponent;
-    aPanelHndl.connect(aField, this);
-  }
+    public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl, XI5250Field aField,
+                                 Component aComponent,
+                                 int aColsDelta, int aRowsDelta,
+                                 int aNCols, int aNRows) {
+        ivColsDelta = aColsDelta;
+        ivRowsDelta = aRowsDelta;
+        ivNCols = aNCols;
+        ivNRows = aNRows;
+        ivComponent = aComponent;
+        aPanelHndl.connect(aField, this);
+    }
 
-  public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl,
-                               XI5250Field aField,
-                               Component aComponent) {
-    this(aPanelHndl, aField, aComponent, 0, 0, 1, 1);
-  }
+    public XI5250FieldConnection(@NotNull XI5250PanelHandler aPanelHndl,
+                                 XI5250Field aField,
+                                 Component aComponent) {
+        this(aPanelHndl, aField, aComponent, 0, 0, 1, 1);
+    }
 
-  protected void recalcBounds(@NotNull XI5250EmulatorExt aEm, @NotNull XI5250Field aField) {
-    Rectangle[] rcts = aField.getRows();
-    // use the last row
-    Rectangle   rct  = rcts[rcts.length - 1];
+    protected void recalcBounds(@NotNull XI5250EmulatorExt aEm, @NotNull XI5250Field aField) {
+        Rectangle[] rcts = aField.getRows();
+        // use the last row
+        Rectangle rct = rcts[rcts.length - 1];
 
-    int bufPos = aEm.toLinearPos(rct.x + rct.width, rct.y);
-    bufPos += aEm.toLinearPos(ivColsDelta, ivRowsDelta);
+        int bufPos = aEm.toLinearPos(rct.x + rct.width, rct.y);
+        bufPos += aEm.toLinearPos(ivColsDelta, ivRowsDelta);
 
-    Point     pt  = aEm.toPoints(aEm.toColPos(bufPos), aEm.toRowPos(bufPos));
+        Point pt = aEm.toPoints(aEm.toColPos(bufPos), aEm.toRowPos(bufPos));
 
-    ivComponent.setBounds(pt.x, pt.y,
-                          ivNCols * aEm.getCharSize().width,
-                          ivNRows * aEm.getCharSize().height);
-  }
+        ivComponent.setBounds(pt.x, pt.y,
+                ivNCols * aEm.getCharSize().width,
+                ivNRows * aEm.getCharSize().height);
+    }
 
-  public final Component getComponent() {
-    return ivComponent;
-  }
+    public final Component getComponent() {
+        return ivComponent;
+    }
 
 }

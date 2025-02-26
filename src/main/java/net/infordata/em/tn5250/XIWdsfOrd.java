@@ -27,27 +27,27 @@ import java.io.InputStream;
 /**
  * WDSF - Write to Display Structured Field
  * TODO
- * 
+ * <p>
  * see: http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.13?DT=19950629163252
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIWdsfOrd extends XI5250Ord {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream)
-      throws IOException, XI5250Exception {
-    throw new XI5250Exception("Not supported", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream)
+            throws IOException, XI5250Exception {
+        throw new XI5250Exception("Not supported", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    }
 
-  @Override
-  protected void execute() {
-    throw new IllegalStateException("Not supported");
-  }
+    @Override
+    protected void execute() {
+        throw new IllegalStateException("Not supported");
+    }
 
-  @Override
-  public String toString() {
-    return super.toString();
-  }
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
 }

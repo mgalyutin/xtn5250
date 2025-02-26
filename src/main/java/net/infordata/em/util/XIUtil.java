@@ -35,130 +35,126 @@ import java.lang.reflect.Method;
 public class XIUtil {
 
 
-  public static final boolean is1dot2 = is1dot2();
-  public static final boolean is1dot3 = is1dot3();
+    public static final boolean is1dot2 = is1dot2();
+    public static final boolean is1dot3 = is1dot3();
 
-  private static boolean is1dot2() {
-    try {
-      // Test if method introduced in 1.2 is available.
-      Method m = Class.class.getMethod("getProtectionDomain");
-      return (m != null);
-    }
-    catch (NoSuchMethodException e) {
-      return false;
-    }
-  }
-
-  private static boolean is1dot3() {
-    try {
-      // Test if method introduced in 1.3 is available.
-      Method m = Runtime.class.getMethod("addShutdownHook",
-              Thread.class);
-      return (m != null);
-    }
-    catch (NoSuchMethodException e) {
-      return false;
-    }
-  }
-
-  private XIUtil() {
-  }
-
-  public static final @Nullable Frame getFrame(Component aComponent) {
-    Component comp = aComponent;
-    while (comp != null && !(comp instanceof Frame))
-      comp = comp.getParent();
-    return (Frame)comp;
-  }
-
-  public static final @Nullable Window getWindow(Component aComponent) {
-    Component comp = aComponent;
-    while (comp != null && !(comp instanceof Window))
-      comp = comp.getParent();
-    return (Window)comp;
-  }
-
-
-
-  public static Image createImage(final @NotNull Class<?> baseClass,
-                                  final @NotNull String gifFile) {
-    byte[] buffer;
-    try {
-      /* Copy resource into a byte array.  This is
-       * necessary because several browsers consider
-       * Class.getResource a security risk because it
-       * can be used to load additional classes.
-       * Class.getResourceAsStream just returns raw
-       * bytes, which we can convert to an image.
-       */
-      InputStream resource = baseClass.getResourceAsStream(gifFile);
-      if (resource == null) {
-        throw new IllegalArgumentException(baseClass.getName() + "/" +
-                                           gifFile + " not found.");
-      }
-      BufferedInputStream in = new BufferedInputStream(resource);
-      ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-      buffer = new byte[1024];
-      int n;
-      while ((n = in.read(buffer)) > 0) {
-        out.write(buffer, 0, n);
-      }
-      in.close();
-      out.flush();
-
-      buffer = out.toByteArray();
-      if (buffer.length == 0) {
-        throw new IllegalStateException("warning: " + gifFile +
-                                        " is zero-length");
-      }
-    }
-    catch (IOException ex) {
-      throw new IllegalStateException(ex.toString());
+    private static boolean is1dot2() {
+        try {
+            // Test if method introduced in 1.2 is available.
+            Method m = Class.class.getMethod("getProtectionDomain");
+            return (m != null);
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 
-    return Toolkit.getDefaultToolkit().createImage(buffer);
-  }
-
-  public static char getMnemonic(@NotNull String str) {
-    char ch;
-    int state = 0;
-    for (int i = 0; i < str.length(); i++) {
-      ch = str.charAt(i);
-      switch (state) {
-        case 0:
-          if (ch == '&')
-            state = 1;
-          break;
-        case 1:
-          if (ch != '&')
-            return ch;
-          state = 0;
-          break;
-      }
+    private static boolean is1dot3() {
+        try {
+            // Test if method introduced in 1.3 is available.
+            Method m = Runtime.class.getMethod("addShutdownHook",
+                    Thread.class);
+            return (m != null);
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
-    return '\u0000';
-  }
 
-  public static @NotNull String removeMnemonics(@NotNull String str) {
-    StringBuilder sb = new StringBuilder(str.length());
-    char ch;
-    int state = 0;
-    for (int i = 0; i < str.length(); i++) {
-      ch = str.charAt(i);
-      switch (state) {
-        case 0:
-          if (ch == '&')
-            state = 1;
-          else
-            sb.append(ch);
-          break;
-        case 1:
-          sb.append(ch);
-          state = 0;
-          break;
-      }
+    private XIUtil() {
     }
-    return sb.toString();
-  }
+
+    public static final @Nullable Frame getFrame(Component aComponent) {
+        Component comp = aComponent;
+        while (comp != null && !(comp instanceof Frame))
+            comp = comp.getParent();
+        return (Frame) comp;
+    }
+
+    public static final @Nullable Window getWindow(Component aComponent) {
+        Component comp = aComponent;
+        while (comp != null && !(comp instanceof Window))
+            comp = comp.getParent();
+        return (Window) comp;
+    }
+
+
+    public static Image createImage(final @NotNull Class<?> baseClass,
+                                    final @NotNull String gifFile) {
+        byte[] buffer;
+        try {
+            /* Copy resource into a byte array.  This is
+             * necessary because several browsers consider
+             * Class.getResource a security risk because it
+             * can be used to load additional classes.
+             * Class.getResourceAsStream just returns raw
+             * bytes, which we can convert to an image.
+             */
+            InputStream resource = baseClass.getResourceAsStream(gifFile);
+            if (resource == null) {
+                throw new IllegalArgumentException(baseClass.getName() + "/" +
+                        gifFile + " not found.");
+            }
+            BufferedInputStream in = new BufferedInputStream(resource);
+            ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+            buffer = new byte[1024];
+            int n;
+            while ((n = in.read(buffer)) > 0) {
+                out.write(buffer, 0, n);
+            }
+            in.close();
+            out.flush();
+
+            buffer = out.toByteArray();
+            if (buffer.length == 0) {
+                throw new IllegalStateException("warning: " + gifFile +
+                        " is zero-length");
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex.toString());
+        }
+
+        return Toolkit.getDefaultToolkit().createImage(buffer);
+    }
+
+    public static char getMnemonic(@NotNull String str) {
+        char ch;
+        int state = 0;
+        for (int i = 0; i < str.length(); i++) {
+            ch = str.charAt(i);
+            switch (state) {
+                case 0:
+                    if (ch == '&')
+                        state = 1;
+                    break;
+                case 1:
+                    if (ch != '&')
+                        return ch;
+                    state = 0;
+                    break;
+            }
+        }
+        return '\u0000';
+    }
+
+    public static @NotNull String removeMnemonics(@NotNull String str) {
+        StringBuilder sb = new StringBuilder(str.length());
+        char ch;
+        int state = 0;
+        for (int i = 0; i < str.length(); i++) {
+            ch = str.charAt(i);
+            switch (state) {
+                case 0:
+                    if (ch == '&')
+                        state = 1;
+                    else
+                        sb.append(ch);
+                    break;
+                case 1:
+                    sb.append(ch);
+                    state = 0;
+                    break;
+            }
+        }
+        return sb.toString();
+    }
 
 }

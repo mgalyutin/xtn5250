@@ -24,11 +24,13 @@ package net.infordata.em.util;
 
 
 /**
+ *
  */
 public interface XICommand {
 
-  /**
-   */
-  void execute();
+    /**
+     *
+     */
+    void execute();
 }
 

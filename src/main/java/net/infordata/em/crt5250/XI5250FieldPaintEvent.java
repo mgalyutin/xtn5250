@@ -31,52 +31,52 @@ import java.util.EventObject;
 /**
  * XI5250Field painting event.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250FieldPaintEvent extends EventObject {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Paint at field level can be added.
-   */
-  public static final int FIELD_PAINT       = 0;
-  /**
-   * Paint at field singol row level can be added.
-   */
-  public static final int ROW_PAINT         = 1;
+    /**
+     * Paint at field level can be added.
+     */
+    public static final int FIELD_PAINT = 0;
+    /**
+     * Paint at field singol row level can be added.
+     */
+    public static final int ROW_PAINT = 1;
 
-  private static final String[] cvIdDescr = {"FIELD_PAINT",
-                                             "ROW_PAINT"};
-  private final int         ivId;
-  private final Graphics    ivGr;
+    private static final String[] cvIdDescr = {"FIELD_PAINT",
+            "ROW_PAINT"};
+    private final int ivId;
+    private final Graphics ivGr;
 
-  public XI5250FieldPaintEvent(int aId, @NotNull XI5250Field aField, Graphics aGr) {
-    super(aField);
-    ivId = aId;
-    ivGr = aGr;
-  }
+    public XI5250FieldPaintEvent(int aId, @NotNull XI5250Field aField, Graphics aGr) {
+        super(aField);
+        ivId = aId;
+        ivGr = aGr;
+    }
 
-  public int getID() {
-    return ivId;
-  }
+    public int getID() {
+        return ivId;
+    }
 
-  /**
-   * Returns the Graphics that can be used to paint.
-   *
-   * @return the Graphics that can be used to paint.
-   */
-  public Graphics getGraphics() {
-    return ivGr;
-  }
+    /**
+     * Returns the Graphics that can be used to paint.
+     *
+     * @return the Graphics that can be used to paint.
+     */
+    public Graphics getGraphics() {
+        return ivGr;
+    }
 
-  public XI5250Field getField() {
-    return (XI5250Field)getSource();
-  }
+    public XI5250Field getField() {
+        return (XI5250Field) getSource();
+    }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + "[" + cvIdDescr[ivId] + "," + getSource() + "]";
-  }
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + "[" + cvIdDescr[ivId] + "," + getSource() + "]";
+    }
 
 }

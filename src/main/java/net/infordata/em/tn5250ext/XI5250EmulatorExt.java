@@ -33,76 +33,77 @@ import java.util.Iterator;
 /**
  * THE 5250 EMULATOR extension.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250EmulatorExt extends XI5250Emulator implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private   boolean ivShowHints = true;
-  private   boolean ivHintOnActiveField = false;
+    private boolean ivShowHints = true;
+    private boolean ivHintOnActiveField = false;
 
-  final transient private @NotNull ArrayList<XI5250PanelsDispatcher>  ivDispatchers =
-      new ArrayList<>();
+    final transient private @NotNull ArrayList<XI5250PanelsDispatcher> ivDispatchers =
+            new ArrayList<>();
 
-  public static final String  SHOW_HINTS            = "showHints";
-  public static final String  HINT_ON_ACTIVE_FIELD  = "hintOnActiveField";
+    public static final String SHOW_HINTS = "showHints";
+    public static final String HINT_ON_ACTIVE_FIELD = "hintOnActiveField";
 
-  public XI5250EmulatorExt() {
-  }
-
-  protected synchronized void addDispatcher(XI5250PanelsDispatcher aDispatcher) {
-    if (!ivDispatchers.contains(aDispatcher))
-      ivDispatchers.add(aDispatcher);
-  }
-
-  protected synchronized void removeDispatcher(XI5250PanelsDispatcher aDispatcher) {
-    ivDispatchers.remove(aDispatcher);
-  }
-
-  protected synchronized void refreshHint() {
-    XI5250PanelsDispatcher disp;
-    XI5250PanelHandler     hndl;
-    for (Iterator<XI5250PanelsDispatcher> en = ivDispatchers.iterator(); en.hasNext(); ) {
-      disp = en.next();
-      hndl = disp.getCurrentPanelHandler();
-
-      if (hndl != null)
-        hndl.refreshHint();
+    public XI5250EmulatorExt() {
     }
-  }
 
-  /**
-   * Enables or disables the fields hints showing (default true).
-   * @param aFlag true to enable showing hints, false to disable.
-   */
-  public void setShowHints(boolean aFlag) {
-    if (ivShowHints == aFlag)
-      return;
+    protected synchronized void addDispatcher(XI5250PanelsDispatcher aDispatcher) {
+        if (!ivDispatchers.contains(aDispatcher))
+            ivDispatchers.add(aDispatcher);
+    }
 
-    boolean oldShowHints = ivShowHints;
-    ivShowHints = aFlag;
+    protected synchronized void removeDispatcher(XI5250PanelsDispatcher aDispatcher) {
+        ivDispatchers.remove(aDispatcher);
+    }
 
-    firePropertyChange(SHOW_HINTS, oldShowHints, ivShowHints);
-  }
+    protected synchronized void refreshHint() {
+        XI5250PanelsDispatcher disp;
+        XI5250PanelHandler hndl;
+        for (Iterator<XI5250PanelsDispatcher> en = ivDispatchers.iterator(); en.hasNext(); ) {
+            disp = en.next();
+            hndl = disp.getCurrentPanelHandler();
 
-  public boolean getShowHints() {
-    return ivShowHints;
-  }
+            if (hndl != null)
+                hndl.refreshHint();
+        }
+    }
 
-  public void setHintOnActiveField(boolean aFlag) {
-    if (ivHintOnActiveField == aFlag)
-      return;
+    /**
+     * Enables or disables the fields hints showing (default true).
+     *
+     * @param aFlag true to enable showing hints, false to disable.
+     */
+    public void setShowHints(boolean aFlag) {
+        if (ivShowHints == aFlag)
+            return;
 
-    boolean oldHintOnActiveField = ivHintOnActiveField;
-    ivHintOnActiveField = aFlag;
+        boolean oldShowHints = ivShowHints;
+        ivShowHints = aFlag;
 
-    firePropertyChange(HINT_ON_ACTIVE_FIELD,
-                       oldHintOnActiveField, ivHintOnActiveField);
-  }
+        firePropertyChange(SHOW_HINTS, oldShowHints, ivShowHints);
+    }
 
-  public boolean isHintOnActiveField() {
-    return ivHintOnActiveField;
-  }
+    public boolean getShowHints() {
+        return ivShowHints;
+    }
+
+    public void setHintOnActiveField(boolean aFlag) {
+        if (ivHintOnActiveField == aFlag)
+            return;
+
+        boolean oldHintOnActiveField = ivHintOnActiveField;
+        ivHintOnActiveField = aFlag;
+
+        firePropertyChange(HINT_ON_ACTIVE_FIELD,
+                oldHintOnActiveField, ivHintOnActiveField);
+    }
+
+    public boolean isHintOnActiveField() {
+        return ivHintOnActiveField;
+    }
 
 }

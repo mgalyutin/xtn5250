@@ -31,54 +31,54 @@ import java.util.Iterator;
 /**
  * 5250 write to display command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIWriteToDisplayCmd extends XICCCmd {
 
-  protected XI5250OrdList ivOrdList;
+    protected XI5250OrdList ivOrdList;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    readCC(inStream);
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        readCC(inStream);
 
-    ivOrdList = ivEmulator.createOrdList(ivEmulator);
-    ivOrdList.readFrom5250Stream(inStream);
-  }
-
-  @Override
-  protected void execute() {
-    executeCC1();
-
-    // if format table is going to be altered then enter NORMAL_LOCKED state
-    if (ivOrdList.isOrderPresent(XI5250Emulator.ORD_SF) ||
-        ivOrdList.isOrderPresent(XI5250Emulator.ORD_SOH)) {
-      ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
+        ivOrdList = ivEmulator.createOrdList(ivEmulator);
+        ivOrdList.readFrom5250Stream(inStream);
     }
 
-    ivOrdList.execute();
+    @Override
+    protected void execute() {
+        executeCC1();
 
-    if (ivEmulator.getState() != XI5250Emulator.ST_NORMAL_UNLOCKED) {
-      //if (!ivOrdList.isOrderPresent(XI5250Emulator.ORD_IC))
-      if (!ivEmulator.ivCmdList.ivICOrderExecuted) {
-        // search first not bypass field
-        XI5250Field field;
-        boolean     found = false;
-        for (Iterator<XI5250Field> e = ivEmulator.getFields().iterator(); e.hasNext(); ) {
-          field = e.next();
-          if (!field.isBypassField()) {
-            ivEmulator.setCursorPos(field.getCol(), field.getRow());
-            found = true;
-            break;
-          }
+        // if format table is going to be altered then enter NORMAL_LOCKED state
+        if (ivOrdList.isOrderPresent(XI5250Emulator.ORD_SF) ||
+                ivOrdList.isOrderPresent(XI5250Emulator.ORD_SOH)) {
+            ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
         }
 
-        if (!found)
-          ivEmulator.setCursorPos(0, 0);
-      }
-    }
+        ivOrdList.execute();
 
-    executeCC2();
-  }
+        if (ivEmulator.getState() != XI5250Emulator.ST_NORMAL_UNLOCKED) {
+            //if (!ivOrdList.isOrderPresent(XI5250Emulator.ORD_IC))
+            if (!ivEmulator.ivCmdList.ivICOrderExecuted) {
+                // search first not bypass field
+                XI5250Field field;
+                boolean found = false;
+                for (Iterator<XI5250Field> e = ivEmulator.getFields().iterator(); e.hasNext(); ) {
+                    field = e.next();
+                    if (!field.isBypassField()) {
+                        ivEmulator.setCursorPos(field.getCol(), field.getRow());
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    ivEmulator.setCursorPos(0, 0);
+            }
+        }
+
+        executeCC2();
+    }
 
 }

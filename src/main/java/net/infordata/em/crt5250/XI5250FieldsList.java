@@ -36,261 +36,267 @@ import java.util.List;
 /**
  * It is used by XI5250Crt to handle the XI5250Field collection.
  *
- * @see    XI5250Crt
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
+ * @see XI5250Crt
  */
 public class XI5250FieldsList implements XI5250BaseField, Cloneable {
-  private final XI5250Crt   ivCrt;
-  private ArrayList<XI5250Field> ivFields = new ArrayList<>(40);
-  private @NotNull List<XI5250Field> ivROFields = Collections.unmodifiableList(ivFields);
+    private final XI5250Crt ivCrt;
+    private ArrayList<XI5250Field> ivFields = new ArrayList<>(40);
+    private @NotNull List<XI5250Field> ivROFields = Collections.unmodifiableList(ivFields);
 
-  public XI5250FieldsList(XI5250Crt aCrt) {
-    ivCrt = aCrt;
-  }
-
-  /**
-   * Returns a cloned XI5250FieldList
-   * @return  a cloned XI5250FieldList
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public @NotNull Object clone() {
-    try {
-      XI5250FieldsList aClone = (XI5250FieldsList)super.clone();
-      // non clono singoli campi perch� vengono sempre ricreati da 0 e mai modificati
-      aClone.ivFields = (ArrayList<XI5250Field>)ivFields.clone();
-      aClone.ivROFields = Collections.unmodifiableList(aClone.ivFields);
-      return aClone;
+    public XI5250FieldsList(XI5250Crt aCrt) {
+        ivCrt = aCrt;
     }
-    catch (CloneNotSupportedException e) {
-      throw new InternalError();
-    }
-  }
 
-  /**
-   * Calls init for each field it owns.
-   * @see    XI5250Field#init
-   */
-  public void init() {
-    for (XI5250Field ivField : ivFields) {
-      ivField.init();
-    }
-  }
-
-  /**
-   * Calls removeNotify for each field it owns.
-   */
-  public void removeNotify() {
-    for (XI5250Field ivField : ivFields) {
-      ivField.removeNotify();
-    }
-  }
-
-  /**
-   * Calls saveTo for each field it owns.
-   * @param aSaver saver where to save the list of fields.
-   * @see    XI5250Field#saveTo
-   */
-  public void saveTo(@NotNull XI5250FieldSaver aSaver) throws IOException {
-    for (XI5250Field ivField : ivFields) {
-      ivField.saveTo(aSaver);
-    }
-  }
-
-  /**
-   * Calls re-sized for each field it owns.
-   * @see    XI5250Field#resized
-   */
-  public void resized() {
-    for (XI5250Field ivField : ivFields) {
-      ivField.resized();
-    }
-  }
-
-  /**
-   * Lets fields paint themselves.
-   * @param g graphic where to paint the fields list.
-   */
-  public void paint(@NotNull Graphics g) {
-    XI5250Field field;
-    Rectangle   clip = g.getClipBounds();
-
-    for (XI5250Field ivField : ivFields) {
-      field = ivField;
-      Rectangle fr = field.getBoundingRect();
-
-      if (clip.intersects(fr)) {
-        Graphics fg = g.create(fr.x, fr.y, fr.width, fr.height);
+    /**
+     * Returns a cloned XI5250FieldList
+     *
+     * @return a cloned XI5250FieldList
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Object clone() {
         try {
-          field.paint(fg);
-        } finally {
-          fg.dispose();
+            XI5250FieldsList aClone = (XI5250FieldsList) super.clone();
+            // non clono singoli campi perch� vengono sempre ricreati da 0 e mai modificati
+            aClone.ivFields = (ArrayList<XI5250Field>) ivFields.clone();
+            aClone.ivROFields = Collections.unmodifiableList(aClone.ivFields);
+            return aClone;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
         }
-      }
-    }
-  }
-
-  /**
-   * Ricerca campo che inizia da tale posizione, se non lo trova
-   * ritorna un numero negativo che trasformandolo con la formula
-   * idx = (-idx) - 1 indica la posizione nel vettore dove dovrebbe
-   * essere inserito
-   *
-   * @param aCol column from where to search the field
-   * @param aRow row from where to search the field
-   * @return the linear position of the field
-   */
-  private int searchField(int aCol, int aRow) {
-    int kk  = ivCrt.toLinearPos(aCol, aRow);
-    int min = 0;
-    int max = ivFields.size();
-    int med = (max + min) / 2;
-    XI5250Field field;
-    // ricerca binaria
-    while ((med < ivFields.size()) && (min <= max)) {
-      field = ivFields.get(med);
-      if (field.getSortKey() == kk)
-        return med;
-      else if (field.getSortKey() > kk)
-        max = med - 1;
-      else
-        min = med + 1;
-
-      med = (max + min) / 2;
-    }
-    // non esiste quindi
-    return -(min + 1);
-  }
-
-  /**
-   * Adds a field to the fields collection.
-   * @param aField field to add to the list.
-   */
-  public void addField(@NotNull XI5250Field aField) {
-    // presente in quella posizione, oppure overlapping,
-    // viene sostituito il campo
-    XI5250Field field = fieldFromPos(aField.getCol(), aField.getRow());
-    if (field != null) {
-      ivFields.set(fromFieldToIdx(field), aField);
-    }
-    else {
-      int idx = searchField(aField.getCol(), aField.getRow());
-      idx = (-idx) - 1;
-      ivFields.add(idx, aField);
-    }
-  }
-
-  /**
-   * Campo presente in tale posizione oppure precedente
-   * @param aCol the column from where to search the field
-   * @param aRow the row from where to search the field
-   * @return the field found before the given position
-   */
-  private @Nullable XI5250Field prevFieldFromPosInternal(int aCol, int aRow) {
-    int idx = searchField(aCol, aRow);
-    if (idx >= 0)
-      return ivFields.get(idx);
-
-    idx = (-idx) - 1;
-
-    if (idx == 0)
-      return null;
-
-    // accedo al precedente
-    return ivFields.get(idx - 1);
-  }
-
-  /**
-   * Ritorna indice del campo
-   * @param aField field to get the index for
-   * @return the index of the field in the list.
-   */
-  protected int fromFieldToIdx(XI5250Field aField) {
-    XI5250Field field;
-    int i = 0;
-    for (Iterator<XI5250Field> e = ivFields.iterator(); e.hasNext(); i++) {
-      field = e.next();
-      if (field == aField)
-        return i;
-    }
-    return -1;
-  }
-
-  /**
-   * Returns the field present in the given position, null if none.
-   * @param aCol column to get the field from
-   * @param aRow row to get the field from
-   * @return the field present in the given position, null if none.
-   */
-  public @Nullable XI5250Field fieldFromPos(int aCol, int aRow) {
-    // accedo al precedente
-    XI5250Field field = prevFieldFromPosInternal(aCol, aRow);
-    if (field == null)
-      return null;
-
-    int kk  = ivCrt.toLinearPos(aCol, aRow);
-    int fk  = field.getSortKey();
-    // verifico che posizione sia sul campo
-    if ((kk >= fk) && (kk < (fk + field.getLength())))
-      return field;
-    else
-      return null;
-  }
-
-  public @Nullable XI5250Field nextFieldFromPos(int aCol, int aRow) {
-    if (ivFields.isEmpty())
-      return null;
-    // accedo al precedente
-    XI5250Field field = prevFieldFromPosInternal(aCol, aRow);
-    if (field == null || field == ivFields.get(ivFields.size() - 1))
-      return ((!ivFields.isEmpty()) ? ivFields.get(0) :
-                                      null);
-
-    int idx = fromFieldToIdx(field);
-    return ivFields.get(idx + 1);
-  }
-
-  public @Nullable XI5250Field prevFieldFromPos(int aCol, int aRow) {
-    if (ivFields.isEmpty())
-      return null;
-    XI5250Field field = fieldFromPos(aCol, aRow);
-    // caso cursore sul campo
-    if (field != null) {
-      if (field == ivFields.get(0))
-        return ivFields.get(ivFields.size() - 1);
-
-      int idx = fromFieldToIdx(field);
-      idx = (idx == 0) ? (ivFields.size() - 1) : idx - 1;
-      return ivFields.get(idx);
     }
 
-    // caso cursore non sul campo
-    // accedo al precedente
-    field = prevFieldFromPosInternal(aCol, aRow);
-    if (field == null)
-      return ((!ivFields.isEmpty()) ? ivFields.get(ivFields.size() - 1) : null);
-
-    return field;
-  }
-
-  public @NotNull List<XI5250Field> getFields() {
-    return ivROFields;
-  }
-
-  /**
-   * Returns the field at the given index (null if none).
-   * Fields enumeration is based on their linear buffer position.
-   *
-   * @param idx index of the field to get
-   * @return the field at the given index (null if none).
-   */
-  public @Nullable XI5250Field getField(int idx) {
-    try {
-      return ivFields.get(idx);
+    /**
+     * Calls init for each field it owns.
+     *
+     * @see XI5250Field#init
+     */
+    public void init() {
+        for (XI5250Field ivField : ivFields) {
+            ivField.init();
+        }
     }
-    catch (ArrayIndexOutOfBoundsException ex) {
-      return null;
+
+    /**
+     * Calls removeNotify for each field it owns.
+     */
+    public void removeNotify() {
+        for (XI5250Field ivField : ivFields) {
+            ivField.removeNotify();
+        }
     }
-  }
+
+    /**
+     * Calls saveTo for each field it owns.
+     *
+     * @param aSaver saver where to save the list of fields.
+     * @see XI5250Field#saveTo
+     */
+    public void saveTo(@NotNull XI5250FieldSaver aSaver) throws IOException {
+        for (XI5250Field ivField : ivFields) {
+            ivField.saveTo(aSaver);
+        }
+    }
+
+    /**
+     * Calls re-sized for each field it owns.
+     *
+     * @see XI5250Field#resized
+     */
+    public void resized() {
+        for (XI5250Field ivField : ivFields) {
+            ivField.resized();
+        }
+    }
+
+    /**
+     * Lets fields paint themselves.
+     *
+     * @param g graphic where to paint the fields list.
+     */
+    public void paint(@NotNull Graphics g) {
+        XI5250Field field;
+        Rectangle clip = g.getClipBounds();
+
+        for (XI5250Field ivField : ivFields) {
+            field = ivField;
+            Rectangle fr = field.getBoundingRect();
+
+            if (clip.intersects(fr)) {
+                Graphics fg = g.create(fr.x, fr.y, fr.width, fr.height);
+                try {
+                    field.paint(fg);
+                } finally {
+                    fg.dispose();
+                }
+            }
+        }
+    }
+
+    /**
+     * Ricerca campo che inizia da tale posizione, se non lo trova
+     * ritorna un numero negativo che trasformandolo con la formula
+     * idx = (-idx) - 1 indica la posizione nel vettore dove dovrebbe
+     * essere inserito
+     *
+     * @param aCol column from where to search the field
+     * @param aRow row from where to search the field
+     * @return the linear position of the field
+     */
+    private int searchField(int aCol, int aRow) {
+        int kk = ivCrt.toLinearPos(aCol, aRow);
+        int min = 0;
+        int max = ivFields.size();
+        int med = (max + min) / 2;
+        XI5250Field field;
+        // ricerca binaria
+        while ((med < ivFields.size()) && (min <= max)) {
+            field = ivFields.get(med);
+            if (field.getSortKey() == kk)
+                return med;
+            else if (field.getSortKey() > kk)
+                max = med - 1;
+            else
+                min = med + 1;
+
+            med = (max + min) / 2;
+        }
+        // non esiste quindi
+        return -(min + 1);
+    }
+
+    /**
+     * Adds a field to the fields collection.
+     *
+     * @param aField field to add to the list.
+     */
+    public void addField(@NotNull XI5250Field aField) {
+        // presente in quella posizione, oppure overlapping,
+        // viene sostituito il campo
+        XI5250Field field = fieldFromPos(aField.getCol(), aField.getRow());
+        if (field != null) {
+            ivFields.set(fromFieldToIdx(field), aField);
+        } else {
+            int idx = searchField(aField.getCol(), aField.getRow());
+            idx = (-idx) - 1;
+            ivFields.add(idx, aField);
+        }
+    }
+
+    /**
+     * Campo presente in tale posizione oppure precedente
+     *
+     * @param aCol the column from where to search the field
+     * @param aRow the row from where to search the field
+     * @return the field found before the given position
+     */
+    private @Nullable XI5250Field prevFieldFromPosInternal(int aCol, int aRow) {
+        int idx = searchField(aCol, aRow);
+        if (idx >= 0)
+            return ivFields.get(idx);
+
+        idx = (-idx) - 1;
+
+        if (idx == 0)
+            return null;
+
+        // accedo al precedente
+        return ivFields.get(idx - 1);
+    }
+
+    /**
+     * Ritorna indice del campo
+     *
+     * @param aField field to get the index for
+     * @return the index of the field in the list.
+     */
+    protected int fromFieldToIdx(XI5250Field aField) {
+        XI5250Field field;
+        int i = 0;
+        for (Iterator<XI5250Field> e = ivFields.iterator(); e.hasNext(); i++) {
+            field = e.next();
+            if (field == aField)
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the field present in the given position, null if none.
+     *
+     * @param aCol column to get the field from
+     * @param aRow row to get the field from
+     * @return the field present in the given position, null if none.
+     */
+    public @Nullable XI5250Field fieldFromPos(int aCol, int aRow) {
+        // accedo al precedente
+        XI5250Field field = prevFieldFromPosInternal(aCol, aRow);
+        if (field == null)
+            return null;
+
+        int kk = ivCrt.toLinearPos(aCol, aRow);
+        int fk = field.getSortKey();
+        // verifico che posizione sia sul campo
+        if ((kk >= fk) && (kk < (fk + field.getLength())))
+            return field;
+        else
+            return null;
+    }
+
+    public @Nullable XI5250Field nextFieldFromPos(int aCol, int aRow) {
+        if (ivFields.isEmpty())
+            return null;
+        // accedo al precedente
+        XI5250Field field = prevFieldFromPosInternal(aCol, aRow);
+        if (field == null || field == ivFields.get(ivFields.size() - 1))
+            return ((!ivFields.isEmpty()) ? ivFields.get(0) :
+                    null);
+
+        int idx = fromFieldToIdx(field);
+        return ivFields.get(idx + 1);
+    }
+
+    public @Nullable XI5250Field prevFieldFromPos(int aCol, int aRow) {
+        if (ivFields.isEmpty())
+            return null;
+        XI5250Field field = fieldFromPos(aCol, aRow);
+        // caso cursore sul campo
+        if (field != null) {
+            if (field == ivFields.get(0))
+                return ivFields.get(ivFields.size() - 1);
+
+            int idx = fromFieldToIdx(field);
+            idx = (idx == 0) ? (ivFields.size() - 1) : idx - 1;
+            return ivFields.get(idx);
+        }
+
+        // caso cursore non sul campo
+        // accedo al precedente
+        field = prevFieldFromPosInternal(aCol, aRow);
+        if (field == null)
+            return ((!ivFields.isEmpty()) ? ivFields.get(ivFields.size() - 1) : null);
+
+        return field;
+    }
+
+    public @NotNull List<XI5250Field> getFields() {
+        return ivROFields;
+    }
+
+    /**
+     * Returns the field at the given index (null if none).
+     * Fields enumeration is based on their linear buffer position.
+     *
+     * @param idx index of the field to get
+     * @return the field at the given index (null if none).
+     */
+    public @Nullable XI5250Field getField(int idx) {
+        try {
+            return ivFields.get(idx);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            return null;
+        }
+    }
 
 }

@@ -37,260 +37,258 @@ import java.util.ResourceBundle;
 
 public class XI5250Frame extends XI5250CrtFrame {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  // images
-  private static final @NotNull XIImagesBdl cvImagesBdl =
-      net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
+    // images
+    private static final @NotNull XIImagesBdl cvImagesBdl =
+            net.infordata.em.tn5250.XIImagesBdl.getImagesBdl();
 
-  private static final ResourceBundle cvRes =
-      ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
+    private static final ResourceBundle cvRes =
+            ResourceBundle.getBundle("net.infordata.em.tn5250.resources.Res");
 
-  private final String ivTitle;
+    private final String ivTitle;
 
-  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt) {
-    super(aTitle, aCrt);
-    ivTitle = aTitle;
-    init(aCrt);
-  }
+    public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt) {
+        super(aTitle, aCrt);
+        ivTitle = aTitle;
+        init(aCrt);
+    }
 
-  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt, boolean dspToolBar, boolean dspMenuBar) {
-    super(aTitle, aCrt, dspToolBar, dspMenuBar);
-    ivTitle = aTitle;
-    init(aCrt);
-  }
+    public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt, boolean dspToolBar, boolean dspMenuBar) {
+        super(aTitle, aCrt, dspToolBar, dspMenuBar);
+        ivTitle = aTitle;
+        init(aCrt);
+    }
 
-  public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt,
-                     boolean sizeControlledFrame, boolean dspToolBar, boolean dspMenuBar) {
-    super(aTitle, aCrt, sizeControlledFrame, dspToolBar, dspMenuBar);
-    ivTitle = aTitle;
-    init(aCrt);
-  }
-  
-  private void init(@NotNull XI5250Emulator aCrt) {
-    if (aCrt.isActive())
-      setTitle(ivTitle + " - " + aCrt.getHost());
-    aCrt.addEmulatorListener(new XI5250EmulatorAdapter() {
-      @Override
-      public void connected(@NotNull XI5250EmulatorEvent e) {
-        setTitle(ivTitle + " - " + e.get5250Emulator().getHost());
-      }
+    public XI5250Frame(String aTitle, @NotNull XI5250Emulator aCrt,
+                       boolean sizeControlledFrame, boolean dspToolBar, boolean dspMenuBar) {
+        super(aTitle, aCrt, sizeControlledFrame, dspToolBar, dspMenuBar);
+        ivTitle = aTitle;
+        init(aCrt);
+    }
 
-      @Override
-      public void disconnected(XI5250EmulatorEvent e) {
-        setTitle(ivTitle);
-      }
-    });
-  }
+    private void init(@NotNull XI5250Emulator aCrt) {
+        if (aCrt.isActive())
+            setTitle(ivTitle + " - " + aCrt.getHost());
+        aCrt.addEmulatorListener(new XI5250EmulatorAdapter() {
+            @Override
+            public void connected(@NotNull XI5250EmulatorEvent e) {
+                setTitle(ivTitle + " - " + e.get5250Emulator().getHost());
+            }
 
-  @Override
-  protected @NotNull XI5250CrtCtrl createController(XI5250Crt crt) {
-    return new XI5250EmulatorCtrl((XI5250Emulator)crt);
-  }
+            @Override
+            public void disconnected(XI5250EmulatorEvent e) {
+                setTitle(ivTitle);
+            }
+        });
+    }
 
-  protected final XI5250EmulatorCtrl getEmulatorCtrl() {
-    return (XI5250EmulatorCtrl)getCrtCtrl();
-  }
+    @Override
+    protected @NotNull XI5250CrtCtrl createController(XI5250Crt crt) {
+        return new XI5250EmulatorCtrl((XI5250Emulator) crt);
+    }
 
-  public final XI5250Emulator getEmulator() {
-    return getEmulatorCtrl().getEmulator();
-  }
+    protected final XI5250EmulatorCtrl getEmulatorCtrl() {
+        return (XI5250EmulatorCtrl) getCrtCtrl();
+    }
 
-  @Override
-  protected void processExitCmd() {
-    if (getEmulator().isActive()) {
-      //otherwise a dead-lock may occur !!
-      SwingUtilities.invokeLater(() -> {
-        int ret = JOptionPane.showConfirmDialog(
-                     XI5250Frame.this,
-                     cvRes.getString("TXT_ConfirmExit"),
-                     "", JOptionPane.YES_NO_OPTION);
-        if (ret != JOptionPane.NO_OPTION) {
-          setVisible(false);
-          dispose();
+    public final XI5250Emulator getEmulator() {
+        return getEmulatorCtrl().getEmulator();
+    }
+
+    @Override
+    protected void processExitCmd() {
+        if (getEmulator().isActive()) {
+            //otherwise a dead-lock may occur !!
+            SwingUtilities.invokeLater(() -> {
+                int ret = JOptionPane.showConfirmDialog(
+                        XI5250Frame.this,
+                        cvRes.getString("TXT_ConfirmExit"),
+                        "", JOptionPane.YES_NO_OPTION);
+                if (ret != JOptionPane.NO_OPTION) {
+                    setVisible(false);
+                    dispose();
+                }
+            });
+        } else {
+            setVisible(false);
+            dispose();
         }
-      });
-    }
-    else {
-      setVisible(false);
-      dispose();
-    }
-  }
-
-  @Override
-  protected void processWindowEvent(@NotNull WindowEvent e) {
-    super.processWindowEvent(e);
-    switch(e.getID()) {
-      case WindowEvent.WINDOW_OPENED:
-        if (getEmulator().getHost() == null)
-          getCommandMgr().dispatchCommand(XI5250EmulatorCtrl.CONNECT_CMD);
-        break;
-    }
-  }
-
-  @Override
-  protected @NotNull JMenuBar createMenuBar() {
-    String str;
-
-    str = cvRes.getString("TXT_Communications");
-    JMenu commMenu = new JMenu(XIUtil.removeMnemonics(str));
-    commMenu.setMnemonic(XIUtil.getMnemonic(str));
-    {
-      JMenuItem connItem =
-          new JMenuItem(cvRes.getString("TXT_Connect"));
-      JMenuItem disconnItem =
-          new JMenuItem(cvRes.getString("TXT_Disconnect"));
-      JMenuItem aboutItem =
-          new JMenuItem(cvRes.getString("TXT_About"));
-      JMenuItem exitItem =
-          new JMenuItem(cvRes.getString("TXT_Exit"));
-      exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,
-                                                     ActionEvent.ALT_MASK));
-
-      commMenu.add(connItem);
-      commMenu.add(disconnItem);
-      commMenu.addSeparator();
-      commMenu.add(aboutItem);
-      commMenu.addSeparator();
-      commMenu.add(exitItem);
-
-      getCommandMgr().handleCommand(connItem,
-                                    XI5250EmulatorCtrl.CONNECT_CMD);
-      getCommandMgr().handleCommand(disconnItem,
-                                    XI5250EmulatorCtrl.DISCONNECT_CMD);
-      getCommandMgr().handleCommand(aboutItem,
-                                    XI5250EmulatorCtrl.ABOUT_CMD);
-      getCommandMgr().handleCommand(exitItem,
-                                    EXIT_CMD);
     }
 
-    str = cvRes.getString("TXT_Edit");
-    JMenu editMenu = new JMenu(XIUtil.removeMnemonics(str));
-    editMenu.setMnemonic(XIUtil.getMnemonic(str));
-    {
-      JMenuItem copyItem =
-          new JMenuItem(cvRes.getString("TXT_Copy"));
-      JMenuItem pasteItem =
-          new JMenuItem(cvRes.getString("TXT_Paste"));
-      JMenuItem snapShotItem =
-          new JMenuItem(cvRes.getString("TXT_SnapShot"));
-      JMenuItem printItem =
-        new JMenuItem(cvRes.getString("TXT_Print"));
-
-      editMenu.add(copyItem);
-      editMenu.add(pasteItem);
-      editMenu.addSeparator();
-      editMenu.add(snapShotItem);
-      editMenu.addSeparator();
-      editMenu.add(printItem);
-
-      getCommandMgr().handleCommand(copyItem,
-                                    XI5250EmulatorCtrl.COPY_CMD);
-      getCommandMgr().handleCommand(pasteItem,
-                                    XI5250EmulatorCtrl.PASTE_CMD);
-      getCommandMgr().handleCommand(snapShotItem,
-                                    XI5250EmulatorCtrl.SNAPSHOT_CMD);
-      getCommandMgr().handleCommand(printItem,
-                                    XI5250EmulatorCtrl.PRINT_CMD);
+    @Override
+    protected void processWindowEvent(@NotNull WindowEvent e) {
+        super.processWindowEvent(e);
+        switch (e.getID()) {
+            case WindowEvent.WINDOW_OPENED:
+                if (getEmulator().getHost() == null)
+                    getCommandMgr().dispatchCommand(XI5250EmulatorCtrl.CONNECT_CMD);
+                break;
+        }
     }
 
-    str = cvRes.getString("TXT_Options");
-    JMenu optionsMenu = new JMenu(XIUtil.removeMnemonics(str));
-    optionsMenu.setMnemonic(XIUtil.getMnemonic(str));
-    {
-      JCheckBoxMenuItem switch3DfxItem =
-          new JCheckBoxMenuItem(cvRes.getString("TXT_3dFx"));
-      JCheckBoxMenuItem referenceCursorItem =
-          new JCheckBoxMenuItem(cvRes.getString("TXT_RefCursor"));
+    @Override
+    protected @NotNull JMenuBar createMenuBar() {
+        String str;
 
-      optionsMenu.add(switch3DfxItem);
-      optionsMenu.add(referenceCursorItem);
+        str = cvRes.getString("TXT_Communications");
+        JMenu commMenu = new JMenu(XIUtil.removeMnemonics(str));
+        commMenu.setMnemonic(XIUtil.getMnemonic(str));
+        {
+            JMenuItem connItem =
+                    new JMenuItem(cvRes.getString("TXT_Connect"));
+            JMenuItem disconnItem =
+                    new JMenuItem(cvRes.getString("TXT_Disconnect"));
+            JMenuItem aboutItem =
+                    new JMenuItem(cvRes.getString("TXT_About"));
+            JMenuItem exitItem =
+                    new JMenuItem(cvRes.getString("TXT_Exit"));
+            exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4,
+                    ActionEvent.ALT_MASK));
 
-      getCommandMgr().handleCommand(switch3DfxItem,
-                                    XI5250EmulatorCtrl.SWITCH_3DFX_CMD);
-      getCommandMgr().handleCommand(referenceCursorItem,
-                                    XI5250EmulatorCtrl.REFERENCE_CURSOR_CMD);
+            commMenu.add(connItem);
+            commMenu.add(disconnItem);
+            commMenu.addSeparator();
+            commMenu.add(aboutItem);
+            commMenu.addSeparator();
+            commMenu.add(exitItem);
+
+            getCommandMgr().handleCommand(connItem,
+                    XI5250EmulatorCtrl.CONNECT_CMD);
+            getCommandMgr().handleCommand(disconnItem,
+                    XI5250EmulatorCtrl.DISCONNECT_CMD);
+            getCommandMgr().handleCommand(aboutItem,
+                    XI5250EmulatorCtrl.ABOUT_CMD);
+            getCommandMgr().handleCommand(exitItem,
+                    EXIT_CMD);
+        }
+
+        str = cvRes.getString("TXT_Edit");
+        JMenu editMenu = new JMenu(XIUtil.removeMnemonics(str));
+        editMenu.setMnemonic(XIUtil.getMnemonic(str));
+        {
+            JMenuItem copyItem =
+                    new JMenuItem(cvRes.getString("TXT_Copy"));
+            JMenuItem pasteItem =
+                    new JMenuItem(cvRes.getString("TXT_Paste"));
+            JMenuItem snapShotItem =
+                    new JMenuItem(cvRes.getString("TXT_SnapShot"));
+            JMenuItem printItem =
+                    new JMenuItem(cvRes.getString("TXT_Print"));
+
+            editMenu.add(copyItem);
+            editMenu.add(pasteItem);
+            editMenu.addSeparator();
+            editMenu.add(snapShotItem);
+            editMenu.addSeparator();
+            editMenu.add(printItem);
+
+            getCommandMgr().handleCommand(copyItem,
+                    XI5250EmulatorCtrl.COPY_CMD);
+            getCommandMgr().handleCommand(pasteItem,
+                    XI5250EmulatorCtrl.PASTE_CMD);
+            getCommandMgr().handleCommand(snapShotItem,
+                    XI5250EmulatorCtrl.SNAPSHOT_CMD);
+            getCommandMgr().handleCommand(printItem,
+                    XI5250EmulatorCtrl.PRINT_CMD);
+        }
+
+        str = cvRes.getString("TXT_Options");
+        JMenu optionsMenu = new JMenu(XIUtil.removeMnemonics(str));
+        optionsMenu.setMnemonic(XIUtil.getMnemonic(str));
+        {
+            JCheckBoxMenuItem switch3DfxItem =
+                    new JCheckBoxMenuItem(cvRes.getString("TXT_3dFx"));
+            JCheckBoxMenuItem referenceCursorItem =
+                    new JCheckBoxMenuItem(cvRes.getString("TXT_RefCursor"));
+
+            optionsMenu.add(switch3DfxItem);
+            optionsMenu.add(referenceCursorItem);
+
+            getCommandMgr().handleCommand(switch3DfxItem,
+                    XI5250EmulatorCtrl.SWITCH_3DFX_CMD);
+            getCommandMgr().handleCommand(referenceCursorItem,
+                    XI5250EmulatorCtrl.REFERENCE_CURSOR_CMD);
+        }
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(commMenu);
+        menuBar.add(editMenu);
+        menuBar.add(optionsMenu);
+        return menuBar;
     }
 
-    JMenuBar menuBar = new JMenuBar();
-    menuBar.add(commMenu);
-    menuBar.add(editMenu);
-    menuBar.add(optionsMenu);
-    return menuBar;
-  }
+    /**
+     * Inserisce nella tool-bar i bottoni di default.
+     *
+     * @return created toolbar.
+     */
+    @Override
+    protected @NotNull JToolBar createToolBar() {
+        // bottoni della tool-bar
+        AbstractButton[] buttons = new AbstractButton[]{
+                new JButton(cvImagesBdl.getIcon("Connect")),
+                new JButton(cvImagesBdl.getIcon("Disconnect")),
+                null,
+                new JButton(cvImagesBdl.getIcon("Copy")),
+                new JButton(cvImagesBdl.getIcon("Paste")),
+                null,
+                new JButton(cvImagesBdl.getIcon("SnapShot")),
+                new JButton(cvImagesBdl.getIcon("Print")),
+                null,
+                new JToggleButton(cvImagesBdl.getIcon("3dFx")),
+                new JToggleButton(cvImagesBdl.getIcon("RefCursor")),
+        };
+        // action commands associati con i bottoni della tool-bar.
+        String[] buttonsActCmd = new String[]{
+                XI5250EmulatorCtrl.CONNECT_CMD,
+                XI5250EmulatorCtrl.DISCONNECT_CMD,
+                null,
+                XI5250EmulatorCtrl.COPY_CMD,
+                XI5250EmulatorCtrl.PASTE_CMD,
+                null,
+                XI5250EmulatorCtrl.SNAPSHOT_CMD,
+                XI5250EmulatorCtrl.PRINT_CMD,
+                null,
+                XI5250EmulatorCtrl.SWITCH_3DFX_CMD,
+                XI5250EmulatorCtrl.REFERENCE_CURSOR_CMD,
+        };
+        // Hint associati ad i vari bottoni.
+        String[] buttonHints = new String[]{
+                cvRes.getString("TXT_Connect"),
+                cvRes.getString("TXT_Disconnect"),
+                null,
+                cvRes.getString("TXT_Copy"),
+                cvRes.getString("TXT_Paste"),
+                null,
+                cvRes.getString("TXT_SnapShot"),
+                cvRes.getString("TXT_Print"),
+                null,
+                cvRes.getString("TXT_3dFx"),
+                cvRes.getString("TXT_RefCursor"),
+        };
 
-  /**
-   * Inserisce nella tool-bar i bottoni di default.
-   *
-   * @return created toolbar.
-   */
-  @Override
-  protected @NotNull JToolBar createToolBar() {
-    // bottoni della tool-bar
-    AbstractButton[] buttons = new AbstractButton[] {
-      new JButton(cvImagesBdl.getIcon("Connect")),
-      new JButton(cvImagesBdl.getIcon("Disconnect")),
-      null,
-      new JButton(cvImagesBdl.getIcon("Copy")),
-      new JButton(cvImagesBdl.getIcon("Paste")),
-      null,
-      new JButton(cvImagesBdl.getIcon("SnapShot")),
-      new JButton(cvImagesBdl.getIcon("Print")),
-      null,
-      new JToggleButton(cvImagesBdl.getIcon("3dFx")),
-      new JToggleButton(cvImagesBdl.getIcon("RefCursor")),
-    };
-    // action commands associati con i bottoni della tool-bar.
-    String[]   buttonsActCmd = new String[] {
-      XI5250EmulatorCtrl.CONNECT_CMD,
-      XI5250EmulatorCtrl.DISCONNECT_CMD,
-      null,
-      XI5250EmulatorCtrl.COPY_CMD,
-      XI5250EmulatorCtrl.PASTE_CMD,
-      null,
-      XI5250EmulatorCtrl.SNAPSHOT_CMD,
-      XI5250EmulatorCtrl.PRINT_CMD,
-      null,
-      XI5250EmulatorCtrl.SWITCH_3DFX_CMD,
-      XI5250EmulatorCtrl.REFERENCE_CURSOR_CMD,
-    };
-    // Hint associati ad i vari bottoni.
-    String[] buttonHints = new String[] {
-      cvRes.getString("TXT_Connect"),
-      cvRes.getString("TXT_Disconnect"),
-      null,
-      cvRes.getString("TXT_Copy"),
-      cvRes.getString("TXT_Paste"),
-      null,
-      cvRes.getString("TXT_SnapShot"),
-      cvRes.getString("TXT_Print"),
-      null,
-      cvRes.getString("TXT_3dFx"),
-      cvRes.getString("TXT_RefCursor"),
-    };
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
 
-    JToolBar toolBar = new JToolBar();
-    toolBar.setFloatable(false);
+        Dimension size = new Dimension(26, 26);
 
-    Dimension size = new Dimension(26, 26);
+        for (int i = 0; i < buttons.length; i++) {
+            if (buttons[i] != null) {
+                AbstractButton button = buttons[i];
+                toolBar.add(button);
+                button.setToolTipText(buttonHints[i]);
+                button.setMinimumSize(size);
+                button.setPreferredSize(size);
+                button.setMaximumSize(size);
+                button.setRequestFocusEnabled(false);
+                getCommandMgr().handleCommand(button, buttonsActCmd[i]);
+            } else
+                toolBar.addSeparator();
+        }
 
-    for (int i = 0; i < buttons.length; i++) {
-      if (buttons[i] != null) {
-        AbstractButton button = buttons[i];
-        toolBar.add(button);
-        button.setToolTipText(buttonHints[i]);
-        button.setMinimumSize(size);
-        button.setPreferredSize(size);
-        button.setMaximumSize(size);
-        button.setRequestFocusEnabled(false);
-        getCommandMgr().handleCommand(button, buttonsActCmd[i]);
-      }
-      else
-        toolBar.addSeparator();
+        return toolBar;
     }
-
-    return toolBar;
-  }
 
 }
 

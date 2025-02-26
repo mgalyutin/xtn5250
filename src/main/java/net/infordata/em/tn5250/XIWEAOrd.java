@@ -30,34 +30,34 @@ import java.io.InputStream;
 /**
  * WEA - Write extended attribute
  * TODO
- * 
+ * <p>
  * see: http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.11?DT=19950629163252
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIWEAOrd extends XI5250Ord {
 
-  protected byte ivAttributeType;
-  protected byte ivAttribute;
+    protected byte ivAttributeType;
+    protected byte ivAttribute;
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream)
-      throws IOException, XI5250Exception {
-    // If not in enhanced mode ...
-    throw new XI5250Exception("Not supported", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
-  }
-
-
-  @Override
-  protected void execute() {
-    //TODO
-    throw new IllegalStateException("Not supported");
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream)
+            throws IOException, XI5250Exception {
+        // If not in enhanced mode ...
+        throw new XI5250Exception("Not supported", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    }
 
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + XITelnet.toHex(ivAttributeType) + "," + 
-        XITelnet.toHex(ivAttribute) + "]";
-  }
+    @Override
+    protected void execute() {
+        //TODO
+        throw new IllegalStateException("Not supported");
+    }
+
+
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + XITelnet.toHex(ivAttributeType) + "," +
+                XITelnet.toHex(ivAttribute) + "]";
+    }
 }

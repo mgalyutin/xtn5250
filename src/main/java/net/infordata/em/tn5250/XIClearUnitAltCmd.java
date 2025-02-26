@@ -31,36 +31,36 @@ import java.io.InputStream;
 /**
  * Clear Unit Alternative
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIClearUnitAltCmd extends XI5250Cmd {
 
-  protected int ivPar;
+    protected int ivPar;
 
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
-    ivPar = Math.max(0, inStream.read());
-    if (ivPar != 0x00 && ivPar != 0x80)
-      throw new XI5250Exception("Invalid clear unit param: " + ivPar, 
-          XI5250Emulator.ERR_INVALID_CLEAR_UNIT_ALT);
-  }
-
-  @Override
-  protected void execute() {
-    ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
-    ivEmulator.ivPendingCmd = null;
-
-    if (ivEmulator.ivPrevFont == null) {
-      Font ft = ivEmulator.getFont();
-      ivEmulator.ivPrevFont = new Font(ft.getName(), ft.getStyle(), ft.getSize());
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream) throws IOException, XI5250Exception {
+        ivPar = Math.max(0, inStream.read());
+        if (ivPar != 0x00 && ivPar != 0x80)
+            throw new XI5250Exception("Invalid clear unit param: " + ivPar,
+                    XI5250Emulator.ERR_INVALID_CLEAR_UNIT_ALT);
     }
 
-    ivEmulator.setCrtSize(132, 27);
+    @Override
+    protected void execute() {
+        ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
+        ivEmulator.ivPendingCmd = null;
 
-    ivEmulator.setDefAttr(0x20);
-    ivEmulator.clear();
-    ivEmulator.removeFields();
-    ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
-  }
+        if (ivEmulator.ivPrevFont == null) {
+            Font ft = ivEmulator.getFont();
+            ivEmulator.ivPrevFont = new Font(ft.getName(), ft.getStyle(), ft.getSize());
+        }
+
+        ivEmulator.setCrtSize(132, 27);
+
+        ivEmulator.setDefAttr(0x20);
+        ivEmulator.clear();
+        ivEmulator.removeFields();
+        ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
+    }
 
 }

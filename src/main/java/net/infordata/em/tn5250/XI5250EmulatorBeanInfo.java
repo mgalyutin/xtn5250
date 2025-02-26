@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 
-
 package net.infordata.em.tn5250;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,78 +23,76 @@ import org.jetbrains.annotations.Nullable;
 import java.beans.*;
 
 public class XI5250EmulatorBeanInfo extends SimpleBeanInfo {
-  @NotNull Class<XI5250Emulator> beanClass = XI5250Emulator.class;
-  @NotNull String iconColor16x16Filename = "resources/XI5250Emulator_16.gif";
-  @NotNull String iconColor32x32Filename = "resources/XI5250Emulator_32.gif";
-  String iconMono16x16Filename;
-  String iconMono32x32Filename;
+    @NotNull Class<XI5250Emulator> beanClass = XI5250Emulator.class;
+    @NotNull String iconColor16x16Filename = "resources/XI5250Emulator_16.gif";
+    @NotNull String iconColor32x32Filename = "resources/XI5250Emulator_32.gif";
+    String iconMono16x16Filename;
+    String iconMono32x32Filename;
 
 
-  public XI5250EmulatorBeanInfo() {
-  }
-
-  @Override
-  public PropertyDescriptor @Nullable [] getPropertyDescriptors() {
-    try  {
-      PropertyDescriptor _active =
-          new PropertyDescriptor("active", beanClass, "isActive", "setActive");
-
-      PropertyDescriptor _host =
-          new PropertyDescriptor("host", beanClass, "getHost", "setHost");
-
-      PropertyDescriptor _keyboardQueue =
-          new PropertyDescriptor("keyboardQueue", beanClass,
-                                 "isKeyboardQueue", "setKeyboardQueue");
-
-      PropertyDescriptor _terminalType =
-          new PropertyDescriptor("terminalType", beanClass,
-                                 "getTerminalType", "setTerminalType");
-      
-      PropertyDescriptor _altFKeyRemap =
-        new PropertyDescriptor("altFKeyRemap", beanClass,
-                               "getAltFKeyRemap", "setAltFKeyRemap");
-
-      PropertyDescriptor[] pds = new PropertyDescriptor[] {
-        _active,
-        _host,
-        _keyboardQueue,
-        _terminalType,
-        _altFKeyRemap,
-      };
-      return pds;
+    public XI5250EmulatorBeanInfo() {
     }
-    catch (IntrospectionException ex) {
-      ex.printStackTrace();
-      return null;
-    }
-  }
 
-  @Override
-  public java.awt.@Nullable Image getIcon(int iconKind) {
-    switch (iconKind) {
-    case BeanInfo.ICON_COLOR_16x16:
-      return iconColor16x16Filename != null ? loadImage(iconColor16x16Filename) : null;
-    case BeanInfo.ICON_COLOR_32x32:
-      return iconColor32x32Filename != null ? loadImage(iconColor32x32Filename) : null;
-    case BeanInfo.ICON_MONO_16x16:
-      return iconMono16x16Filename != null ? loadImage(iconMono16x16Filename) : null;
-    case BeanInfo.ICON_MONO_32x32:
-      return iconMono32x32Filename != null ? loadImage(iconMono32x32Filename) : null;
-    }
-    return null;
-  }
+    @Override
+    public PropertyDescriptor @Nullable [] getPropertyDescriptors() {
+        try {
+            PropertyDescriptor _active =
+                    new PropertyDescriptor("active", beanClass, "isActive", "setActive");
 
-  @Override
-  public BeanInfo @Nullable [] getAdditionalBeanInfo() {
-    Class<?> superclass = beanClass.getSuperclass();
-    try  {
-      BeanInfo superBeanInfo = Introspector.getBeanInfo(superclass);
-      return new BeanInfo[] { superBeanInfo };
+            PropertyDescriptor _host =
+                    new PropertyDescriptor("host", beanClass, "getHost", "setHost");
+
+            PropertyDescriptor _keyboardQueue =
+                    new PropertyDescriptor("keyboardQueue", beanClass,
+                            "isKeyboardQueue", "setKeyboardQueue");
+
+            PropertyDescriptor _terminalType =
+                    new PropertyDescriptor("terminalType", beanClass,
+                            "getTerminalType", "setTerminalType");
+
+            PropertyDescriptor _altFKeyRemap =
+                    new PropertyDescriptor("altFKeyRemap", beanClass,
+                            "getAltFKeyRemap", "setAltFKeyRemap");
+
+            PropertyDescriptor[] pds = new PropertyDescriptor[]{
+                    _active,
+                    _host,
+                    _keyboardQueue,
+                    _terminalType,
+                    _altFKeyRemap,
+            };
+            return pds;
+        } catch (IntrospectionException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
-    catch (IntrospectionException ex) {
-      ex.printStackTrace();
-      return null;
+
+    @Override
+    public java.awt.@Nullable Image getIcon(int iconKind) {
+        switch (iconKind) {
+            case BeanInfo.ICON_COLOR_16x16:
+                return iconColor16x16Filename != null ? loadImage(iconColor16x16Filename) : null;
+            case BeanInfo.ICON_COLOR_32x32:
+                return iconColor32x32Filename != null ? loadImage(iconColor32x32Filename) : null;
+            case BeanInfo.ICON_MONO_16x16:
+                return iconMono16x16Filename != null ? loadImage(iconMono16x16Filename) : null;
+            case BeanInfo.ICON_MONO_32x32:
+                return iconMono32x32Filename != null ? loadImage(iconMono32x32Filename) : null;
+        }
+        return null;
     }
-  }
+
+    @Override
+    public BeanInfo @Nullable [] getAdditionalBeanInfo() {
+        Class<?> superclass = beanClass.getSuperclass();
+        try {
+            BeanInfo superBeanInfo = Introspector.getBeanInfo(superclass);
+            return new BeanInfo[]{superBeanInfo};
+        } catch (IntrospectionException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }
 

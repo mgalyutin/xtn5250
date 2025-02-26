@@ -31,25 +31,25 @@ import java.io.InputStream;
  */
 public abstract class XI5250Cmd {
 
-  protected XI5250Emulator ivEmulator;
+    protected XI5250Emulator ivEmulator;
 
-  protected void init(XI5250Emulator aEmulator) {
-    ivEmulator = aEmulator;
-  }
+    protected void init(XI5250Emulator aEmulator) {
+        ivEmulator = aEmulator;
+    }
 
-  /**
-   * @param inStream stream to read from
-   * @throws IOException raised when there is some communication error.
-   * @throws XI5250Exception raised if command parameters are wrong.
-   */
-  protected abstract void readFrom5250Stream(InputStream inStream)
-      throws IOException, XI5250Exception;
+    /**
+     * @param inStream stream to read from
+     * @throws IOException     raised when there is some communication error.
+     * @throws XI5250Exception raised if command parameters are wrong.
+     */
+    protected abstract void readFrom5250Stream(InputStream inStream)
+            throws IOException, XI5250Exception;
 
-  protected abstract void execute();
+    protected abstract void execute();
 
 
-  protected void executePending(int anAidCode, boolean isMasked) {
-    throw new RuntimeException("executePending() not supported");
-  }
+    protected void executePending(int anAidCode, boolean isMasked) {
+        throw new RuntimeException("executePending() not supported");
+    }
 
 }

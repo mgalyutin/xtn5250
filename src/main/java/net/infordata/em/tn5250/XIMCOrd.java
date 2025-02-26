@@ -18,7 +18,7 @@ limitations under the License.
     ***
     30/06/98 rel. _.___- Swing, JBuilder2 e VSS.
  */
- 
+
 package net.infordata.em.tn5250;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,35 +28,35 @@ import java.io.InputStream;
 
 /**
  * MC - Move cursor
- * 
+ * <p>
  * see: http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.6?DT=19950629163252
-
- * @author   Valentino Proietti - Infordata S.p.A.
+ *
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIMCOrd extends XI5250Ord {
 
-  protected int ivRow, ivCol;
-  
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    ivRow = Math.max(0, inStream.read());
-    ivCol = Math.max(0, inStream.read());
-    // Cannot deal with real dimensions, since they can be not applied yet 
-    if (ivRow <= 0 || ivRow > XI5250Emulator.MAX_ROWS || 
-        ivCol <= 0 || ivCol > XI5250Emulator.MAX_COLS)
-      throw new XI5250Exception("Invalid screen coord: " + ivRow + "," + ivCol, 
-          XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
-  }
+    protected int ivRow, ivCol;
 
-  @Override
-  protected void execute() {
-    ivEmulator.setCursorPos(ivCol - 1, ivRow - 1);
-  }
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        ivRow = Math.max(0, inStream.read());
+        ivCol = Math.max(0, inStream.read());
+        // Cannot deal with real dimensions, since they can be not applied yet
+        if (ivRow <= 0 || ivRow > XI5250Emulator.MAX_ROWS ||
+                ivCol <= 0 || ivCol > XI5250Emulator.MAX_COLS)
+            throw new XI5250Exception("Invalid screen coord: " + ivRow + "," + ivCol,
+                    XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + ivRow + "," + ivCol + "]";
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.setCursorPos(ivCol - 1, ivRow - 1);
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + ivRow + "," + ivCol + "]";
+    }
 
 }

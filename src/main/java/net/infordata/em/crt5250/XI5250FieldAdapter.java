@@ -26,24 +26,25 @@ package net.infordata.em.crt5250;
 
 /**
  * XI5250FieldListener adapter.
- * @see    XI5250FieldListener
- * @author   Valentino Proietti - Infordata S.p.A.
+ *
+ * @author Valentino Proietti - Infordata S.p.A.
+ * @see XI5250FieldListener
  */
 public class XI5250FieldAdapter implements XI5250FieldListener {
 
-  public void activated(XI5250FieldEvent e) {
-  }
+    public void activated(XI5250FieldEvent e) {
+    }
 
-  public void deactivated(XI5250FieldEvent e) {
-  }
+    public void deactivated(XI5250FieldEvent e) {
+    }
 
-  public void valueChanged(XI5250FieldEvent e) {
-  }
+    public void valueChanged(XI5250FieldEvent e) {
+    }
 
-  public void enabledStateChanged(XI5250FieldEvent e) {
-  }
+    public void enabledStateChanged(XI5250FieldEvent e) {
+    }
 
-  public void keyEvent(XI5250FieldEvent e) {
-  }
+    public void keyEvent(XI5250FieldEvent e) {
+    }
 
 }

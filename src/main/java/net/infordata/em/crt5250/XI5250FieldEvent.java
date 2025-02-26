@@ -21,7 +21,7 @@ limitations under the License.
     ***
     30/06/98 rel. _.___- Swing, JBuilder2 e VSS.
  */
- 
+
 package net.infordata.em.crt5250;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,64 +32,64 @@ import java.util.EventObject;
 /**
  * XI5250Field notification event.
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XI5250FieldEvent extends EventObject {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * The field has been activated (ie. the cursor enters the field area)
-   */
-  public static final int ACTIVATED              = 0;
-  /**
-   * The field has been deactivated (ie. the cursor exits the field area)
-   */
-  public static final int DEACTIVATED            = 1;
-  /**
-   * The field value has been changed.
-   */
-  public static final int VALUE_CHANGED          = 2;
-  /**
-   * The field enabled state has changed.
-   */
-  public static final int ENABLED_STATE_CHANGED  = 3;
-  public static final int KEY_EVENT              = 4;
+    /**
+     * The field has been activated (ie. the cursor enters the field area)
+     */
+    public static final int ACTIVATED = 0;
+    /**
+     * The field has been deactivated (ie. the cursor exits the field area)
+     */
+    public static final int DEACTIVATED = 1;
+    /**
+     * The field value has been changed.
+     */
+    public static final int VALUE_CHANGED = 2;
+    /**
+     * The field enabled state has changed.
+     */
+    public static final int ENABLED_STATE_CHANGED = 3;
+    public static final int KEY_EVENT = 4;
 
-  private static final String[] cvIdDescr = {"ACTIVATED",
-                                             "DEACTIVATED",
-                                             "VALUE_CHANGED",
-                                             "ENABLED_STATE_CHANGED",
-                                             "KEY_EVENT"};
+    private static final String[] cvIdDescr = {"ACTIVATED",
+            "DEACTIVATED",
+            "VALUE_CHANGED",
+            "ENABLED_STATE_CHANGED",
+            "KEY_EVENT"};
 
-  private final int         ivId;
-  private KeyEvent    ivKeyEvent;
+    private final int ivId;
+    private KeyEvent ivKeyEvent;
 
-  public XI5250FieldEvent(int aId, @NotNull XI5250Field aField) {
-    super(aField);
-    ivId = aId;
-  }
+    public XI5250FieldEvent(int aId, @NotNull XI5250Field aField) {
+        super(aField);
+        ivId = aId;
+    }
 
-  public XI5250FieldEvent(int aId, @NotNull XI5250Field aField, KeyEvent ke) {
-    this(aId, aField);
-    ivKeyEvent = ke;
-  }
+    public XI5250FieldEvent(int aId, @NotNull XI5250Field aField, KeyEvent ke) {
+        this(aId, aField);
+        ivKeyEvent = ke;
+    }
 
-  public final int getID() {
-    return ivId;
-  }
+    public final int getID() {
+        return ivId;
+    }
 
-  public final XI5250Field getField() {
-    return (XI5250Field)getSource();
-  }
+    public final XI5250Field getField() {
+        return (XI5250Field) getSource();
+    }
 
-  public final KeyEvent getKeyEvent() {
-    return ivKeyEvent;
-  }
+    public final KeyEvent getKeyEvent() {
+        return ivKeyEvent;
+    }
 
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + "[" + cvIdDescr[ivId] + "," + getSource() + "]";
-  }
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + "[" + cvIdDescr[ivId] + "," + getSource() + "]";
+    }
 
 }

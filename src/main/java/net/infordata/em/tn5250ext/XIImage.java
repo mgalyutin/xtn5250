@@ -27,37 +27,37 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
-public class XIImage extends JComponent {  
+public class XIImage extends JComponent {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private Image ivImage;
+    private Image ivImage;
 
-  public XIImage(Image anImage) {
-    setImage(anImage);
-  }
+    public XIImage(Image anImage) {
+        setImage(anImage);
+    }
 
-  public void setImage(Image anImage)	{
-    if (anImage == ivImage)
-      return;
+    public void setImage(Image anImage) {
+        if (anImage == ivImage)
+            return;
 
-    ivImage = anImage;
-    repaint();
-  }
+        ivImage = anImage;
+        repaint();
+    }
 
-  @Override
-  public void update(Graphics gr) {
-    paint(gr);
-  }
+    @Override
+    public void update(Graphics gr) {
+        paint(gr);
+    }
 
-  @Override
-  public void paintComponent(@NotNull Graphics gr) {
-    Dimension dim = getSize();
+    @Override
+    public void paintComponent(@NotNull Graphics gr) {
+        Dimension dim = getSize();
 
-    if (ivImage != null)
-      gr.drawImage(ivImage, 0, 0, dim.width, dim.height, this);
-  }
+        if (ivImage != null)
+            gr.drawImage(ivImage, 0, 0, dim.width, dim.height, this);
+    }
 
 }

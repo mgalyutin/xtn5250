@@ -31,21 +31,21 @@ import java.io.InputStream;
  */
 public abstract class XI5250Ord {
 
-  protected XI5250Emulator ivEmulator;
+    protected XI5250Emulator ivEmulator;
 
 
-  protected void init(XI5250Emulator aEmulator) {
-    ivEmulator = aEmulator;
-  }
+    protected void init(XI5250Emulator aEmulator) {
+        ivEmulator = aEmulator;
+    }
 
-  /**
-   * @param inStream the stream from where to read the order from.
-   * @throws XI5250Exception raised if order parameters are wrong.
-   * @throws IOException raised when there is an input/output problem.
-   */
-  protected abstract void readFrom5250Stream(InputStream inStream)
-      throws IOException, XI5250Exception;
+    /**
+     * @param inStream the stream from where to read the order from.
+     * @throws XI5250Exception raised if order parameters are wrong.
+     * @throws IOException     raised when there is an input/output problem.
+     */
+    protected abstract void readFrom5250Stream(InputStream inStream)
+            throws IOException, XI5250Exception;
 
 
-  protected abstract void execute();
+    protected abstract void execute();
 }

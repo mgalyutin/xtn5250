@@ -36,108 +36,108 @@ import java.io.InputStream;
  */
 public abstract class XICCCmd extends XI5250Cmd {
 
-  protected byte[] ivCC;
+    protected byte[] ivCC;
 
-  /**
-   * @param inStream input stream from where to read the command from.
-   * @throws IOException raised if there is an input/output problem.
-   * @throws XI5250Exception raised if command parameters are wrong.
-   */
-  @Override
-  protected abstract void readFrom5250Stream(InputStream inStream)
-      throws IOException, XI5250Exception;
+    /**
+     * @param inStream input stream from where to read the command from.
+     * @throws IOException     raised if there is an input/output problem.
+     * @throws XI5250Exception raised if command parameters are wrong.
+     */
+    @Override
+    protected abstract void readFrom5250Stream(InputStream inStream)
+            throws IOException, XI5250Exception;
 
-  @Override
-  protected abstract void execute();
+    @Override
+    protected abstract void execute();
 
-  /**
-   * @param inStream input stream from where to read the CC parameter from.
-   * @throws IOException raised if there is an input/output problem.
-   * @throws XI5250Exception raised if command parameters are wrong.
-   */
-  protected void readCC(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
+    /**
+     * @param inStream input stream from where to read the CC parameter from.
+     * @throws IOException     raised if there is an input/output problem.
+     * @throws XI5250Exception raised if command parameters are wrong.
+     */
+    protected void readCC(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
 
-    int bb;
-    int i;
-    ivCC = new byte[2];
+        int bb;
+        int i;
+        ivCC = new byte[2];
 
-    for (i = 0; (i < 2) && ((bb = inStream.read()) != -1); i++) {
-      ivCC[i] = (byte) bb;
-    }
-
-    if (i < 2) {
-      throw new XI5250Exception("CC required", XI5250Emulator.ERR_INVALID_COMMAND);
-    }
-  }
-
-  protected void executeCC1() {
-    int cc1 = ivCC[0] & 0xE0;
-
-    // reset pending aid; lock keyboard
-    if (cc1 != 0) {
-      ivEmulator.ivPendingCmd = null;
-      ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
-    }
-
-    // clear master mdt; reset mdt in nonbypass-fields
-    if (cc1 == 0x40 || cc1 == 0xA0 || cc1 == 0xC0) {
-      //!!V gestire master mdt
-      for (XI5250Field field : ivEmulator.getFields()) {
-        if (!field.isOrgBypassField()) {
-          field.resetMDT();
+        for (i = 0; (i < 2) && ((bb = inStream.read()) != -1); i++) {
+            ivCC[i] = (byte) bb;
         }
-      }
-    }
 
-    // clear master mdt; reset mdt in all fields
-    if (cc1 == 0x60 || cc1 == 0xE0) {
-      //!!V gestire master mdt
-      for (XI5250Field field : ivEmulator.getFields()) {
-        field.resetMDT();
-      }
-    }
-
-    // null non bypass-fields with mdt on
-    if (cc1 == 0x80 || cc1 == 0xC0) {
-      for (XI5250Field field : ivEmulator.getFields()) {
-        if (!field.isOrgBypassField() && field.isMDTOn()) {
-          field.clear();
+        if (i < 2) {
+            throw new XI5250Exception("CC required", XI5250Emulator.ERR_INVALID_COMMAND);
         }
-      }
     }
 
-    // null all non bypass-fields
-    if (cc1 == 0xA0 || cc1 == 0xE0) {
-      for (XI5250Field field : ivEmulator.getFields()) {
-        if (!field.isBypassField()) {
-          field.clear();
+    protected void executeCC1() {
+        int cc1 = ivCC[0] & 0xE0;
+
+        // reset pending aid; lock keyboard
+        if (cc1 != 0) {
+            ivEmulator.ivPendingCmd = null;
+            ivEmulator.setState(XI5250Emulator.ST_NORMAL_LOCKED);
         }
-      }
-    }
-  }
 
-  protected void executeCC2() {
-    if ((ivCC[1] & 0x10) != 0) {
-      ivEmulator.setBlinkingCursor(true);
-    } else if ((ivCC[1] & 0x20) != 0) {
-      ivEmulator.setBlinkingCursor(false);
+        // clear master mdt; reset mdt in nonbypass-fields
+        if (cc1 == 0x40 || cc1 == 0xA0 || cc1 == 0xC0) {
+            //!!V gestire master mdt
+            for (XI5250Field field : ivEmulator.getFields()) {
+                if (!field.isOrgBypassField()) {
+                    field.resetMDT();
+                }
+            }
+        }
+
+        // clear master mdt; reset mdt in all fields
+        if (cc1 == 0x60 || cc1 == 0xE0) {
+            //!!V gestire master mdt
+            for (XI5250Field field : ivEmulator.getFields()) {
+                field.resetMDT();
+            }
+        }
+
+        // null non bypass-fields with mdt on
+        if (cc1 == 0x80 || cc1 == 0xC0) {
+            for (XI5250Field field : ivEmulator.getFields()) {
+                if (!field.isOrgBypassField() && field.isMDTOn()) {
+                    field.clear();
+                }
+            }
+        }
+
+        // null all non bypass-fields
+        if (cc1 == 0xA0 || cc1 == 0xE0) {
+            for (XI5250Field field : ivEmulator.getFields()) {
+                if (!field.isBypassField()) {
+                    field.clear();
+                }
+            }
+        }
     }
 
-    // unlock the keyboard
-    if ((ivCC[1] & 0x08) != 0) {
-      ivEmulator.setState(XI5250Emulator.ST_NORMAL_UNLOCKED);
+    protected void executeCC2() {
+        if ((ivCC[1] & 0x10) != 0) {
+            ivEmulator.setBlinkingCursor(true);
+        } else if ((ivCC[1] & 0x20) != 0) {
+            ivEmulator.setBlinkingCursor(false);
+        }
+
+        // unlock the keyboard
+        if ((ivCC[1] & 0x08) != 0) {
+            ivEmulator.setState(XI5250Emulator.ST_NORMAL_UNLOCKED);
+        }
+
+        if ((ivCC[1] & 0x04) != 0) {
+            ivEmulator.soundAlarm();
+        }
     }
 
-    if ((ivCC[1] & 0x04) != 0) {
-      ivEmulator.soundAlarm();
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [CC=[" + XITelnet.toHex(ivCC[0]) + "," + XITelnet.toHex(ivCC[1])
+                + "]]";
     }
-  }
-
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [CC=[" + XITelnet.toHex(ivCC[0]) + "," + XITelnet.toHex(ivCC[1])
-        + "]]";
-  }
 
 }

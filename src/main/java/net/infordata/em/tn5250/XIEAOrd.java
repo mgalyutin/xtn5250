@@ -29,55 +29,55 @@ import java.io.InputStream;
 
 /**
  * EA - Erase to address TODO
- *
+ * <p>
  * see: http://publibfp.boulder.ibm.com/cgi-bin/bookmgr/BOOKS/co2e2001/15.6.8?DT=19950629163252
  *
  * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIEAOrd extends XI5250Ord {
 
-  protected int ivRow;
-  protected int ivCol;
-  protected int ivLen;
+    protected int ivRow;
+    protected int ivCol;
+    protected int ivLen;
 
-  protected byte[] ivAttributeTypes;
+    protected byte[] ivAttributeTypes;
 
-  /**
-   * @param inStream the stream from where to read the order from.
-   * @throws XI5250Exception raised if order parameters are wrong.
-   * @throws IOException raised when there is an input/output problem.
-   */
-  @Override
-  protected void readFrom5250Stream(@NotNull InputStream inStream)
-      throws IOException, XI5250Exception {
-    byte[] buf = new byte[3];
-    if (inStream.read(buf) < buf.length) {
-      throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    /**
+     * @param inStream the stream from where to read the order from.
+     * @throws XI5250Exception raised if order parameters are wrong.
+     * @throws IOException     raised when there is an input/output problem.
+     */
+    @Override
+    protected void readFrom5250Stream(@NotNull InputStream inStream)
+            throws IOException, XI5250Exception {
+        byte[] buf = new byte[3];
+        if (inStream.read(buf) < buf.length) {
+            throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
+        ivRow = XITelnet.toInt(buf[0]);
+        ivCol = XITelnet.toInt(buf[1]);
+        ivLen = XITelnet.toInt(buf[2]);
+
+        if (ivLen < 2 || ivLen > 5) {
+            throw new XI5250Exception("Invalid len: " + ivLen, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
+        ivLen--;
+        ivAttributeTypes = new byte[ivLen];
+        if (inStream.read(ivAttributeTypes) < ivLen) {
+            throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+        }
     }
-    ivRow = XITelnet.toInt(buf[0]);
-    ivCol = XITelnet.toInt(buf[1]);
-    ivLen = XITelnet.toInt(buf[2]);
 
-    if (ivLen < 2 || ivLen > 5) {
-      throw new XI5250Exception("Invalid len: " + ivLen, XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+    @Override
+    protected void execute() {
+        //TODO
+        throw new IllegalStateException("Not supported");
     }
-    ivLen--;
-    ivAttributeTypes = new byte[ivLen];
-    if (inStream.read(ivAttributeTypes) < ivLen) {
-      throw new XI5250Exception("EOF reached", XI5250Emulator.ERR_INVALID_ROW_COL_ADDR);
+
+    @Override
+    public @NotNull String toString() {
+        return super.toString() + " [" + ivRow + "," + ivCol + "," + ivLen + "," + ",[" +
+                XITelnet.toHex(ivAttributeTypes) + "]" + "]";
     }
-  }
-
-  @Override
-  protected void execute() {
-    //TODO
-    throw new IllegalStateException("Not supported");
-  }
-
-  @Override
-  public @NotNull String toString() {
-    return super.toString() + " [" + ivRow + "," + ivCol + "," + ivLen + "," + ",[" +
-        XITelnet.toHex(ivAttributeTypes) + "]" + "]";
-  }
 
 }

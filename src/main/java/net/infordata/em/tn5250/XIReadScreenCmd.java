@@ -27,17 +27,17 @@ import java.io.InputStream;
 /**
  * 5250 read screen command
  *
- * @author   Valentino Proietti - Infordata S.p.A.
+ * @author Valentino Proietti - Infordata S.p.A.
  */
 public class XIReadScreenCmd extends XI5250Cmd {
 
-  @Override
-  protected void readFrom5250Stream(InputStream inStream) throws IOException {
-  }
+    @Override
+    protected void readFrom5250Stream(InputStream inStream) throws IOException {
+    }
 
-  @Override
-  protected void execute() {
-    ivEmulator.send5250Screen();
-  }
+    @Override
+    protected void execute() {
+        ivEmulator.send5250Screen();
+    }
 
 }
