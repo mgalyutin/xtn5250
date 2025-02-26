@@ -33,6 +33,7 @@ import net.infordata.em.crt.XICrtBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -44,6 +45,7 @@ import java.io.Serializable;
 public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
 
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final int GRAY_INTENSITY = colorAsIntensity(Color.gray);
@@ -532,7 +534,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
      * @return the intensity (0 to 1000) for the given color
      * @see #setDefBackground
      */
-    public static final int colorAsIntensity(@NotNull Color aColor) {
+    public static int colorAsIntensity(@NotNull Color aColor) {
         float[] hsb = Color.RGBtoHSB(aColor.getRed(), aColor.getGreen(),
                 aColor.getBlue(), null);
         return (int) (hsb[2] * 1000);
@@ -571,6 +573,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
      */
     private static class ColorWrapper extends Color implements Serializable {
 
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private Color ivColor;
