@@ -433,7 +433,6 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
      * @param row    row from where to get the string
      * @param nChars number of characters to get from the given position
      * @return the string in the given position with the given length.
-     * @see String#indexOf
      */
     @Override
     public @NotNull String getString(int col, int row, int nChars) {
