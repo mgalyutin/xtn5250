@@ -49,10 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.VolatileImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -471,6 +468,33 @@ public class XICrt extends JComponent implements Serializable, Cleaner.Cleanable
      */
     public int getAttr(int col, int row) {
         return ivCrtBuffer.getAttr(col, row);
+    }
+
+    /**
+     * Copies the attribute buffer from the current buffer.
+     *
+     * @return a 2D integer array representing the copied attribute buffer
+     */
+    public int[][] copyAttrBuffer() {
+        return ivCrtBuffer.copyAttrBuffer();
+    }
+
+    /**
+     * Creates and returns a copy of the character buffer encapsulated in the ivCrtBuffer object.
+     *
+     * @return A 2D char array that is a copy of the character buffer.
+     */
+    public char[][] copyCharBuffer() {
+        return ivCrtBuffer.copyCharBuffer();
+    }
+
+    /**
+     * Dumps the contents of the internal buffer to the specified PrintStream.
+     *
+     * @param out the PrintStream to which the buffer contents will be written; must not be null
+     */
+    public void dumpBuffer(@NotNull PrintStream out) {
+        ivCrtBuffer.dumpBuffer(out);
     }
 
     /**

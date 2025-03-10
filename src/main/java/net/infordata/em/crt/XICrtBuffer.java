@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -504,6 +505,28 @@ public class XICrtBuffer implements Serializable {
      */
     protected Color getForeground(int aAttribute) {
         return Color.green;
+    }
+
+    /**
+     * Creates a deep copy of the attribute buffer.
+     * The returned buffer is a new 2D integer array,
+     * where each row is a clone of the corresponding row in the original buffer.
+     *
+     * @return a deep copy of the attribute buffer as a 2D integer array.
+     */
+    public final int[][] copyAttrBuffer() {
+        return Arrays.stream(ivAttrBuffer).map(int[]::clone).toArray(int[][]::new);
+    }
+
+    /**
+     * Creates a deep copy of the character buffer.
+     * The returned buffer is a new 2D character array,
+     * where each row is a clone of the corresponding row in the original buffer.
+     *
+     * @return a deep copy of the character buffer as a 2D character array.
+     */
+    public final char[][] copyCharBuffer() {
+        return Arrays.stream(ivCharBuffer).map(char[]::clone).toArray(char[][]::new);
     }
 
     public final int getAttrInternal(int col, int row) {

@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="jbr-21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="net.infordata.em.Main" />
-    <module name="xtn5250" />
+    <module name="xtn5250.main" />
     <option name="PROGRAM_PARAMETERS" value="-PSHBTNCHC jupiter" />
     <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logging.properties" />
     <extension name="coverage">

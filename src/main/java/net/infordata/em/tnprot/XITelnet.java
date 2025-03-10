@@ -459,7 +459,7 @@ public class XITelnet implements AutoCloseable {
                     sb.append(" r ").append(bb).append(" ");
                     try {
                         sb.append(TELCMD[-(bb + 1)]).append(" ");
-                    } catch (Exception _) {
+                    } catch (Exception ignored) {
                     }
                     LOGGER.debug(sb.toString());
                 }
