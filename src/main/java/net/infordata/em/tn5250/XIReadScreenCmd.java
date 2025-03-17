@@ -40,4 +40,10 @@ public class XIReadScreenCmd extends XI5250Cmd {
         ivEmulator.send5250Screen();
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIReadScreenCmd{");
+        sb.append('}');
+        return sb.toString();
+    }
 }

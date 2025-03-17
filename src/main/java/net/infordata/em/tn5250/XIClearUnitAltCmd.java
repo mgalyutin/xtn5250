@@ -63,4 +63,11 @@ public class XIClearUnitAltCmd extends XI5250Cmd {
         ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIClearUnitAltCmd{");
+        sb.append("ivPar=").append(ivPar);
+        sb.append('}');
+        return sb.toString();
+    }
 }

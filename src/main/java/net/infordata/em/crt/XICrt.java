@@ -130,6 +130,7 @@ public class XICrt extends JComponent implements Serializable, Cleaner.Cleanable
         return new XICrtBuffer(nCols, nRows);
     }
 
+
     /**
      * Changes the panel font. Only monospaced fonts are accepted.
      *

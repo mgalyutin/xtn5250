@@ -913,6 +913,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
                 try {
                     cmdList.readFrom5250Stream(dataStream);
                     ivCmdList = cmdList;
+
                     SwingUtilities.invokeAndWait(new Runnable() {
                         public void run() {
                             //this statement avoids deadlocks during component resizing
@@ -931,7 +932,10 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
                                         processEmulatorEvent(
                                                 new XI5250EmulatorEvent(
                                                         XI5250EmulatorEvent.NEW_PANEL_RECEIVED,
-                                                        XI5250Emulator.this));
+                                                        XI5250Emulator.this)
+                                                        .withOpCode(opCode)
+                                                        .withCmdList(cmdList)
+                                        );
                                     } finally {
                                         setFreeze(false);
                                     }

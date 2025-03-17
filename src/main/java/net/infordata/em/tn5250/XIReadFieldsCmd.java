@@ -52,4 +52,18 @@ public class XIReadFieldsCmd extends XICCCmd {
         ivEmulator.send5250Data(anAidCode, ivEmulator.isMasterMDTSet() && !isMasked, false);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIReadFieldsCmd{");
+        sb.append("ivCC=");
+        if (ivCC == null) sb.append("null");
+        else {
+            sb.append('[');
+            for (int i = 0; i < ivCC.length; ++i)
+                sb.append(i == 0 ? "" : ", ").append(ivCC[i]);
+            sb.append(']');
+        }
+        sb.append('}');
+        return sb.toString();
+    }
 }

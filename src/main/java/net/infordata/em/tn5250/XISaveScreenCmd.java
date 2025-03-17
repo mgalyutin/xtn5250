@@ -43,4 +43,10 @@ public class XISaveScreenCmd extends XI5250Cmd {
         ivEmulator.send5250SavedScreen(pos);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XISaveScreenCmd{");
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -135,9 +135,17 @@ public abstract class XICCCmd extends XI5250Cmd {
     }
 
     @Override
-    public @NotNull String toString() {
-        return super.toString() + " [CC=[" + XITelnet.toHex(ivCC[0]) + "," + XITelnet.toHex(ivCC[1])
-                + "]]";
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XICCCmd{");
+        sb.append("ivCC=");
+        if (ivCC == null) sb.append("null");
+        else {
+            sb.append('[');
+            for (int i = 0; i < ivCC.length; ++i)
+                sb.append(i == 0 ? "" : ", ").append(ivCC[i]);
+            sb.append(']');
+        }
+        sb.append('}');
+        return sb.toString();
     }
-
 }

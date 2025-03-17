@@ -54,4 +54,11 @@ public class XIRestoreScreenCmd extends XI5250Cmd {
         }
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIRestoreScreenCmd{");
+        sb.append("ivPos=").append(ivPos);
+        sb.append('}');
+        return sb.toString();
+    }
 }

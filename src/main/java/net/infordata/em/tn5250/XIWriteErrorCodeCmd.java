@@ -53,4 +53,11 @@ public class XIWriteErrorCodeCmd extends XI5250Cmd {
         ivOrdList.execute();
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIWriteErrorCodeCmd{");
+        sb.append("ivOrdList=").append(ivOrdList);
+        sb.append('}');
+        return sb.toString();
+    }
 }

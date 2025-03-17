@@ -73,6 +73,8 @@ public class XI5250EmulatorEvent extends EventObject {
 
     protected int ivId;
     protected byte ivAidCode;
+    private int opCode;
+    private XI5250CmdList cmdList;
 
     public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm) {
         super(aEm);
@@ -82,6 +84,11 @@ public class XI5250EmulatorEvent extends EventObject {
     public XI5250EmulatorEvent(int aId, @NotNull XI5250Emulator aEm, byte anAidCode) {
         this(aId, aEm);
         ivAidCode = anAidCode;
+    }
+
+    public XI5250EmulatorEvent withOpCode(int opCode) {
+        this.opCode = opCode;
+        return this;
     }
 
     public int getID() {
@@ -106,4 +113,16 @@ public class XI5250EmulatorEvent extends EventObject {
         return super.toString() + "[" + cvIdDescr[ivId] + "]";
     }
 
+    public int getOpCode() {
+        return this.opCode;
+    }
+
+    public @NotNull XI5250EmulatorEvent withCmdList(XI5250CmdList cmdList) {
+        this.cmdList = cmdList;
+        return this;
+    }
+
+    public XI5250CmdList getCmdList() {
+        return cmdList;
+    }
 }

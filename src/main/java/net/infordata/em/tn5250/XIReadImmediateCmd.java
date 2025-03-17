@@ -40,4 +40,10 @@ public class XIReadImmediateCmd extends XI5250Cmd {
         ivEmulator.send5250Data(0x00, ivEmulator.isMasterMDTSet(), false);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIReadImmediateCmd{");
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -165,9 +165,16 @@ public class XI5250CmdList extends XI5250Cmd {
         }
     }
 
-    @Override
-    public @NotNull String toString() {
-        return super.toString() + ivCmdVect.toString();
+    public boolean hasOnlyMemberOfType(@NotNull Class<? extends XI5250Cmd> type) {
+        return ivCmdVect.size() == 1 && type.isAssignableFrom(ivCmdVect.get(0).getClass());
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XI5250CmdList{");
+        sb.append("ivCmdVect=").append(ivCmdVect);
+        sb.append(", ivICOrderExecuted=").append(ivICOrderExecuted);
+        sb.append('}');
+        return sb.toString();
+    }
 }

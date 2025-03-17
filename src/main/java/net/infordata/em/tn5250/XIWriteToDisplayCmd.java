@@ -81,4 +81,19 @@ public class XIWriteToDisplayCmd extends XICCCmd {
         executeCC2();
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIWriteToDisplayCmd{");
+        sb.append("ivOrdList=").append(ivOrdList);
+        sb.append(", ivCC=");
+        if (ivCC == null) sb.append("null");
+        else {
+            sb.append('[');
+            for (int i = 0; i < ivCC.length; ++i)
+                sb.append(i == 0 ? "" : ", ").append(ivCC[i]);
+            sb.append(']');
+        }
+        sb.append('}');
+        return sb.toString();
+    }
 }

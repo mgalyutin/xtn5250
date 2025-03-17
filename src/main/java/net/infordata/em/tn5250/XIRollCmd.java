@@ -68,4 +68,14 @@ public class XIRollCmd extends XI5250Cmd {
         ivEmulator.scroll(ivDown, ivTopRow - 1, ivBottomRow, ivNRows);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIRollCmd{");
+        sb.append("ivDown=").append(ivDown);
+        sb.append(", ivNRows=").append(ivNRows);
+        sb.append(", ivTopRow=").append(ivTopRow);
+        sb.append(", ivBottomRow=").append(ivBottomRow);
+        sb.append('}');
+        return sb.toString();
+    }
 }

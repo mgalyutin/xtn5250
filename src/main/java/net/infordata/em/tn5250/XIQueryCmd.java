@@ -81,4 +81,18 @@ public class XIQueryCmd extends XI5250Cmd {
         ivEmulator.send5250Packet((byte) 0x00, (byte) 0x00, buf);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIQueryCmd{");
+        sb.append("ivPar=");
+        if (ivPar == null) sb.append("null");
+        else {
+            sb.append('[');
+            for (int i = 0; i < ivPar.length; ++i)
+                sb.append(i == 0 ? "" : ", ").append(ivPar[i]);
+            sb.append(']');
+        }
+        sb.append('}');
+        return sb.toString();
+    }
 }

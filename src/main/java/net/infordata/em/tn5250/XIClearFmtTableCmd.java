@@ -44,4 +44,10 @@ public class XIClearFmtTableCmd extends XI5250Cmd {
         ivEmulator.setErrorRow(ivEmulator.getCrtSize().height - 1);
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIClearFmtTableCmd{");
+        sb.append('}');
+        return sb.toString();
+    }
 }

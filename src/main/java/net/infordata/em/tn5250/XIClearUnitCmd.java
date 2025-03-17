@@ -54,4 +54,10 @@ public class XIClearUnitCmd extends XI5250Cmd {
         }
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("XIClearUnitCmd{");
+        sb.append('}');
+        return sb.toString();
+    }
 }
