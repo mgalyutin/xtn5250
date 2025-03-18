@@ -7,6 +7,14 @@ plugins {
 group = 'net.infordata'
 version = '1.0.1'
 
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+
 repositories {
     maven {
         url DISO21_THIRD_PARTY_REPOSITORY
@@ -22,7 +30,7 @@ repositories {
             password "$nexusUserPassword"
         }
     }
-   //  mavenCentral()
+    //  mavenCentral()
 }
 /*
 rewrite {
