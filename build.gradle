@@ -5,10 +5,35 @@ plugins {
 }
 
 group = 'net.infordata'
-version = '1.0.1'
+version = '1.0.2'
+
+publishing {
+    repositories {
+        maven {
+            url DISO21_THIRD_PARTY_REPOSITORY
+            credentials {
+                username "$nexusUserName"
+                password "$nexusUserPassword"
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+//    publications {
+//        maven(MavenPublication) {
+//            version = "${project.version}-${project.extensions.buildNumber.get()}"
+//            artifact distZip
+//        }
+//    }
+}
+
 
 
 java {
+    withSourcesJar()
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
@@ -43,13 +68,11 @@ rewrite {
 dependencies {
     // implementation 'org.openrewrite:rewrite-javascript:8.37.3'
     // implementation 'org.openrewrite:rewrite-logging:8.37.3'
-
-    implementation 'org.jetbrains:annotations:26.0.1'
-    implementation 'com.google.guava:guava:33.4.0-jre'
     implementation 'org.slf4j:slf4j-api:2.0.16'
 
-    implementation "org.openrewrite:rewrite-core:8.0.0"
-    implementation "org.openrewrite:rewrite-java:8.0.0"
+    compileOnly 'com.google.guava:guava:18.0'
+    compileOnly 'org.jetbrains:annotations:26.0.1'
+
 
     // testImplementation platform('org.junit:junit-bom:5.10.0')
     // testImplementation 'org.junit.jupiter:junit-jupiter'

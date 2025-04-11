@@ -474,7 +474,7 @@ public class XI5250CrtBuffer extends XICrtBuffer implements Serializable {
         return EXTRA_ATTR_MAP[getColorAttributeIdx(aAttribute) - 0x20];
     }
 
-    protected final byte getColorMapIdx(int aAttribute) {
+    protected final byte   getColorMapIdx(int aAttribute) {
         return (byte) ((aAttribute >> 24) & 0xFF);
     }
 
