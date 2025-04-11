@@ -472,8 +472,10 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
             } else {
                 setBlinkingCursor(false);
                 if (ivTelnet != null && ivTelnet.isConnected()) {
-                    ivTelnet.disconnect();
-                    ivTelnet.setEmulator(null);
+                    @NotNull XITelnet t = ivTelnet;
+                    ivTelnet = null;
+                    t.disconnect();
+                    t.setEmulator(null);
                 }
                 ivTelnet = null;
             }
@@ -983,16 +985,18 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
                             }
                         }
                     });
-                } catch (IOException ex) {
-                    caughtException(ex);
                 } catch (XI5250Exception ex) {
                     caught5250Exception(ex);
+                } catch (InterruptedException ex) {
+                    if (isActive()) {
+                        caughtException(ex);
+                    } else {
+                        // ignore as part if closing sequence
+                    }
                 } catch (Exception ex) {
                     caughtException(ex);
                 }
-
                 LOGGER.debug("{}", cmdList);
-
                 break;
             //
             case OPCODE_CANCEL_INVITE:
