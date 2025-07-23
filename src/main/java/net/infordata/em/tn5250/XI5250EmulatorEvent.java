@@ -34,6 +34,7 @@ public class XI5250EmulatorEvent extends EventObject {
 
     private static final long serialVersionUID = 1L;
 
+    // event IDs
     /**
      * Fired just before trying to connect.
      */

@@ -166,20 +166,20 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
     public static final String TELNET_ENV = "telnetEnv";
     public static final String STRPCCMD_ENABLED = "strPcCmd";
     // opcodes
-    protected static final byte OPCODE_NOP = (byte) 0x00;
-    protected static final byte OPCODE_INVITE_OPERATION = (byte) 0x01;
-    protected static final byte OPCODE_OUTPUT_ONLY = (byte) 0x02;
-    protected static final byte OPCODE_PUT_GET = (byte) 0x03;
-    protected static final byte OPCODE_SAVE_SCREEN = (byte) 0x04;
-    protected static final byte OPCODE_RESTORE_SCREEN = (byte) 0x05;
-    protected static final byte OPCODE_READ_IMM = (byte) 0x06;
-    protected static final byte OPCODE_RESERVED1 = (byte) 0x07;
-    protected static final byte OPCODE_READ_SCREEN = (byte) 0x08;
-    protected static final byte OPCODE_RESERVED2 = (byte) 0x09;
-    protected static final byte OPCODE_CANCEL_INVITE = (byte) 0x0A;
-    protected static final byte OPCODE_TURN_ON_MSG = (byte) 0x0B;
-    protected static final byte OPCODE_TURN_OFF_MSG = (byte) 0x0C;
-    protected static final String[] OPCODE =
+    public static final byte OPCODE_NOP = (byte) 0x00;
+    public static final byte OPCODE_INVITE_OPERATION = (byte) 0x01;
+    public static final byte OPCODE_OUTPUT_ONLY = (byte) 0x02;
+    public static final byte OPCODE_PUT_GET = (byte) 0x03;
+    public static final byte OPCODE_SAVE_SCREEN = (byte) 0x04;
+    public static final byte OPCODE_RESTORE_SCREEN = (byte) 0x05;
+    public static final byte OPCODE_READ_IMM = (byte) 0x06;
+    public static final byte OPCODE_RESERVED1 = (byte) 0x07;
+    public static final byte OPCODE_READ_SCREEN = (byte) 0x08;
+    public static final byte OPCODE_RESERVED2 = (byte) 0x09;
+    public static final byte OPCODE_CANCEL_INVITE = (byte) 0x0A;
+    public static final byte OPCODE_TURN_ON_MSG = (byte) 0x0B;
+    public static final byte OPCODE_TURN_OFF_MSG = (byte) 0x0C;
+    public static final String[] OPCODE =
             {"No operation",
                     "Invite operation",
                     "Output only",
@@ -892,7 +892,7 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
 
         ByteArrayInputStream dataStream = new ByteArrayInputStream(ivRXBuf, dataStart,
                 ivRXBufLen - dataStart);
-        LOGGER.debug("OPCODE : {}", OPCODE[opCode]);
+        LOGGER.debug("OPCODE : {}", getOpcodeName(opCode));
 
         switch (opCode) {
             //
@@ -1013,6 +1013,10 @@ public class XI5250Emulator extends XI5250Crt implements Serializable, AutoClose
         }
 
         ivRXBufLen = 0;
+    }
+
+    public static String getOpcodeName(byte opCode) {
+        return OPCODE[opCode];
     }
 
     protected void localFlagsChanged(byte aIACOpt) {
